@@ -1,13 +1,6 @@
 {
   "name": "Timeline Card",
   "filename": "timeline-card.js",
-  "render_readme": true,
-  "domains": [
-    "lovelace"
-  ],
-  "country": [
-    "DE",
-    "EN"
-  ],
-  "homeassistant": "2023.0.0"
+  "content_in_root": true,
+  "render_readme": true
 }
