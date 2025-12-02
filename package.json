@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "build-dev": "webpack --mode development --watch"    
+    "build-dev": "webpack --mode development --watch"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/weedpump/timeline-card/issues"
   },
