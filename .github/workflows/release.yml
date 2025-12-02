@@ -1,5 +1,8 @@
 name: Build & Release Timeline Card
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
@@ -24,18 +27,7 @@ jobs:
       - name: Build timeline-card
         run: npm run build
 
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload timeline-card.js
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: dist/timeline-card.js
