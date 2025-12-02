@@ -1,3 +1,8 @@
+import en from "./locales/en.json";
+import de from "./locales/de.json";
+
+const translations = { en, de };
+
 class TimelineCard extends HTMLElement {
   setConfig(config) {
     if (!config.entities || !Array.isArray(config.entities)) {
@@ -214,22 +219,7 @@ class TimelineCard extends HTMLElement {
     const short = lang.toLowerCase().substring(0, 2);
     this.languageCode = short;
 
-    const path = `/local/timeline-card/locales/${short}.json`;
-    const fallbackPath = `/local/timeline-card/locales/en.json`;
-
-    try {
-      const res = await fetch(path);
-      if (res.ok) {
-        this.translations = await res.json();
-        return;
-      }
-    } catch(e) {
-      console.warn("TimelineCard: Failed loading locale:", path);
-    }
-
-    // Fallback → English
-    const res2 = await fetch(fallbackPath);
-    this.translations = await res2.json();
+    this.translations = translations[short] || translations.en;
   }
 
   // Helper to access nested translation values, e.g. t("time.minutes")
