@@ -23,20 +23,17 @@ mapping, and flexible filtering.**
 2. [Installation](#-installation)
    1. [HACS (Custom Repository)](#hacs-custom-repository---recommended)
    2. [Manual Installation](#manual-installation)
-3. [Locales](#-locales)
-4. [Configuration](#-configuration)
+3. [Configuration](#-configuration)
    1. [Basic Example](#basic-example)
    2. [Card Options](#card-options)
-5. [Per-Entity Configuration](#-per-entity-configuration)
+4. [Per-Entity Configuration](#-per-entity-configuration)
    1. [Example](#example)
    2. [Entity Options](#entity-options)
-6. [How Icons Are Resolved](#-how-icons-are-resolved)
-7. [How States Are Translated](#-how-states-are-translated)
-8. [Examples](#-examples)
+5. [Examples](#-examples)
    1. [Presence Timeline](#presence-timeline)
    2. [Door Monitoring](#door-monitoring)
-9. [Development Notes](#-development-notes)
-10. [License](#-license)
+6. [Locales](#-locales)   
+7. [License](#-license)
 
 ---
 
@@ -96,16 +93,6 @@ resources:
 Or via the UI:
 **Settings → Dashboards → ⋮ → Resources → Add resource**
 </details>
-
-## 🌐 Locales
-
-The card uses JSON-based localization.
-Language selection order:
-
-1. `language:` option in YAML
-2. Home Assistant UI language
-3. Browser language
-4. Fallback → English
 
 ---
 
@@ -178,29 +165,6 @@ entities:
 
 ---
 
-## 🔧 How Icons Are Resolved
-
-Priority order:
-
-1. `icon_map[state]`
-2. `icon`
-3. `icon_map.default`
-4. HA native icon
-5. Device class icons
-6. Domain icons
-7. Generic icons (`on`, `off`, `open`, `closed`)
-8. Fallback → `mdi:help-circle`
-
----
-
-## 📊 How States Are Translated
-
-1. `status_map[state]`
-2. `status.{state}` from locale JSON
-3. Raw state string
-
----
-
 ## 📘 Examples
 
 ### Presence Timeline
@@ -236,12 +200,15 @@ entities:
 
 ---
 
-## 🛠 Development Notes
+## 🌐 Locales
 
-* Custom element name: `timeline-card`
-* File: `timeline-card.js`
-* No external dependencies
-* Uses the Home Assistant history API
+The card uses JSON-based localization.
+Language selection order:
+
+1. `language:` option in YAML
+2. Home Assistant UI language
+3. Browser language
+4. Fallback → English
 
 ---
 
