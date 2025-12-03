@@ -7,13 +7,26 @@
 # Timeline Card
 [![hacs][hacs-default]][hacs-default-link] [![hacs][hacs-validate]][hacs-validate-link]
 
-**A custom Lovelace card for Home Assistant that renders a vertical,
-alternating timeline of recent events for one or more entities.
-Supports per-entity configuration, localized time and state labels, icon
-mapping, and flexible filtering.**
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/weedpump/timeline-card/main/docs/logo.png"
+    alt="Timeline Card Logo"
+    width="140"
+    style="margin-bottom: 12px;"
+  />
+</p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/weedpump/timeline-card/main/docs/card-preview.png" alt="HA Timeline Card">
+  <strong>Timeline Card for Home Assistant</strong><br>
+  <em>Real-time event history with WebSocket updates & beautiful timeline UI</em>
+</p>
+
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/weedpump/timeline-card/main/docs/card-preview.png"
+    alt="Timeline Card Screenshot"
+    style="border-radius:12px; box-shadow:0 4px 22px rgba(0,0,0,0.15);"
+  />
 </p>
 
 ---
@@ -26,6 +39,8 @@ mapping, and flexible filtering.**
 3. [Configuration](#-configuration)
    1. [Basic Example](#basic-example)
    2. [Card Options](#card-options)
+   3. [Auto-Refresh](#auto-refresh)
+   4. [Live Events (WebSocket)](#live-events-websocket)
 4. [Per-Entity Configuration](#-per-entity-configuration)
    1. [Example](#example)
    2. [Entity Options](#entity-options)
@@ -42,11 +57,11 @@ mapping, and flexible filtering.**
 * Alternating left/right timeline layout with a central gradient line
 * Configurable history range (in hours)
 * Global limit for the number of events shown
-* Per-entity configuration (name, icons, colors, status labels,
-  filters)
-* Localized **relative time** (e.g. "5 minutes ago") or **absolute
-  datetime**
+* Per-entity configuration (name, icons, colors, status labels, filters)
+* Localized **relative time** (e.g. "5 minutes ago") or **absolute datetime**
 * Locale-based state translation with per-entity overrides
+* Optional **auto-refresh** interval (in seconds)
+* **Live updates via WebSocket** — timeline updates instantly without page refresh
 * Works with any entity that appears in Home Assistant history
 
 ---
@@ -63,7 +78,7 @@ To install it, click this link:
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=weedpump&repository=timeline-card&category=plugin)
 
 Or:
-<BR>Open the HACS panel in HA, for timeline-card and click download.
+<BR>Open the HACS panel in HA, search for timeline-card, and click download.
 Follow the instructions provided to complete the installation.
 </details>
 
@@ -112,17 +127,47 @@ entities:
 
 ### Card Options
 
-| Option          | Type    | Required | Default | Description                               |
-| --------------- | ------- | -------- | ------- | ----------------------------------------- |
-| `entities`      | list    | yes      | —       | List of entities or entity config objects |
-| `hours`         | number  | yes      | —       | Number of hours of history to fetch       |
-| `limit`         | number  | yes      | —       | Max number of events displayed            |
-| `title`         | string  | no       | ""      | Card title                                |
-| `relative_time` | boolean | no       | false   | Use relative ("5 minutes ago") time       |
-| `show_names`   | boolean | no       | true    | Show entity names                          |
-| `show_states`   | boolean | no       | true    | Show entitiy states                       |
-| `show_states`   | boolean | no       | true    | Show entity icons                         |
-| `language`      | string  | no       | auto    | Language code (`en`, `de`, …)             |
+| Option             | Type    | Required | Default | Description                               |
+| ------------------ | ------- | -------- | ------- | ----------------------------------------- |
+| `entities`         | list    | yes      | —       | List of entities or entity config objects |
+| `hours`            | number  | yes      | —       | Number of hours of history to fetch       |
+| `limit`            | number  | yes      | —       | Max number of events displayed            |
+| `title`            | string  | no       | ""      | Card title                                |
+| `relative_time`    | boolean | no       | false   | Use relative ("5 minutes ago") time       |
+| `show_names`       | boolean | no       | true    | Show entity names                         |
+| `show_states`      | boolean | no       | true    | Show entity states                        |
+| `show_icons`       | boolean | no       | true    | Show entity icons                         |
+| `language`         | string  | no       | auto    | Language code (`en`, `de`, …)             |
+| `refresh_interval` | number  | no       | —       | Auto-refresh interval in seconds (background refresh) |
+
+### Auto-Refresh
+
+You can enable an optional background refresh interval.  
+The card will periodically re-fetch history data without reloading the UI.
+
+```yaml
+type: custom:timeline-card
+hours: 6
+limit: 8
+refresh_interval: 30   # refresh every 30 seconds
+entities:
+  - entity: sensor.energy_usage
+```
+
+The refresh runs silently in the background and only updates the timeline if new events appear.
+
+### Live Events (WebSocket)
+
+The card listens to Home Assistant’s `state_changed` events via WebSockets.  
+Any change of the configured entities is added to the timeline immediately — without refreshing the page.
+
+**No configuration is required.**  
+Live updates work automatically as soon as the card is loaded.
+
+Features:
+* Real-time updates for all configured entities  
+* Same formatting as history events (icons, colors, labels, localization)  
+* No full dashboard reload — only the timeline content is updated
 
 ---
 
@@ -214,6 +259,6 @@ Language selection order:
 
 ## 📄 License
 
-MIT License
+MIT License  
 Free to use, free to modify.
 

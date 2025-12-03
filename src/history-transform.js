@@ -1,7 +1,9 @@
-import { getEntityName } from "./name-engine.js";
-import { getCustomConfig } from "./config-engine.js";
-import { getIconForEntity, getIconColor } from "./icon-engine.js";
+import { transformState } from "./state-transform.js";
 
+/**
+ * Transform HA history API result into a unified flat list
+ * of timeline entries.
+ */
 export function transformHistory(historyData, entities, hassStates, i18n) {
   const { data, start } = historyData;
 
@@ -9,23 +11,21 @@ export function transformHistory(historyData, entities, hassStates, i18n) {
 
   data.forEach((entityList) => {
     entityList.forEach((entry) => {
-      const st        = hassStates[entry.entity_id];
-      const rawState  = entry.state;
-      const cfg       = getCustomConfig(entry.entity_id, entities);
-      const name      = getEntityName(entry.entity_id, entities, hassStates);
+      // Use unified transform for both history and live events
+      const item = transformState(
+        entry.entity_id,
+        entry,          // entry itself is a state object
+        { states: hassStates },
+        entities,
+        i18n
+      );
 
-      flat.push({
-        id: entry.entity_id,
-        name,
-        icon: getIconForEntity(st, cfg, rawState),
-        icon_color: getIconColor(cfg, rawState),
-        state: i18n.getLocalizedState(entry.entity_id, rawState, cfg),
-        raw_state: rawState,
-        time: new Date(entry.last_changed),
-      });
+      if (item) {
+        flat.push(item);
+      }
     });
   });
 
   // Remove synthetic "range start"
-  return flat.filter(e => e.time.getTime() !== start.getTime());
+  return flat.filter((e) => e.time.getTime() !== start.getTime());
 }
