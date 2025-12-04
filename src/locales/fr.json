@@ -1,0 +1,60 @@
+{
+  "time": {
+    "seconds": "il y a quelques secondes",
+    "minutes": "il y a {n} minutes",
+    "hours": "il y a {n} heures",
+    "days": "il y a {n} jours"
+  },
+  "status": {
+    "locked": "verrouillé",
+    "unlocked": "déverrouillé",
+    "open": "ouvert",
+    "closed": "fermé",
+    "on": "allumé",
+    "off": "éteint",
+    "home": "à la maison",
+    "not_home": "absent",
+    "idle": "inactif",
+    "running": "en cours",
+    "paused": "en pause",
+    "stopped": "arrêté",
+    "pending": "en attente",
+    "unknown": "inconnu",
+    "unavailable": "indisponible",
+    "detected": "détecté",
+    "clear": "aucune détection",
+    "online": "en ligne",
+    "offline": "hors ligne",
+    "playing": "lecture en cours",
+    "buffering": "mise en mémoire tampon",
+    "standby": "veille",
+    "cleaning": "nettoyage",
+    "returning": "retour au dock",
+    "docked": "sur la base",
+    "charging": "en charge",
+    "error": "erreur",
+    "spot_cleaning": "nettoyage localisé",
+    "edge_cleaning": "nettoyage des bords",
+    "mopping": "lavage",
+    "locating": "localisation",
+    "moving": "en déplacement",
+    "stuck": "bloqué",
+    "disarmed": "désarmée",
+    "armed_home": "armée (maison)",
+    "armed_away": "armée (absent)",
+    "armed_night": "armée (nuit)",
+    "armed_custom_bypass": "armée (personnalisé)",
+    "arming": "armement",
+    "disarming": "désarmement",
+    "triggered": "déclenché"
+  },
+  "date_format": {
+    "datetime": {
+      "day": "2-digit",
+      "month": "2-digit",
+      "year": "numeric",
+      "hour": "2-digit",
+      "minute": "2-digit"
+    }
+  }
+}
