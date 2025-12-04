@@ -283,7 +283,7 @@ class TimelineCard extends HTMLElement {
                         ${
                           this.showStates
                             ? this.showNames
-                              ? `<div class="secondary-text" style="${stateColor ? `color:${stateColor};` : ""}">(${this.capitalize(item.state)})</div>`
+                              ? `<div class="secondary-text" style="${stateColor ? `color:${stateColor};` : ""}">(${item.state})</div>`
                               : `<div class="primary-text" style="${stateColor ? `color:${stateColor};` : ""}">${this.capitalize(item.state)}</div>`
                             : ``
                         }
@@ -328,7 +328,7 @@ class TimelineCard extends HTMLElement {
                         ${
                           this.showStates
                             ? this.showNames
-                              ? `<div class="secondary-text" style="${stateColor ? `color:${stateColor};` : ""}">(${this.capitalize(item.state)})</div>`
+                              ? `<div class="secondary-text" style="${stateColor ? `color:${stateColor};` : ""}">(${item.state})</div>`
                               : `<div class="primary-text" style="${stateColor ? `color:${stateColor};` : ""}">${this.capitalize(item.state)}</div>`
                             : ``
                         }
