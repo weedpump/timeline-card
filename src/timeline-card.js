@@ -219,10 +219,10 @@ class TimelineCard extends HTMLElement {
       clearInterval(this.refreshTimer);
       this.refreshTimer = null;
     }
-    if (this.liveUnsub) {
-      this.liveUnsub();
-      this.liveUnsub = null;
+    if (typeof this.liveUnsub === "function") {
+        this.liveUnsub();
     }
+    this.liveUnsub = null;
   }
 
   // ------------------------------------
