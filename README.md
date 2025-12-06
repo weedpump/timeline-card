@@ -148,6 +148,9 @@ entities:
 | `allow_multiline`  | boolean | no       | false   | Enables automatic multiline wrapping for long names/states |
 | `name_color`       | string  | no       | —       | Global name color (overridden by entity) |
 | `state_color`      | string  | no       | —       | Global state color (overridden by entity) |
+| `collapse_duplicates` | boolean | false | Removes consecutive events with the same state across all entities. |
+
+
 
 ### Auto-Refresh
 
@@ -220,6 +223,8 @@ entities:
 | `include_states` | list   | Only include events with these raw states |
 | `name_color`     | string | Name color override (fallback: card → theme) |
 | `state_color`    | string | State color override (fallback: card → theme) |
+| `collapse_duplicates` | boolean | false | Removes consecutive events with the same state for this entity only (overrides global setting). |
+
 
 ---
 
@@ -265,6 +270,7 @@ Available translations:
 - English
 - German
 - French
+- Brazilian Portuguese
 
 ---
 

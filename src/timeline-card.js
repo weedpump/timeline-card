@@ -30,7 +30,7 @@ class TimelineCard extends HTMLElement {
         : {
             ...e,
             name_color: e.name_color || null,
-            state_color: e.state_color || null
+            state_color: e.state_color || null,
           }
     );
 
@@ -106,11 +106,7 @@ class TimelineCard extends HTMLElement {
   }
 
   async refreshInForeground() {
-    const raw = await fetchHistory(
-      this.hassInst,
-      this.entities,
-      this.hours
-    );
+    const raw = await fetchHistory(this.hassInst, this.entities, this.hours);
 
     const flat = transformHistory(
       raw,
@@ -119,25 +115,21 @@ class TimelineCard extends HTMLElement {
       this.i18n
     );
 
-    const items = filterHistory(flat, this.entities, this.limit);
-
-    setCachedHistory(
+    const items = filterHistory(
+      flat,
       this.entities,
-      this.hours,
-      this.languageCode,
-      items
+      this.limit,
+      this.config // enthält collapse_duplicates
     );
+
+    setCachedHistory(this.entities, this.hours, this.languageCode, items);
 
     this.items = items;
     this.render();
   }
 
   async refreshInBackground() {
-    const raw = await fetchHistory(
-      this.hassInst,
-      this.entities,
-      this.hours
-    );
+    const raw = await fetchHistory(this.hassInst, this.entities, this.hours);
 
     const flat = transformHistory(
       raw,
@@ -146,16 +138,16 @@ class TimelineCard extends HTMLElement {
       this.i18n
     );
 
-    const items = filterHistory(flat, this.entities, this.limit);
+    const items = filterHistory(
+      flat,
+      this.entities,
+      this.limit,
+      this.config // enthält collapse_duplicates
+    );
 
     if (JSON.stringify(items) === JSON.stringify(this.items)) return;
 
-    setCachedHistory(
-      this.entities,
-      this.hours,
-      this.languageCode,
-      items
-    );
+    setCachedHistory(this.entities, this.hours, this.languageCode, items);
 
     this.items = items;
     this.render();
@@ -173,28 +165,25 @@ class TimelineCard extends HTMLElement {
   startLiveEvents() {
     const entityIds = this.entities.map((e) => e.entity);
 
-    this.liveUnsub = this.hassInst.connection.subscribeEvents(
-      (msg) => {
-        const data = msg?.data;
-        if (!data?.entity_id) return;
-        if (!entityIds.includes(data.entity_id)) return;
+    this.liveUnsub = this.hassInst.connection.subscribeEvents((msg) => {
+      const data = msg?.data;
+      if (!data?.entity_id) return;
+      if (!entityIds.includes(data.entity_id)) return;
 
-        this.processLiveEvent(data);
-      },
-      "state_changed"
-    );
+      this.processLiveEvent(data);
+    }, "state_changed");
   }
 
   processLiveEvent(data) {
     const entityId = data.entity_id;
     const newState = data.new_state;
 
-    // --- NEW: include_states filter for LIVE EVENTS ---
-    const cfg = this.entities.find(e => e.entity === entityId);
+    // --- include_states filter for LIVE EVENTS ---
+    const cfg = this.entities.find((e) => e.entity === entityId);
     if (cfg?.include_states && !cfg.include_states.includes(newState.state)) {
       return; // ignore this live event
     }
-    // --------------------------------------------------
+    // --------------------------------------------
 
     const item = transformState(
       entityId,
@@ -206,8 +195,22 @@ class TimelineCard extends HTMLElement {
 
     if (!item) return;
 
+    // --- NEW: collapse duplicates for LIVE events ---
+    const collapse =
+      cfg?.collapse_duplicates ?? this.config.collapse_duplicates ?? false;
+
+    if (collapse) {
+      const last = this.items[0];
+      if (last && last.id === item.id && last.raw_state === item.raw_state) {
+        return; // ignore duplicate
+      }
+    }
+    // -------------------------------------------------
+
+    // Insert new event at the top
     this.items.unshift(item);
 
+    // Limit size
     if (this.limit && this.items.length > this.limit) {
       this.items = this.items.slice(0, this.limit);
     }
@@ -221,7 +224,7 @@ class TimelineCard extends HTMLElement {
       this.refreshTimer = null;
     }
     if (typeof this.liveUnsub === "function") {
-        this.liveUnsub();
+      this.liveUnsub();
     }
     this.liveUnsub = null;
   }
@@ -257,10 +260,8 @@ class TimelineCard extends HTMLElement {
         const entityCfg = item.entityCfg || {};
 
         // COLOR RESOLUTION: entity → card → theme/css
-        const nameColor =
-          entityCfg.name_color || this.nameColor || "";
-        const stateColor =
-          entityCfg.state_color || this.stateColor || "";
+        const nameColor = entityCfg.name_color || this.nameColor || "";
+        const stateColor = entityCfg.state_color || this.stateColor || "";
 
         return `
           <div class="timeline-row">
@@ -268,7 +269,9 @@ class TimelineCard extends HTMLElement {
               ${
                 side === "left"
                   ? `
-                  <div class="event-box ${this.allowMultiline ? "auto-multiline" : ""}">
+                  <div class="event-box ${
+                    this.allowMultiline ? "auto-multiline" : ""
+                  }">
                     ${
                       this.showIcons
                         ? `<ha-icon icon="${item.icon}" style="color:${item.icon_color};"></ha-icon>`
@@ -278,14 +281,20 @@ class TimelineCard extends HTMLElement {
                       <div class="row">
                         ${
                           this.showNames
-                            ? `<div class="primary-text" style="${nameColor ? `color:${nameColor};` : ""}">${item.name}</div>`
+                            ? `<div class="primary-text" style="${
+                                nameColor ? `color:${nameColor};` : ""
+                              }">${item.name}</div>`
                             : ``
                         }
                         ${
                           this.showStates
                             ? this.showNames
-                              ? `<div class="secondary-text" style="${stateColor ? `color:${stateColor};` : ""}">(${item.state})</div>`
-                              : `<div class="primary-text" style="${stateColor ? `color:${stateColor};` : ""}">${this.capitalize(item.state)}</div>`
+                              ? `<div class="secondary-text" style="${
+                                  stateColor ? `color:${stateColor};` : ""
+                                }">(${item.state})</div>`
+                              : `<div class="primary-text" style="${
+                                  stateColor ? `color:${stateColor};` : ""
+                                }">${this.capitalize(item.state)}</div>`
                             : ``
                         }
                       </div>
@@ -313,7 +322,9 @@ class TimelineCard extends HTMLElement {
               ${
                 side === "right"
                   ? `
-                  <div class="event-box ${this.allowMultiline ? "auto-multiline" : ""}">
+                  <div class="event-box ${
+                    this.allowMultiline ? "auto-multiline" : ""
+                  }">
                     ${
                       this.showIcons
                         ? `<ha-icon icon="${item.icon}" style="color:${item.icon_color};"></ha-icon>`
@@ -323,14 +334,20 @@ class TimelineCard extends HTMLElement {
                       <div class="row">
                         ${
                           this.showNames
-                            ? `<div class="primary-text" style="${nameColor ? `color:${nameColor};` : ""}">${item.name}</div>`
+                            ? `<div class="primary-text" style="${
+                                nameColor ? `color:${nameColor};` : ""
+                              }">${item.name}</div>`
                             : ``
                         }
                         ${
                           this.showStates
                             ? this.showNames
-                              ? `<div class="secondary-text" style="${stateColor ? `color:${stateColor};` : ""}">(${item.state})</div>`
-                              : `<div class="primary-text" style="${stateColor ? `color:${stateColor};` : ""}">${this.capitalize(item.state)}</div>`
+                              ? `<div class="secondary-text" style="${
+                                  stateColor ? `color:${stateColor};` : ""
+                                }">(${item.state})</div>`
+                              : `<div class="primary-text" style="${
+                                  stateColor ? `color:${stateColor};` : ""
+                                }">${this.capitalize(item.state)}</div>`
                             : ``
                         }
                       </div>
@@ -341,7 +358,8 @@ class TimelineCard extends HTMLElement {
                             : formatAbsoluteTime(
                                 item.time,
                                 this.languageCode,
-                                this.i18n)
+                                this.i18n
+                              )
                         }
                       </div>
                     </div>
@@ -379,5 +397,6 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type: "timeline-card",
   name: "Timeline Card",
-  description: "A timeline-based event history card with icons, states and WS updates."
+  description:
+    "A timeline-based event history card with icons, states and WS updates.",
 });
