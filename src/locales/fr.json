@@ -48,6 +48,10 @@
     "disarming": "désarmement",
     "triggered": "déclenché"
   },
+  "ui": {
+    "show_more": "Afficher {n} de plus",
+    "show_less": "Afficher moins"
+  },
   "date_format": {
     "datetime": {
       "day": "2-digit",

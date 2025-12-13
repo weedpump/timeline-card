@@ -490,8 +490,8 @@ class TimelineCard extends HTMLElement {
             <button class="toggle-button" type="button" id="tc-toggle-hidden" aria-expanded="${this.expanded}">
               ${
                 this.expanded
-                  ? "Show less"
-                  : `Show ${hiddenCount} more`
+                  ? this.i18n.t("ui.show_less")
+                  : this.i18n.t("ui.show_more", { n: hiddenCount })
               }
             </button>
           </div>

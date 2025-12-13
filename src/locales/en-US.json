@@ -48,6 +48,10 @@
     "disarming": "disarming",
     "triggered": "triggered"
   },
+  "ui": {
+    "show_more": "Show {n} more",
+    "show_less": "Show less"
+  },
   "date_format": {
     "datetime": {
       "day": "2-digit",

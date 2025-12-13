@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.3.1
+- Added missing translations for the collapse button.
+
 ## v1.3.0
 
 ### 🎉 The Card is now fully configurable via the Home Assistant UI editor.

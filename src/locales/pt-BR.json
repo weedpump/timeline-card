@@ -48,6 +48,10 @@
     "disarming": "desarmando",
     "triggered": "disparado"
   },
+  "ui": {
+    "show_more": "Mostrar mais {n}",
+    "show_less": "Mostrar menos"
+  },
   "date_format": {
     "datetime": {
       "day": "2-digit",
