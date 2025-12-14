@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.4.1
+- Left/right layouts now center the timeline line and tiles as a single block.
+
 ## v1.4.0
 - Added card option ``force_multiline`` to always place the state below the name.
 - Added `card_layout` with `center` (default), `left`, and `right` single-sided timeline layouts using consistent card widths.

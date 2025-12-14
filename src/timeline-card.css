@@ -33,10 +33,16 @@ ha-card {
 
 .wrapper.layout-left {
   --tc-line-offset: calc(var(--tc-line-column) / 2);
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .wrapper.layout-right {
   --tc-line-offset: calc(100% - (var(--tc-line-column) / 2));
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .wrapper.compact {
@@ -62,6 +68,7 @@ ha-card {
   align-items: center;
   position: relative;
   margin: 16px 0;
+  width: 100%;
 }
 
 .wrapper.compact .timeline-row {
@@ -76,20 +83,25 @@ ha-card {
 .wrapper.layout-right .timeline-row {
   display: grid;
   align-items: center;
-  width: 100%;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
   column-gap: 16px;
+  justify-content: center;
 }
 
 .wrapper.layout-left .timeline-row {
-  grid-template-columns: var(--tc-line-column)
-    var(--tc-event-col-width, max-content);
-  justify-content: flex-start;
+  grid-template-columns: var(--tc-line-column) minmax(
+      0,
+      var(--tc-event-col-width, max-content)
+    );
 }
 
 .wrapper.layout-right .timeline-row {
-  grid-template-columns: var(--tc-event-col-width, max-content)
-    var(--tc-line-column);
-  justify-content: flex-end;
+  grid-template-columns: minmax(
+      0,
+      var(--tc-event-col-width, max-content)
+    ) var(--tc-line-column);
 }
 
 .side {
