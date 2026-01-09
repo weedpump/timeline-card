@@ -1,0 +1,65 @@
+{
+  "time": {
+    "seconds": "för några sekunder sedan",
+    "minutes": "{n} minuter sedan",
+    "hours": "{n} timmar sedan",
+    "days": "{n} dagar sedan"
+  },
+  "status": {
+    "locked": "låst",
+    "unlocked": "olåst",
+    "open": "öppet",
+    "closed": "stängd",
+    "on": "på",
+    "off": "av",
+    "home": "hem",
+    "not_home": "borta",
+    "idle": "inaktiv",
+    "running": "är igång",
+    "paused": "pausad",
+    "stopped": "stoppad",
+    "pending": "väntande",
+    "unknown": "okänd",
+    "unavailable": "otillgänglig",
+    "detected": "upptäckt",
+    "clear": "klar",
+    "online": "online",
+    "offline": "offline",
+    "playing": "spelar",
+    "buffering": "buffring",
+    "standby": "standby",
+    "cleaning": "rengöring",
+    "returning": "återvändande",
+    "docked": "dockad",
+    "charging": "laddar",
+    "error": "fel",
+    "spot_cleaning": "punktrengöring",
+    "edge_cleaning": "kantrengöring",
+    "mopping": "moppning",
+    "locating": "söker plats",
+    "moving": "rör sig",
+    "stuck": "fast",
+    "disarmed": "avaktiverad",
+    "armed_home": "aktiverat hem",
+    "armed_away": "aktiverat borta",
+    "armed_night": "aktiverat natt",
+    "armed_custom_bypass": "aktivera anpassad förbikoppling",
+    "arming": "aktivera",
+    "disarming": "avaktiverar",
+    "triggered": "utlöst"
+  },
+  "ui": {
+    "show_more": "Visa {n} mer",
+    "show_less": "Visa mindre"
+  },
+  "date_format": {
+    "datetime": {
+      "day": "2-digit",
+      "month": "2-digit",
+      "year": "numeric",
+      "hour": "2-digit",
+      "minute": "2-digit",
+      "hour12": true
+    }
+  }
+}
