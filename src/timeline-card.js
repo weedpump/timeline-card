@@ -136,6 +136,28 @@ class TimelineCard extends HTMLElement {
     this.config = config;
   }
 
+  connectedCallback() {
+    // Ensure structure exists immediately so card_mod can attach
+    if (!this.shadowRoot) {
+      this.attachShadow({ mode: "open" });
+    }
+    this.ensureCardExists();
+  }
+
+  ensureCardExists() {
+    console.log("test");
+    const root = this.shadowRoot;
+    if (!root.querySelector('style')) {
+        const styleEl = document.createElement('style');
+        styleEl.textContent = styles;
+        root.appendChild(styleEl);
+    }
+    if (!root.querySelector("ha-card")) {
+        const card = document.createElement("ha-card");
+        root.appendChild(card);
+    }
+  }
+
   set hass(hass) {
     this.hassInst = hass;
 
@@ -330,14 +352,21 @@ class TimelineCard extends HTMLElement {
   // RENDER CARD
   // ------------------------------------
   render() {
-    const root = this.shadowRoot || this.attachShadow({ mode: "open" });
+    // Check if we already have a shadow root
+    let root = this.shadowRoot;
+    
+    // If not, create it
+    if (!root) {
+      root = this.attachShadow({ mode: "open" });
+    }
+
+    // Ensure card exists
+    this.ensureCardExists();
+    let card = root.querySelector("ha-card");
 
     if (!this.items.length) {
-      root.innerHTML = `
-        <style>${styles}</style>
-        <ha-card>
-          <div style="padding:12px">Keine Ereignisse in diesem Zeitraum.</div>
-        </ha-card>
+      card.innerHTML = `
+          <div style="padding:12px">${this.i18n.t("ui.no_events")}</div>
       `;
       return;
     }
@@ -486,9 +515,7 @@ class TimelineCard extends HTMLElement {
         `
         : "";
 
-    root.innerHTML = `
-      <style>${styles}</style>
-      <ha-card>
+    card.innerHTML = `
         ${this.title ? `<h1 class="card-title">${this.title}</h1>` : ""}
         <div class="timeline-container ${
           overflowMode === "scroll" ? "scrollable" : ""
@@ -499,7 +526,6 @@ class TimelineCard extends HTMLElement {
           </div>
         </div>
         ${collapseToggle}
-      </ha-card>
     `;
 
     const toggleBtn = root.getElementById("tc-toggle-hidden");

@@ -50,7 +50,8 @@
   },
   "ui": {
     "show_more": "Afficher {n} de plus",
-    "show_less": "Afficher moins"
+    "show_less": "Afficher moins",
+    "no_events": "Aucun événement dans cette période."
   },
   "date_format": {
     "datetime": {
