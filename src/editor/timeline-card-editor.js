@@ -1,9 +1,9 @@
-import { LitElement, html } from "lit";
-import editorStyles from "./timeline-card-editor.css";
+import { LitElement, html } from 'lit';
+import editorStyles from './timeline-card-editor.css';
 
-import "./general-settings.js";
-import "./entity-list.js";
-import "./entity-editor.js";
+import './general-settings.js';
+import './entity-list.js';
+import './entity-editor.js';
 
 class TimelineCardEditor extends LitElement {
   static get properties() {
@@ -18,13 +18,13 @@ class TimelineCardEditor extends LitElement {
   constructor() {
     super();
     this._config = {};
-    this._view = "main";
+    this._view = 'main';
     this._editedEntityIndex = -1;
   }
 
   setConfig(config) {
     const normalizedEntities = (config.entities || []).map((e) =>
-      typeof e === "string" ? { entity: e } : e
+      typeof e === 'string' ? { entity: e } : e
     );
 
     this._config = { ...config, entities: normalizedEntities };
@@ -44,11 +44,11 @@ class TimelineCardEditor extends LitElement {
       this._config.collapse_duplicates = false;
     if (this._config.compact_layout === undefined)
       this._config.compact_layout = false;
-    if (!["center", "left", "right"].includes(this._config.card_layout)) {
-      this._config.card_layout = "center";
+    if (!['center', 'left', 'right'].includes(this._config.card_layout)) {
+      this._config.card_layout = 'center';
     }
-    if (!["collapse", "scroll"].includes(this._config.overflow)) {
-      this._config.overflow = "collapse";
+    if (!['collapse', 'scroll'].includes(this._config.overflow)) {
+      this._config.overflow = 'collapse';
     }
   }
 
@@ -59,11 +59,11 @@ class TimelineCardEditor extends LitElement {
   render() {
     if (!this._config) return html``;
 
-    if (this._view === "card") {
+    if (this._view === 'card') {
       return this._renderCardSettings();
     }
 
-    if (this._view === "entity") {
+    if (this._view === 'entity') {
       return this._renderEntitySettings();
     }
 
@@ -73,7 +73,9 @@ class TimelineCardEditor extends LitElement {
   // MAIN VIEW
   _renderMainView() {
     return html`
-      <style>${editorStyles}</style>
+      <style>
+        ${editorStyles}
+      </style>
       <div class="tc-editor-root">
         <div class="tc-header">
           <div class="tc-header-title">Timeline Card</div>
@@ -104,13 +106,15 @@ class TimelineCardEditor extends LitElement {
   // CARD SETTINGS VIEW
   _renderCardSettings() {
     return html`
-      <style>${editorStyles}</style>
+      <style>
+        ${editorStyles}
+      </style>
       <div class="tc-editor-root">
         <div class="tc-header">
           <button
             class="tc-icon-button"
             title="Back"
-            @click=${() => this._goTo("main")}
+            @click=${() => this._goTo('main')}
           >
             <ha-icon icon="mdi:arrow-left"></ha-icon>
           </button>
@@ -132,13 +136,15 @@ class TimelineCardEditor extends LitElement {
     const entity = index >= 0 ? entities[index] : null;
 
     return html`
-      <style>${editorStyles}</style>
+      <style>
+        ${editorStyles}
+      </style>
       <div class="tc-editor-root">
         <div class="tc-header">
           <button
             class="tc-icon-button"
             title="Back"
-            @click=${() => this._goTo("main")}
+            @click=${() => this._goTo('main')}
           >
             <ha-icon icon="mdi:arrow-left"></ha-icon>
           </button>
@@ -156,7 +162,7 @@ class TimelineCardEditor extends LitElement {
   }
 
   _openCardSettings() {
-    this._goTo("card");
+    this._goTo('card');
   }
 
   _goTo(view) {
@@ -184,7 +190,7 @@ class TimelineCardEditor extends LitElement {
   _onEditEntity(ev) {
     const idx = ev.detail?.index;
     this._editedEntityIndex = idx;
-    this._goTo("entity");
+    this._goTo('entity');
   }
 
   _onEntityUpdated(ev) {
@@ -203,7 +209,7 @@ class TimelineCardEditor extends LitElement {
 
   _emitConfigChanged() {
     this.dispatchEvent(
-      new CustomEvent("config-changed", {
+      new CustomEvent('config-changed', {
         detail: { config: this._config },
         bubbles: true,
         composed: true,
@@ -212,4 +218,4 @@ class TimelineCardEditor extends LitElement {
   }
 }
 
-customElements.define("weedpump-timeline-card-editor", TimelineCardEditor);
+customElements.define('weedpump-timeline-card-editor', TimelineCardEditor);

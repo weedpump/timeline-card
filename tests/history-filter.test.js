@@ -9,7 +9,7 @@ describe('filterHistory', () => {
       { entity: 'sensor.b', collapse_duplicates: true },
     ];
 
-    // Input data: 
+    // Input data:
     // sensor.a toggles ON -> OFF, but has a duplicate ON in between.
     // sensor.b is RED, and has a duplicate RED in between.
     // They are interleaved in time.
@@ -31,9 +31,21 @@ describe('filterHistory', () => {
     // Remaining: A(1000), B(900), A(600).
     expect(result).toHaveLength(3);
 
-    expect(result[0]).toMatchObject({ id: 'sensor.a', time: 1000, raw_state: 'ON' });
-    expect(result[1]).toMatchObject({ id: 'sensor.b', time: 900, raw_state: 'RED' });
-    expect(result[2]).toMatchObject({ id: 'sensor.a', time: 600, raw_state: 'OFF' });
+    expect(result[0]).toMatchObject({
+      id: 'sensor.a',
+      time: 1000,
+      raw_state: 'ON',
+    });
+    expect(result[1]).toMatchObject({
+      id: 'sensor.b',
+      time: 900,
+      raw_state: 'RED',
+    });
+    expect(result[2]).toMatchObject({
+      id: 'sensor.a',
+      time: 600,
+      raw_state: 'OFF',
+    });
   });
 
   it('should respect per-entity configuration for collapsing', () => {
@@ -53,7 +65,7 @@ describe('filterHistory', () => {
 
     expect(result).toHaveLength(3);
     // A(900) removed, B(700) kept.
-    const times = result.map(i => i.time);
+    const times = result.map((i) => i.time);
     expect(times).toContain(1000);
     expect(times).not.toContain(900);
     expect(times).toContain(800);

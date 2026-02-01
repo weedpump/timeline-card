@@ -1,11 +1,11 @@
-import { LitElement, html } from "lit";
-import editorStyles from "./timeline-card-editor.css";
+import { LitElement, html } from 'lit';
+import editorStyles from './timeline-card-editor.css';
 import {
   alphaToPercent,
   formatColorValue,
   parseColorValue,
   percentToAlpha,
-} from "./color-utils.js";
+} from './color-utils.js';
 
 class TimelineCardEntityEditor extends LitElement {
   static get properties() {
@@ -19,7 +19,9 @@ class TimelineCardEntityEditor extends LitElement {
   render() {
     if (!this.entity) {
       return html`
-        <style>${editorStyles}</style>
+        <style>
+          ${editorStyles}
+        </style>
         <div class="tc-editor-root">
           <div class="tc-placeholder">No entity selected.</div>
         </div>
@@ -30,16 +32,15 @@ class TimelineCardEntityEditor extends LitElement {
     const stateObj = this.hass?.states?.[entityId];
     const friendlyName = stateObj?.attributes?.friendly_name || entityId;
 
-    const domain = entityId?.split(".")[0] ?? "sensor";
+    const domain = entityId?.split('.')[0] ?? 'sensor';
     const defaultDomainIcons = {
-      lock: "mdi:lock",
-      sensor: "mdi:information-outline",
-      binary_sensor: "mdi:eye",
-      light: "mdi:lightbulb",
-      switch: "mdi:toggle-switch",
+      lock: 'mdi:lock',
+      sensor: 'mdi:information-outline',
+      binary_sensor: 'mdi:eye',
+      light: 'mdi:lightbulb',
+      switch: 'mdi:toggle-switch',
     };
-    const entityIcon =
-      defaultDomainIcons[domain] || "mdi:information-outline";
+    const entityIcon = defaultDomainIcons[domain] || 'mdi:information-outline';
 
     const cfg = this.entity;
     const hasIncludeStates =
@@ -50,17 +51,26 @@ class TimelineCardEntityEditor extends LitElement {
     const excludeDisabled = hasIncludeStates;
 
     return html`
-      <style>${editorStyles}</style>
+      <style>
+        ${editorStyles}
+      </style>
       <div class="tc-editor-root">
-
         <!-- OVERVIEW -->
         <div class="tc-section">
           <h3 class="tc-section-title">Entity overview</h3>
 
-          <div class="tc-card-block" style="display:flex; gap:12px; align-items:flex-start;">
-            <ha-icon icon="${entityIcon}" style="--mdc-icon-size: 24px;"></ha-icon>
+          <div
+            class="tc-card-block"
+            style="display:flex; gap:12px; align-items:flex-start;"
+          >
+            <ha-icon
+              icon="${entityIcon}"
+              style="--mdc-icon-size: 24px;"
+            ></ha-icon>
             <div style="flex:1;">
-              <div style="font-size:15px; font-weight:600;">${friendlyName}</div>
+              <div style="font-size:15px; font-weight:600;">
+                ${friendlyName}
+              </div>
               <div style="font-size:13px; opacity:0.7;">${entityId}</div>
             </div>
           </div>
@@ -72,7 +82,6 @@ class TimelineCardEntityEditor extends LitElement {
 
           <div class="tc-card-block">
             <div class="tc-form-group">
-
               <!-- CUSTOM NAME -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
@@ -81,8 +90,8 @@ class TimelineCardEntityEditor extends LitElement {
 
                 <ha-textfield
                   style="min-width: 200px; width: 280px; max-width: 280px;"
-                  .value=${cfg.name || ""}
-                  @input=${(e) => this._updateField("name", e.target.value)}
+                  .value=${cfg.name || ''}
+                  @input=${(e) => this._updateField('name', e.target.value)}
                 ></ha-textfield>
               </div>
 
@@ -94,16 +103,16 @@ class TimelineCardEntityEditor extends LitElement {
 
                 <ha-icon-picker
                   style="min-width: 200px; width: 280px; max-width: 280px;"
-                  .value=${cfg.icon || ""}
+                  .value=${cfg.icon || ''}
                   @value-changed=${(e) =>
-                    this._updateField("icon", e.detail.value)}
+                    this._updateField('icon', e.detail.value)}
                 ></ha-icon-picker>
               </div>
 
               ${this._booleanRow(
-                "Use entity picture (if available)",
-                "Show the entity picture instead of the icon when provided.",
-                "show_entity_picture",
+                'Use entity picture (if available)',
+                'Show the entity picture instead of the icon when provided.',
+                'show_entity_picture',
                 cfg.show_entity_picture ?? null
               )}
 
@@ -116,21 +125,33 @@ class TimelineCardEntityEditor extends LitElement {
                   </div>
                 </div>
                 <div class="tc-color-row">
-                  ${this._renderColorPicker("icon_color", cfg.icon_color, "Icon color")}
+                  ${this._renderColorPicker(
+                    'icon_color',
+                    cfg.icon_color,
+                    'Icon color'
+                  )}
                 </div>
                 <div class="tc-color-row">
-                  ${this._renderColorPicker("name_color", cfg.name_color, "Name color")}
+                  ${this._renderColorPicker(
+                    'name_color',
+                    cfg.name_color,
+                    'Name color'
+                  )}
                 </div>
                 <div class="tc-color-row">
-                  ${this._renderColorPicker("state_color", cfg.state_color, "State color")}
+                  ${this._renderColorPicker(
+                    'state_color',
+                    cfg.state_color,
+                    'State color'
+                  )}
                 </div>
               </div>
 
               <!-- COLLAPSE DUPLICATES -->
               ${this._booleanRow(
-                "Collapse duplicates (entity level)",
-                "Hide consecutive identical states for this entity.",
-                "collapse_duplicates",
+                'Collapse duplicates (entity level)',
+                'Hide consecutive identical states for this entity.',
+                'collapse_duplicates',
                 cfg.collapse_duplicates ?? null
               )}
 
@@ -140,9 +161,11 @@ class TimelineCardEntityEditor extends LitElement {
                   <div class="tc-setting-title">Include states</div>
                   <div class="tc-setting-description">
                     Only show events matching this YAML list:
-                    <pre>- open
+                    <pre>
+- open
 - closed
-- jammed</pre>
+- jammed</pre
+                    >
                   </div>
                 </div>
 
@@ -176,9 +199,11 @@ class TimelineCardEntityEditor extends LitElement {
                   <div class="tc-setting-title">Exclude states</div>
                   <div class="tc-setting-description">
                     Hide events matching this YAML list:
-                    <pre>- idle
+                    <pre>
+- idle
 - unknown
-- unavailable</pre>
+- unavailable</pre
+                    >
                   </div>
                 </div>
 
@@ -205,7 +230,6 @@ class TimelineCardEntityEditor extends LitElement {
                     )}
                 ></textarea>
               </div>
-
             </div>
           </div>
         </div>
@@ -222,7 +246,7 @@ class TimelineCardEntityEditor extends LitElement {
                     Override displayed labels per raw state.
                   </div>
                 </div>
-                ${this._renderMapEditor("state_map", cfg.state_map, "Label")}
+                ${this._renderMapEditor('state_map', cfg.state_map, 'Label')}
               </div>
 
               <div class="tc-setting-block">
@@ -232,7 +256,7 @@ class TimelineCardEntityEditor extends LitElement {
                     Select icons per state (uses MDI names).
                   </div>
                 </div>
-                ${this._renderIconMapEditor("icon_map", cfg.icon_map)}
+                ${this._renderIconMapEditor('icon_map', cfg.icon_map)}
               </div>
 
               <div class="tc-setting-block">
@@ -242,12 +266,14 @@ class TimelineCardEntityEditor extends LitElement {
                     Hex/RGB color per state.
                   </div>
                 </div>
-                ${this._renderColorMapEditor("icon_color_map", cfg.icon_color_map)}
+                ${this._renderColorMapEditor(
+                  'icon_color_map',
+                  cfg.icon_color_map
+                )}
               </div>
             </div>
           </div>
         </div>
-
       </div>
     `;
   }
@@ -257,17 +283,17 @@ class TimelineCardEntityEditor extends LitElement {
   -------------------------*/
 
   _stringifyStateList(arr) {
-    if (!Array.isArray(arr) || arr.length === 0) return "";
-    return arr.map((s) => `- ${s}`).join("\n");
+    if (!Array.isArray(arr) || arr.length === 0) return '';
+    return arr.map((s) => `- ${s}`).join('\n');
   }
 
   _parseStateList(text) {
     if (!text.trim()) return undefined;
 
     const list = text
-      .split("\n")
+      .split('\n')
       .map((line) => line.trim())
-      .filter((line) => line.startsWith("- "))
+      .filter((line) => line.startsWith('- '))
       .map((line) => line.substring(2))
       .filter((v) => v.length > 0);
 
@@ -310,7 +336,7 @@ class TimelineCardEntityEditor extends LitElement {
 
     const newCfg = {
       ...this.entity,
-      [key]: value === "" ? undefined : value,
+      [key]: value === '' ? undefined : value,
     };
 
     this._emitUpdate(newCfg);
@@ -318,7 +344,7 @@ class TimelineCardEntityEditor extends LitElement {
 
   _emitUpdate(entity) {
     this.dispatchEvent(
-      new CustomEvent("entity-updated", {
+      new CustomEvent('entity-updated', {
         detail: { index: this.index, entity },
         bubbles: true,
         composed: true,
@@ -330,7 +356,7 @@ class TimelineCardEntityEditor extends LitElement {
      MAP EDITOR HELPERS
   -------------------------*/
 
-  _renderMapEditor(mapKey, mapObj = {}, placeholder = "") {
+  _renderMapEditor(mapKey, mapObj = {}, placeholder = '') {
     const entries = Object.entries(mapObj || {});
 
     return html`
@@ -382,7 +408,7 @@ class TimelineCardEntityEditor extends LitElement {
   _addMapEntry(mapKey) {
     const map = { ...(this.entity[mapKey] || {}) };
     const newKey = this._suggestNextKey(map);
-    map[newKey] = "";
+    map[newKey] = '';
     this._updateField(mapKey, map);
   }
 
@@ -476,14 +502,14 @@ class TimelineCardEntityEditor extends LitElement {
   }
 
   _suggestNextKey(mapObj) {
-    const base = "state";
+    const base = 'state';
     let idx = 1;
     while (mapObj[`${base}${idx}`]) idx += 1;
     return `${base}${idx}`;
   }
 
   _onMapKeyChange(mapKey, oldKey, newKey) {
-    const nextKey = (newKey || "").trim();
+    const nextKey = (newKey || '').trim();
     if (!nextKey) return;
     if (nextKey === oldKey) return;
 
@@ -583,4 +609,4 @@ class TimelineCardEntityEditor extends LitElement {
   }
 }
 
-customElements.define("timeline-card-entity-editor", TimelineCardEntityEditor);
+customElements.define('timeline-card-entity-editor', TimelineCardEntityEditor);

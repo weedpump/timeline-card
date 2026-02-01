@@ -3,12 +3,12 @@ function clamp(value, min, max) {
 }
 
 function normalizeHex(value) {
-  const raw = value.replace("#", "");
+  const raw = value.replace('#', '');
   if (/^[0-9a-f]{3}$/i.test(raw)) {
     return `#${raw
-      .split("")
+      .split('')
       .map((c) => `${c}${c}`)
-      .join("")}`;
+      .join('')}`;
   }
   if (/^[0-9a-f]{6}$/i.test(raw)) {
     return `#${raw}`;
@@ -21,20 +21,19 @@ function rgbToHex({ r, g, b }) {
 }
 
 function toHex(value) {
-  return value.toString(16).padStart(2, "0");
+  return value.toString(16).padStart(2, '0');
 }
 
 function parseRgbString(value) {
   const match = value
-    .replace(/\s+/g, "")
+    .replace(/\s+/g, '')
     .match(/^rgba?\((\d{1,3}),(\d{1,3}),(\d{1,3})(?:,([0-9.]+))?\)$/);
   if (!match) return null;
 
   const r = clamp(parseInt(match[1], 10), 0, 255);
   const g = clamp(parseInt(match[2], 10), 0, 255);
   const b = clamp(parseInt(match[3], 10), 0, 255);
-  const alpha =
-    match[4] !== undefined ? clamp(parseFloat(match[4]), 0, 1) : 1;
+  const alpha = match[4] !== undefined ? clamp(parseFloat(match[4]), 0, 1) : 1;
 
   return { hex: rgbToHex({ r, g, b }), alpha };
 }
@@ -50,8 +49,8 @@ function parseHexColor(value) {
   };
 }
 
-export function parseColorValue(value, fallbackHex = "#00aaff") {
-  if (!value || typeof value !== "string") {
+export function parseColorValue(value, fallbackHex = '#00aaff') {
+  if (!value || typeof value !== 'string') {
     return { hex: fallbackHex, alpha: 1 };
   }
 
@@ -61,18 +60,18 @@ export function parseColorValue(value, fallbackHex = "#00aaff") {
   }
 
   const lowered = trimmed.toLowerCase();
-  if (lowered === "transparent") {
-    return { hex: "#000000", alpha: 0 };
+  if (lowered === 'transparent') {
+    return { hex: '#000000', alpha: 0 };
   }
 
-  if (lowered.startsWith("#")) {
+  if (lowered.startsWith('#')) {
     const hex = normalizeHex(lowered);
     if (hex) {
       return { hex, alpha: 1 };
     }
   }
 
-  if (lowered.startsWith("rgb")) {
+  if (lowered.startsWith('rgb')) {
     const parsed = parseRgbString(lowered);
     if (parsed) return parsed;
   }
@@ -103,7 +102,7 @@ export function alphaToPercent(alpha) {
 }
 
 export function percentToAlpha(value) {
-  const parsed = typeof value === "string" ? parseInt(value, 10) : value;
+  const parsed = typeof value === 'string' ? parseInt(value, 10) : value;
   if (Number.isNaN(parsed)) return 1;
   return clamp(parsed / 100, 0, 1);
 }

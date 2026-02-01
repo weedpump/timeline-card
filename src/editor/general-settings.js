@@ -1,11 +1,11 @@
-import { LitElement, html } from "lit";
-import editorStyles from "./timeline-card-editor.css";
+import { LitElement, html } from 'lit';
+import editorStyles from './timeline-card-editor.css';
 import {
   alphaToPercent,
   formatColorValue,
   parseColorValue,
   percentToAlpha,
-} from "./color-utils.js";
+} from './color-utils.js';
 
 class TimelineCardGeneralSettings extends LitElement {
   static get properties() {
@@ -17,12 +17,14 @@ class TimelineCardGeneralSettings extends LitElement {
   render() {
     if (!this.config) return html``;
     const cfg = this.config;
-    const overflowMode = (cfg.overflow || "collapse").toLowerCase();
-    const isCollapseMode = overflowMode === "collapse";
-    const isScrollMode = overflowMode === "scroll";
+    const overflowMode = (cfg.overflow || 'collapse').toLowerCase();
+    const isCollapseMode = overflowMode === 'collapse';
+    const isScrollMode = overflowMode === 'scroll';
 
     return html`
-      <style>${editorStyles}</style>
+      <style>
+        ${editorStyles}
+      </style>
       <div class="tc-editor-root">
         <!-- SECTION: General -->
         <div class="tc-section">
@@ -35,14 +37,12 @@ class TimelineCardGeneralSettings extends LitElement {
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Title</div>
-                  <div class="tc-setting-description">
-                    Optional card title.
-                  </div>
+                  <div class="tc-setting-description">Optional card title.</div>
                 </div>
                 <ha-textfield
                   style="min-width: 200px; width: 280px; max-width: 280px;"
-                  .value=${cfg.title || ""}
-                  @input=${(e) => this._onTextChange("title", e.target.value)}
+                  .value=${cfg.title || ''}
+                  @input=${(e) => this._onTextChange('title', e.target.value)}
                 ></ha-textfield>
               </div>
 
@@ -56,8 +56,8 @@ class TimelineCardGeneralSettings extends LitElement {
                 </div>
                 <ha-select
                   style="min-width: 200px; width: 240px;"
-                  .value=${cfg.language || ""}
-                  @selected=${(e) => this._onSelectChange("language", e)}
+                  .value=${cfg.language || ''}
+                  @selected=${(e) => this._onSelectChange('language', e)}
                   @closed=${(e) => e.stopPropagation()}
                 >
                   <mwc-list-item value="">Auto</mwc-list-item>
@@ -83,9 +83,9 @@ class TimelineCardGeneralSettings extends LitElement {
                   type="number"
                   min="1"
                   style="width: 140px;"
-                  .value=${cfg.refresh_interval ?? ""}
+                  .value=${cfg.refresh_interval ?? ''}
                   @input=${(e) =>
-                    this._onNumberChange("refresh_interval", e.target.value)}
+                    this._onNumberChange('refresh_interval', e.target.value)}
                 ></ha-textfield>
               </div>
             </div>
@@ -111,8 +111,8 @@ class TimelineCardGeneralSettings extends LitElement {
                   type="number"
                   min="1"
                   style="width: 140px;"
-                  .value=${cfg.hours ?? ""}
-                  @input=${(e) => this._onNumberChange("hours", e.target.value)}
+                  .value=${cfg.hours ?? ''}
+                  @input=${(e) => this._onNumberChange('hours', e.target.value)}
                 ></ha-textfield>
               </div>
 
@@ -128,8 +128,8 @@ class TimelineCardGeneralSettings extends LitElement {
                   type="number"
                   min="1"
                   style="width: 140px;"
-                  .value=${cfg.limit ?? ""}
-                  @input=${(e) => this._onNumberChange("limit", e.target.value)}
+                  .value=${cfg.limit ?? ''}
+                  @input=${(e) => this._onNumberChange('limit', e.target.value)}
                 ></ha-textfield>
               </div>
             </div>
@@ -159,16 +159,16 @@ class TimelineCardGeneralSettings extends LitElement {
                         type="number"
                         min="1"
                         style="width: 140px;"
-                        .value=${cfg.visible_events ?? ""}
+                        .value=${cfg.visible_events ?? ''}
                         @input=${(e) =>
                           this._onNumberChange(
-                            "visible_events",
+                            'visible_events',
                             e.target.value
                           )}
                       ></ha-textfield>
                     </div>
                   `
-                : ""}
+                : ''}
 
               <!-- OVERFLOW MODE -->
               <div class="tc-setting-row">
@@ -180,12 +180,16 @@ class TimelineCardGeneralSettings extends LitElement {
                 </div>
                 <ha-select
                   style="min-width: 180px; width: 200px;"
-                  .value=${cfg.overflow || "collapse"}
-                  @selected=${(e) => this._onSelectChange("overflow", e)}
+                  .value=${cfg.overflow || 'collapse'}
+                  @selected=${(e) => this._onSelectChange('overflow', e)}
                   @closed=${(e) => e.stopPropagation()}
                 >
-                  <mwc-list-item value="collapse">Collapse (show more/less)</mwc-list-item>
-                  <mwc-list-item value="scroll">Scroll (respect max height)</mwc-list-item>
+                  <mwc-list-item value="collapse"
+                    >Collapse (show more/less)</mwc-list-item
+                  >
+                  <mwc-list-item value="scroll"
+                    >Scroll (respect max height)</mwc-list-item
+                  >
                 </ha-select>
               </div>
 
@@ -201,13 +205,13 @@ class TimelineCardGeneralSettings extends LitElement {
                       </div>
                       <ha-textfield
                         style="width: 180px;"
-                        .value=${cfg.max_height ?? ""}
+                        .value=${cfg.max_height ?? ''}
                         @input=${(e) =>
-                          this._onTextChange("max_height", e.target.value)}
+                          this._onTextChange('max_height', e.target.value)}
                       ></ha-textfield>
                     </div>
                   `
-                : ""}
+                : ''}
             </div>
           </div>
         </div>
@@ -225,18 +229,25 @@ class TimelineCardGeneralSettings extends LitElement {
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Card layout</div>
                   <div class="tc-setting-description">
-                    Switch between centered (alternating) and single-sided layouts.
+                    Switch between centered (alternating) and single-sided
+                    layouts.
                   </div>
                 </div>
                 <ha-select
                   style="min-width: 200px; width: 240px;"
-                  .value=${cfg.card_layout || "center"}
-                  @selected=${(e) => this._onSelectChange("card_layout", e)}
+                  .value=${cfg.card_layout || 'center'}
+                  @selected=${(e) => this._onSelectChange('card_layout', e)}
                   @closed=${(e) => e.stopPropagation()}
                 >
-                  <mwc-list-item value="center">Center (alternating)</mwc-list-item>
-                  <mwc-list-item value="left">Left line, cards right</mwc-list-item>
-                  <mwc-list-item value="right">Right line, cards left</mwc-list-item>
+                  <mwc-list-item value="center"
+                    >Center (alternating)</mwc-list-item
+                  >
+                  <mwc-list-item value="left"
+                    >Left line, cards right</mwc-list-item
+                  >
+                  <mwc-list-item value="right"
+                    >Right line, cards left</mwc-list-item
+                  >
                 </ha-select>
               </div>
 
@@ -248,40 +259,38 @@ class TimelineCardGeneralSettings extends LitElement {
         <!-- SECTION: Content -->
         <div class="tc-section">
           <h3 class="tc-section-title">Content</h3>
-          <div class="tc-section-subtitle">
-            What is shown for each event.
-          </div>
+          <div class="tc-section-subtitle">What is shown for each event.</div>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               ${this._booleanRow(
-                "Show names",
-                "Show the entity name in the timeline.",
-                "show_names",
+                'Show names',
+                'Show the entity name in the timeline.',
+                'show_names',
                 cfg.show_names ?? true
               )}
               ${this._booleanRow(
-                "Show states",
-                "Display the entity state next to the name.",
-                "show_states",
+                'Show states',
+                'Display the entity state next to the name.',
+                'show_states',
                 cfg.show_states ?? true
               )}
               ${this._booleanRow(
-                "Show icons",
-                "Add the entity icon to each event.",
-                "show_icons",
+                'Show icons',
+                'Add the entity icon to each event.',
+                'show_icons',
                 cfg.show_icons ?? true
               )}
               ${this._booleanRow(
-                "Use relative time",
-                "Show relative timestamps like 5 minutes ago.",
-                "relative_time",
+                'Use relative time',
+                'Show relative timestamps like 5 minutes ago.',
+                'relative_time',
                 cfg.relative_time ?? false
               )}
               ${this._booleanRow(
-                "Show date",
-                "Include the date for absolute timestamps; turn off to display time only.",
-                "show_date",
+                'Show date',
+                'Include the date for absolute timestamps; turn off to display time only.',
+                'show_date',
                 cfg.show_date ?? true
               )}
             </div>
@@ -298,15 +307,15 @@ class TimelineCardGeneralSettings extends LitElement {
           <div class="tc-card-block">
             <div class="tc-form-group">
               ${this._booleanRow(
-                "Allow multiline",
-                "Allow names and states to wrap across multiple lines.",
-                "allow_multiline",
+                'Allow multiline',
+                'Allow names and states to wrap across multiple lines.',
+                'allow_multiline',
                 cfg.allow_multiline ?? false
               )}
               ${this._booleanRow(
-                "Force multiline",
-                "Always place the state on a new line under the name.",
-                "force_multiline",
+                'Force multiline',
+                'Always place the state on a new line under the name.',
+                'force_multiline',
                 cfg.force_multiline ?? false
               )}
             </div>
@@ -323,9 +332,9 @@ class TimelineCardGeneralSettings extends LitElement {
           <div class="tc-card-block">
             <div class="tc-form-group">
               ${this._booleanRow(
-                "Collapse duplicates",
-                "Hide consecutive events with the same state.",
-                "collapse_duplicates",
+                'Collapse duplicates',
+                'Hide consecutive events with the same state.',
+                'collapse_duplicates',
                 cfg.collapse_duplicates ?? false
               )}
             </div>
@@ -342,47 +351,47 @@ class TimelineCardGeneralSettings extends LitElement {
             <div class="tc-form-group">
               <div class="tc-color-row">
                 ${this._renderColorPicker(
-                  "card_background",
+                  'card_background',
                   cfg.card_background,
-                  "Card background color"
+                  'Card background color'
                 )}
               </div>
               <div class="tc-color-row">
                 ${this._renderColorPicker(
-                  "timeline_color_start",
+                  'timeline_color_start',
                   cfg.timeline_color_start,
-                  "Timeline gradient start",
-                  "#2da8ff"
+                  'Timeline gradient start',
+                  '#2da8ff'
                 )}
               </div>
               <div class="tc-color-row">
                 ${this._renderColorPicker(
-                  "timeline_color_end",
+                  'timeline_color_end',
                   cfg.timeline_color_end,
-                  "Timeline gradient end",
-                  "#b24aff"
+                  'Timeline gradient end',
+                  '#b24aff'
                 )}
               </div>
               <div class="tc-color-row">
                 ${this._renderColorPicker(
-                  "dot_color",
+                  'dot_color',
                   cfg.dot_color,
-                  "Dot color",
-                  "#31a8ff"
+                  'Dot color',
+                  '#31a8ff'
                 )}
               </div>
               <div class="tc-color-row">
                 ${this._renderColorPicker(
-                  "name_color",
+                  'name_color',
                   cfg.name_color,
-                  "Name color"
+                  'Name color'
                 )}
               </div>
               <div class="tc-color-row">
                 ${this._renderColorPicker(
-                  "state_color",
+                  'state_color',
                   cfg.state_color,
-                  "State color"
+                  'State color'
                 )}
               </div>
             </div>
@@ -398,10 +407,8 @@ class TimelineCardGeneralSettings extends LitElement {
         <div class="tc-setting-label">
           <div class="tc-setting-title">${title}</div>
           ${description
-            ? html`<div class="tc-setting-description">
-                ${description}
-              </div>`
-            : ""}
+            ? html`<div class="tc-setting-description">${description}</div>`
+            : ''}
         </div>
         <ha-switch
           .checked=${value}
@@ -415,7 +422,7 @@ class TimelineCardGeneralSettings extends LitElement {
   _onToggle(key, ev) {
     const patch = { [key]: ev.target.checked };
     this.dispatchEvent(
-      new CustomEvent("settings-changed", {
+      new CustomEvent('settings-changed', {
         detail: { patch },
         bubbles: true,
         composed: true,
@@ -444,7 +451,11 @@ class TimelineCardGeneralSettings extends LitElement {
             max="100"
             .value=${alphaPercent}
             @input=${(e) =>
-              this._onColorChange(key, parsed.hex, percentToAlpha(e.target.value))}
+              this._onColorChange(
+                key,
+                parsed.hex,
+                percentToAlpha(e.target.value)
+              )}
           />
           <button
             class="tc-icon-button"
@@ -462,7 +473,7 @@ class TimelineCardGeneralSettings extends LitElement {
     if (!value) {
       const patch = { [key]: undefined };
       this.dispatchEvent(
-        new CustomEvent("settings-changed", {
+        new CustomEvent('settings-changed', {
           detail: { patch },
           bubbles: true,
           composed: true,
@@ -472,12 +483,11 @@ class TimelineCardGeneralSettings extends LitElement {
     }
 
     const parsed = parseColorValue(value);
-    const resolvedAlpha =
-      typeof alpha === "number" ? alpha : parsed.alpha;
+    const resolvedAlpha = typeof alpha === 'number' ? alpha : parsed.alpha;
     const formatted = formatColorValue(parsed.hex, resolvedAlpha);
     const patch = { [key]: formatted || undefined };
     this.dispatchEvent(
-      new CustomEvent("settings-changed", {
+      new CustomEvent('settings-changed', {
         detail: { patch },
         bubbles: true,
         composed: true,
@@ -486,7 +496,7 @@ class TimelineCardGeneralSettings extends LitElement {
   }
 
   _onNumberChange(key, rawValue) {
-    const text = `${rawValue ?? ""}`.trim();
+    const text = `${rawValue ?? ''}`.trim();
     if (!text) {
       this._emitPatch({ [key]: undefined });
       return;
@@ -497,16 +507,16 @@ class TimelineCardGeneralSettings extends LitElement {
   }
 
   _onTextChange(key, value) {
-    const v = (value || "").trim();
+    const v = (value || '').trim();
     this._emitPatch({ [key]: v || undefined });
   }
 
   _onSelectChange(key, ev) {
-    const val = ev.target?.value ?? "";
+    const val = ev.target?.value ?? '';
     const patch = { [key]: val || undefined };
 
     // If layout switches away from center, turn off compact to avoid invalid combo
-    if (key === "card_layout" && val && val !== "center") {
+    if (key === 'card_layout' && val && val !== 'center') {
       patch.compact_layout = false;
     }
 
@@ -514,15 +524,15 @@ class TimelineCardGeneralSettings extends LitElement {
   }
 
   _compactRow(cfg) {
-    const layout = cfg.card_layout || "center";
-    const disabled = layout !== "center";
+    const layout = cfg.card_layout || 'center';
+    const disabled = layout !== 'center';
     const desc = disabled
-      ? "Center layout required."
-      : "Overlap rows to reduce the vertical height of the timeline.";
+      ? 'Center layout required.'
+      : 'Overlap rows to reduce the vertical height of the timeline.';
     return this._booleanRow(
-      "Compact layout",
+      'Compact layout',
       desc,
-      "compact_layout",
+      'compact_layout',
       cfg.compact_layout ?? false,
       disabled
     );
@@ -530,7 +540,7 @@ class TimelineCardGeneralSettings extends LitElement {
 
   _emitPatch(patch) {
     this.dispatchEvent(
-      new CustomEvent("settings-changed", {
+      new CustomEvent('settings-changed', {
         detail: { patch },
         bubbles: true,
         composed: true,
@@ -540,6 +550,6 @@ class TimelineCardGeneralSettings extends LitElement {
 }
 
 customElements.define(
-  "timeline-card-general-settings",
+  'timeline-card-general-settings',
   TimelineCardGeneralSettings
 );

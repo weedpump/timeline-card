@@ -1,8 +1,8 @@
 export class TranslationEngine {
   constructor(translations) {
     this.translations = translations; // { en-us: {...}, de: {...} }
-    this.langCode = "en-us"; // fallback
-    this.active = translations["en-us"]; // active translation table
+    this.langCode = 'en-us'; // fallback
+    this.active = translations['en-us']; // active translation table
   }
 
   // Loads translation object based on a language like 'de-DE'
@@ -13,14 +13,14 @@ export class TranslationEngine {
     this.active =
       this.translations[key] ||
       this.translations[short] ||
-      this.translations["en-us"];
+      this.translations['en-us'];
 
     this.langCode = key;
   }
 
   // e.g. t("status.open", { n: 5 })
   t(path, vars = {}) {
-    const parts = path.split(".");
+    const parts = path.split('.');
     let node = this.active;
 
     for (const p of parts) {
@@ -28,7 +28,7 @@ export class TranslationEngine {
       node = node[p];
     }
 
-    if (typeof node === "string") {
+    if (typeof node === 'string') {
       return node.replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? `{${v}}`);
     }
 

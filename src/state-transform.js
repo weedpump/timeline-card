@@ -7,9 +7,9 @@
 // Produces the unified timeline item format.
 //
 
-import { getEntityName } from "./name-engine.js";
-import { getCustomConfig } from "./config-engine.js";
-import { getIconForEntity, getIconColor } from "./icon-engine.js";
+import { getEntityName } from './name-engine.js';
+import { getCustomConfig } from './config-engine.js';
+import { getIconForEntity, getIconColor } from './icon-engine.js';
 
 export function transformState(entityId, newState, hass, entities, i18n) {
   if (!newState) return null;
@@ -26,13 +26,9 @@ export function transformState(entityId, newState, hass, entities, i18n) {
   const icon = getIconForEntity(hass.states[entityId], cfg, rawState);
   const icon_color = getIconColor(cfg, rawState);
 
-  const localizedState = i18n.getLocalizedState(
-    entityId,
-    rawState,
-    cfg
-  );
+  const localizedState = i18n.getLocalizedState(entityId, rawState, cfg);
   const stateWithUnit =
-    unit && typeof localizedState === "string"
+    unit && typeof localizedState === 'string'
       ? `${localizedState} ${unit}`
       : localizedState;
 
@@ -47,6 +43,6 @@ export function transformState(entityId, newState, hass, entities, i18n) {
     time: new Date(newState.last_changed), // must be Date() for relative_time
 
     // NEW: expose entity config for the renderer (colors etc.)
-    entityCfg: cfg
+    entityCfg: cfg,
   };
 }

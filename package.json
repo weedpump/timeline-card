@@ -8,6 +8,9 @@
   },
   "scripts": {
     "test": "vitest run",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development --watch"
   },
@@ -24,9 +27,14 @@
   },
   "homepage": "https://github.com/weedpump/timeline-card#readme",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "baseline-browser-mapping": "^2.9.19",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^7.1.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.3.0",
+    "prettier": "^3.8.1",
     "vitest": "^4.0.18",
     "webpack": "^5.103.0",
     "webpack-cli": "^6.0.1"

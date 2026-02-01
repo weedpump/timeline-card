@@ -8,10 +8,10 @@
 export function relativeTime(date, i18n) {
   const diff = (Date.now() - date.getTime()) / 1000;
 
-  if (diff < 60) return i18n.t("time.seconds");
-  if (diff < 3600) return i18n.t("time.minutes", { n: Math.floor(diff / 60) });
-  if (diff < 86400) return i18n.t("time.hours", { n: Math.floor(diff / 3600) });
-  return i18n.t("time.days", { n: Math.floor(diff / 86400) });
+  if (diff < 60) return i18n.t('time.seconds');
+  if (diff < 3600) return i18n.t('time.minutes', { n: Math.floor(diff / 60) });
+  if (diff < 86400) return i18n.t('time.hours', { n: Math.floor(diff / 3600) });
+  return i18n.t('time.days', { n: Math.floor(diff / 86400) });
 }
 
 // Formats an absolute timestamp using the locale's "date_format.datetime"
@@ -22,13 +22,13 @@ export function formatAbsoluteTime(
   i18n,
   { includeDate = true } = {}
 ) {
-  const datetimeFmt = i18n.t("date_format.datetime");
-  const timeFmt = i18n.t("date_format.time");
+  const datetimeFmt = i18n.t('date_format.datetime');
+  const timeFmt = i18n.t('date_format.time');
 
   const pickTimeFormat = () => {
-    if (timeFmt && timeFmt !== "date_format.time") return timeFmt;
+    if (timeFmt && timeFmt !== 'date_format.time') return timeFmt;
 
-    if (datetimeFmt && typeof datetimeFmt === "object") {
+    if (datetimeFmt && typeof datetimeFmt === 'object') {
       const { hour, minute, hour12 } = datetimeFmt;
       const fallback = {};
 
@@ -39,17 +39,17 @@ export function formatAbsoluteTime(
       if (Object.keys(fallback).length) return fallback;
     }
 
-    return { hour: "2-digit", minute: "2-digit" };
+    return { hour: '2-digit', minute: '2-digit' };
   };
 
   const formatOptions = includeDate ? datetimeFmt : pickTimeFormat();
 
   const base = date.toLocaleString(langCode, formatOptions);
-  const suffix = i18n.t("date_format.time_suffix");
+  const suffix = i18n.t('date_format.time_suffix');
   const suffixText =
-    typeof suffix === "string" && suffix !== "date_format.time_suffix"
+    typeof suffix === 'string' && suffix !== 'date_format.time_suffix'
       ? suffix.trim()
-      : "";
+      : '';
 
   return suffixText ? `${base} ${suffixText}` : base;
 }

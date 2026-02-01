@@ -7,7 +7,10 @@ const CACHE_TTL = 60 * 1000; // 1 minute (customize)
 const cache = new Map();
 
 function buildKey(entities, hours, lang) {
-  const ids = entities.map(e => e.entity).sort().join(",");
+  const ids = entities
+    .map((e) => e.entity)
+    .sort()
+    .join(',');
   return `${ids}__${hours}__${lang}`;
 }
 
@@ -31,6 +34,6 @@ export function setCachedHistory(entities, hours, lang, data) {
 
   cache.set(key, {
     data,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
 }

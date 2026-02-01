@@ -1,5 +1,5 @@
-import { LitElement, html } from "lit";
-import editorStyles from "./timeline-card-editor.css";
+import { LitElement, html } from 'lit';
+import editorStyles from './timeline-card-editor.css';
 
 class TimelineCardEntityList extends LitElement {
   static get properties() {
@@ -13,18 +13,19 @@ class TimelineCardEntityList extends LitElement {
   constructor() {
     super();
     this.entities = [];
-    this._newEntityId = "";
+    this._newEntityId = '';
   }
 
   render() {
     const entities = this.entities || [];
 
     return html`
-      <style>${editorStyles}</style>
+      <style>
+        ${editorStyles}
+      </style>
 
       <div class="tc-section">
         <div class="tc-entities-list">
-
           <div class="tc-entities-header">
             <div class="tc-entities-title">Entities</div>
           </div>
@@ -36,8 +37,10 @@ class TimelineCardEntityList extends LitElement {
             : entities.map((e, idx) => this._renderEntityRow(e, idx))}
 
           <!-- ADD NEW ENTITY -->
-          <div class="tc-add-entity" style="display: flex; gap: 8px; align-items: center;">
-            
+          <div
+            class="tc-add-entity"
+            style="display: flex; gap: 8px; align-items: center;"
+          >
             <ha-selector
               style="flex: 1;"
               .hass=${this.hass}
@@ -53,25 +56,22 @@ class TimelineCardEntityList extends LitElement {
             >
               Add
             </button>
-
           </div>
 
           <div class="tc-muted">
-            Entities are added as plain <code>entity:</code> entries first.  
-            You can customise them in the entity editor later.
+            Entities are added as plain <code>entity:</code> entries first. You
+            can customise them in the entity editor later.
           </div>
-
         </div>
       </div>
     `;
   }
 
   _renderEntityRow(entityCfg, index) {
-    const id = typeof entityCfg === "string" ? entityCfg : entityCfg.entity;
+    const id = typeof entityCfg === 'string' ? entityCfg : entityCfg.entity;
 
     return html`
       <div class="tc-entity-row">
-
         <!-- ENTITY PICKER (EDITABLE) -->
         <ha-selector
           style="flex: 1;"
@@ -98,7 +98,6 @@ class TimelineCardEntityList extends LitElement {
             <ha-icon icon="mdi:delete"></ha-icon>
           </button>
         </div>
-
       </div>
     `;
   }
@@ -107,13 +106,13 @@ class TimelineCardEntityList extends LitElement {
   // VALUE EXTRACTOR — HA entity selectors vary by version
   //
   _extractEntityId(sel) {
-    if (!sel) return "";
+    if (!sel) return '';
 
-    if (typeof sel === "string") return sel;
+    if (typeof sel === 'string') return sel;
     if (sel.entity_id) return sel.entity_id;
     if (sel.value) return sel.value;
 
-    return "";
+    return '';
   }
 
   //
@@ -130,7 +129,7 @@ class TimelineCardEntityList extends LitElement {
     const list = [...(this.entities || [])];
     list.push({ entity: id });
 
-    this._newEntityId = "";
+    this._newEntityId = '';
 
     this._emitEntitiesChanged(list);
   }
@@ -162,7 +161,7 @@ class TimelineCardEntityList extends LitElement {
   //
   _editEntity(index) {
     this.dispatchEvent(
-      new CustomEvent("edit-entity", {
+      new CustomEvent('edit-entity', {
         detail: { index },
         bubbles: true,
         composed: true,
@@ -175,7 +174,7 @@ class TimelineCardEntityList extends LitElement {
   //
   _emitEntitiesChanged(list) {
     this.dispatchEvent(
-      new CustomEvent("entities-changed", {
+      new CustomEvent('entities-changed', {
         detail: { entities: list },
         bubbles: true,
         composed: true,
@@ -184,4 +183,4 @@ class TimelineCardEntityList extends LitElement {
   }
 }
 
-customElements.define("timeline-card-entity-list", TimelineCardEntityList);
+customElements.define('timeline-card-entity-list', TimelineCardEntityList);

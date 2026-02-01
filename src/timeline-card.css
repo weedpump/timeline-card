@@ -18,7 +18,7 @@ ha-card {
 .timeline-container {
   position: relative;
   width: 100%;
-  z-index: 0;                /* create a stacking context so dots cannot bleed above dialogs */
+  z-index: 0; /* create a stacking context so dots cannot bleed above dialogs */
 }
 
 .timeline-container.scrollable {
@@ -102,10 +102,9 @@ ha-card {
 }
 
 .wrapper.layout-right .timeline-row {
-  grid-template-columns: minmax(
-      0,
-      var(--tc-event-col-width, max-content)
-    ) var(--tc-line-column);
+  grid-template-columns:
+    minmax(0, var(--tc-event-col-width, max-content))
+    var(--tc-line-column);
 }
 
 .side {
@@ -236,9 +235,9 @@ ha-icon {
 .event-box.auto-multiline .state,
 .event-box.force-multiline .name,
 .event-box.force-multiline .state {
-  white-space: nowrap;         /* no extra line breaks */
-  overflow: hidden;            /* keep content inside the box */
-  text-overflow: ellipsis;     /* ... for overlength */
+  white-space: nowrap; /* no extra line breaks */
+  overflow: hidden; /* keep content inside the box */
+  text-overflow: ellipsis; /* ... for overlength */
   max-width: 100%;
   flex-shrink: 1;
 }
@@ -251,7 +250,7 @@ ha-icon {
 }
 
 .event-box.force-multiline .state {
-  flex-basis: 100%;            /* always its own line */
+  flex-basis: 100%; /* always its own line */
 }
 
 /* adds a bit more breathing room when text wraps */
@@ -292,7 +291,9 @@ ha-icon {
   padding: 6px 12px;
   border-radius: 10px;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .toggle-button:hover {

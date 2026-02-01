@@ -1,4 +1,4 @@
-import { transformState } from "./state-transform.js";
+import { transformState } from './state-transform.js';
 
 /**
  * Transform HA history API result into a unified flat list
@@ -14,7 +14,7 @@ export function transformHistory(historyData, entities, hassStates, i18n) {
       // Use unified transform for both history and live events
       const item = transformState(
         entry.entity_id,
-        entry,          // entry itself is a state object
+        entry, // entry itself is a state object
         { states: hassStates },
         entities,
         i18n
