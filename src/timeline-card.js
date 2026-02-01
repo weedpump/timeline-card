@@ -36,7 +36,7 @@ class TimelineCard extends HTMLElement {
     return document.createElement('weedpump-timeline-card-editor');
   }
 
-  static getStubConfig(hass, entities) {
+  static getStubConfig() {
     return {
       type: 'custom:timeline-card',
       title: 'Timeline',
