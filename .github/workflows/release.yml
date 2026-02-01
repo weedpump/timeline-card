@@ -9,7 +9,11 @@ on:
       - 'v*'
 
 jobs:
+  quality-check:
+    uses: ./.github/workflows/tests.yml
+
   build-and-release:
+    needs: quality-check
     runs-on: ubuntu-latest
 
     steps:
