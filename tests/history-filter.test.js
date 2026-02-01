@@ -73,4 +73,26 @@ describe('filterHistory', () => {
     expect(times).toContain(800);
     expect(times).toContain(700);
   });
+
+  it('should explicitly keep the oldest event in a sequence of duplicates', () => {
+    const entities = [{ entity: 'sensor.x', collapse_duplicates: true }];
+    const items = [
+      { id: 'sensor.x', raw_state: 'ON', time: 3000 }, // Newest
+      { id: 'sensor.x', raw_state: 'ON', time: 2000 },
+      { id: 'sensor.x', raw_state: 'ON', time: 1000 }, // Oldest
+    ];
+
+    // filterHistory sorts by time (oldest first) internally before collapsing
+    // So it processes 1000, 2000, 3000.
+    // 1000 -> Keep (first ON)
+    // 2000 -> Skip
+    // 3000 -> Skip
+    // Then it reverses back to newest first for display.
+    // Result should be [ { time: 1000 } ]
+
+    const result = filterHistory(items, entities, 100, {});
+
+    expect(result).toHaveLength(1);
+    expect(result[0].time).toBe(1000);
+  });
 });

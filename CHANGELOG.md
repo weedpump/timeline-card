@@ -2,7 +2,11 @@
 
 ## v1.7.0
 
-- Added Swedish translations by **gcosta74**, Thank you!
+- **Fixed & Improved `collapse_duplicates`:**
+  - Logic updated to track states separately per entity, fixing issues where interleaved events from other entities broke the collapsing.
+  - Changed behavior to keep the **earliest** event (start time) of a duplicate sequence instead of the latest.
+- Added automated testing workflow and integrated it into the release process.
+- Added Italian translations by **gcosta74**, Thank you!
 
 ## v1.6.0
 
