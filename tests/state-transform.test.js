@@ -3,7 +3,7 @@ import { transformState } from '../src/state-transform.js';
 
 // Mock dependencies
 const mockI18n = {
-  getLocalizedState: (entityId, state, cfg) => {
+  getLocalizedState: (entityId, state) => {
     // Simple mock: return the state as is, or capitalize it
     return state;
   },
@@ -33,7 +33,13 @@ describe('transformState', () => {
     };
     const entities = []; // No custom config
 
-    const result = transformState(entityId, newState, mockHass, entities, mockI18n);
+    const result = transformState(
+      entityId,
+      newState,
+      mockHass,
+      entities,
+      mockI18n
+    );
 
     expect(result).toMatchObject({
       id: 'switch.light',
@@ -50,14 +56,20 @@ describe('transformState', () => {
     const newState = {
       state: '22.5',
       last_changed: new Date().toISOString(),
-      attributes: { 
+      attributes: {
         friendly_name: 'Temperature',
-        unit_of_measurement: '°C' 
+        unit_of_measurement: '°C',
       },
     };
     const entities = [];
 
-    const result = transformState(entityId, newState, mockHass, entities, mockI18n);
+    const result = transformState(
+      entityId,
+      newState,
+      mockHass,
+      entities,
+      mockI18n
+    );
 
     expect(result.state).toBe('22.5 °C');
     expect(result.raw_state).toBe('22.5');
@@ -70,19 +82,29 @@ describe('transformState', () => {
       last_changed: new Date().toISOString(),
       attributes: { friendly_name: 'Living Room Light' },
     };
-    
-    // Config overrides name
-    const entities = [
-      { entity: 'switch.light', name: 'My Custom Lamp' }
-    ];
 
-    const result = transformState(entityId, newState, mockHass, entities, mockI18n);
+    // Config overrides name
+    const entities = [{ entity: 'switch.light', name: 'My Custom Lamp' }];
+
+    const result = transformState(
+      entityId,
+      newState,
+      mockHass,
+      entities,
+      mockI18n
+    );
 
     expect(result.name).toBe('My Custom Lamp');
   });
 
   it('should return null if newState is invalid', () => {
-    const result = transformState('sensor.unknown', null, mockHass, [], mockI18n);
+    const result = transformState(
+      'sensor.unknown',
+      null,
+      mockHass,
+      [],
+      mockI18n
+    );
     expect(result).toBeNull();
   });
 });
