@@ -43,11 +43,14 @@ export function filterHistory(items, entities, limit, globalConfig = {}) {
     return true;
   });
 
-  // Sort (newest first)
-  filtered = filtered.sort((a, b) => b.time - a.time);
+  // Sort (OLDEST first) to keep the earliest event when collapsing
+  filtered = filtered.sort((a, b) => a.time - b.time);
 
   // NEW: collapse duplicates
   filtered = collapseDuplicates(filtered, entities, globalConfig);
+
+  // Sort back to NEWEST first for display
+  filtered = filtered.reverse();
 
   // Apply limit
   return filtered.slice(0, limit);
