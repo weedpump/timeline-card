@@ -331,8 +331,8 @@ class TimelineCard extends HTMLElement {
       cfg?.collapse_duplicates ?? this.config.collapse_duplicates ?? false;
 
     if (collapse) {
-      const last = this.items[0];
-      if (last && last.id === item.id && last.raw_state === item.raw_state) {
+      const last = this.items.find((i) => i.id === item.id);
+      if (last && last.raw_state === item.raw_state) {
         return; // ignore duplicate
       }
     }
