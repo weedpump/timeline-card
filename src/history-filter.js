@@ -3,7 +3,7 @@
 // ------------------------------------
 function collapseDuplicates(list, entities, globalConfig) {
   const collapsed = [];
-  let lastKey = null;
+  const lastStates = {};
 
   for (const item of list) {
     const cfg = entities.find((e) => e.entity === item.id) || {};
@@ -17,11 +17,11 @@ function collapseDuplicates(list, entities, globalConfig) {
       continue;
     }
 
-    // duplicate key = same entity + same raw_state
-    const key = `${item.id}__${item.raw_state}`;
-    if (key !== lastKey) {
+    // Check against the last seen state *for this specific entity*
+    const lastState = lastStates[item.id];
+    if (item.raw_state !== lastState) {
       collapsed.push(item);
-      lastKey = key;
+      lastStates[item.id] = item.raw_state;
     }
   }
 
