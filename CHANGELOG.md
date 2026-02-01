@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.7.0
+- Added Swedish translations by **gcosta74**, Thank you!
+
 ## v1.6.0
 - Fixed: card_mod compatibility and localize empty state message by **@kvanzuijlen**, Thank you!
 - Added Swedish translations by **@naitkris**, Thank you!
@@ -7,8 +10,6 @@
 - Added card options `timeline_color_start`, `timeline_color_end`, `dot_color` to set timeline & dots color
 - Added entity option `show_entity_picture` to show the entity picture instead of icon if available 
 - Added transparency slider to all color pickers
-
-
 
 ## v1.5.1
 - Resolved a CustomElementRegistry conflict with the LLM Vision Card by
