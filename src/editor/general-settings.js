@@ -61,10 +61,11 @@ class TimelineCardGeneralSettings extends LitElement {
                   @closed=${(e) => e.stopPropagation()}
                 >
                   <mwc-list-item value="">Auto</mwc-list-item>
-                  <mwc-list-item value="en-US">English (US)</mwc-list-item>
-                  <mwc-list-item value="en-GB">English (UK)</mwc-list-item>
                   <mwc-list-item value="de">Deutsch</mwc-list-item>
+                  <mwc-list-item value="en-GB">English (UK)</mwc-list-item>
+                  <mwc-list-item value="en-US">English (US)</mwc-list-item>
                   <mwc-list-item value="fr">Francais</mwc-list-item>
+                  <mwc-list-item value="it">Italiano</mwc-list-item>
                   <mwc-list-item value="pt-br">Portugues (BR)</mwc-list-item>
                   <mwc-list-item value="sv">Svensk</mwc-list-item>
                 </ha-select>

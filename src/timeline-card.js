@@ -1,7 +1,8 @@
-import enUS from "./locales/en-US.json";
-import enGB from "./locales/en-GB.json";
 import de from "./locales/de.json";
+import enGB from "./locales/en-GB.json";
+import enUS from "./locales/en-US.json";
 import fr from "./locales/fr.json";
+import it from "./locales/it.json";
 import ptBR from "./locales/pt-BR.json";
 import sv from "./locales/sv.json";
 import styles from "./timeline-card.css";
@@ -21,10 +22,11 @@ import { getCachedHistory, setCachedHistory } from "./history-cache.js";
 import { transformState } from "./state-transform.js";
 
 const translations = {
-  "en-us": enUS,
-  "en-gb": enGB,
   de,
+  "en-gb": enGB,
+  "en-us": enUS,
   fr,
+  it,
   "pt-br": ptBR,
   sv,
 };
