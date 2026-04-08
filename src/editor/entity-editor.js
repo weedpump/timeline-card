@@ -23,7 +23,7 @@ class TimelineCardEntityEditor extends LitElement {
           ${editorStyles}
         </style>
         <div class="tc-editor-root">
-          <div class="tc-placeholder">No entity selected.</div>
+          <div class="tc-placeholder">Сущность не выбрана.</div>
         </div>
       `;
     }
@@ -57,7 +57,7 @@ class TimelineCardEntityEditor extends LitElement {
       <div class="tc-editor-root">
         <!-- OVERVIEW -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Entity overview</h3>
+          <h3 class="tc-section-title">Обзор сущности</h3>
 
           <div
             class="tc-card-block"
@@ -78,14 +78,14 @@ class TimelineCardEntityEditor extends LitElement {
 
         <!-- DISPLAY -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Display</h3>
+          <h3 class="tc-section-title">Отображение</h3>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               <!-- CUSTOM NAME -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Custom name</div>
+                  <div class="tc-setting-title">Пользовательское имя</div>
                 </div>
 
                 <ha-textfield
@@ -98,7 +98,7 @@ class TimelineCardEntityEditor extends LitElement {
               <!-- CUSTOM ICON -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Custom icon</div>
+                  <div class="tc-setting-title">Пользовательская иконка</div>
                 </div>
 
                 <ha-icon-picker
@@ -110,8 +110,8 @@ class TimelineCardEntityEditor extends LitElement {
               </div>
 
               ${this._booleanRow(
-                'Use entity picture (if available)',
-                'Show the entity picture instead of the icon when provided.',
+                'Использовать изображение сущности (если есть)',
+                'Показывать изображение сущности вместо иконки, если оно задано.',
                 'show_entity_picture',
                 cfg.show_entity_picture ?? null
               )}
@@ -119,38 +119,38 @@ class TimelineCardEntityEditor extends LitElement {
               <!-- COLORS -->
               <div class="tc-setting-block">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Colors</div>
+                  <div class="tc-setting-title">Цвета</div>
                   <div class="tc-setting-description">
-                    Optional static colors for icon, name and state.
+                    Необязательные статические цвета для иконки, имени и состояния.
                   </div>
                 </div>
                 <div class="tc-color-row">
                   ${this._renderColorPicker(
                     'icon_color',
                     cfg.icon_color,
-                    'Icon color'
+                    'Цвет иконки'
                   )}
                 </div>
                 <div class="tc-color-row">
                   ${this._renderColorPicker(
                     'name_color',
                     cfg.name_color,
-                    'Name color'
+                    'Цвет имени'
                   )}
                 </div>
                 <div class="tc-color-row">
                   ${this._renderColorPicker(
                     'state_color',
                     cfg.state_color,
-                    'State color'
+                    'Цвет состояния'
                   )}
                 </div>
               </div>
 
               <!-- COLLAPSE DUPLICATES -->
               ${this._booleanRow(
-                'Collapse duplicates (entity level)',
-                'Hide consecutive identical states for this entity.',
+                'Скрывать дубликаты (уровень сущности)',
+                'Скрывать последовательные одинаковые состояния для этой сущности.',
                 'collapse_duplicates',
                 cfg.collapse_duplicates ?? null
               )}
@@ -158,9 +158,9 @@ class TimelineCardEntityEditor extends LitElement {
               <!-- INCLUDE STATES (YAML ONLY) -->
               <div class="tc-setting-row" style="align-items: flex-start;">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Include states</div>
+                  <div class="tc-setting-title">Включать состояния</div>
                   <div class="tc-setting-description">
-                    Only show events matching this YAML list:
+                    Показывать только события из этого YAML-списка:
                     <pre>
 - open
 - closed
@@ -196,9 +196,9 @@ class TimelineCardEntityEditor extends LitElement {
               <!-- EXCLUDE STATES (YAML ONLY) -->
               <div class="tc-setting-row" style="align-items: flex-start;">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Exclude states</div>
+                  <div class="tc-setting-title">Исключать состояния</div>
                   <div class="tc-setting-description">
-                    Hide events matching this YAML list:
+                    Скрывать события из этого YAML-списка:
                     <pre>
 - idle
 - unknown
@@ -236,24 +236,24 @@ class TimelineCardEntityEditor extends LitElement {
 
         <!-- COLORS -->
         <div class="tc-section">
-          <h3 class="tc-section-title">State mapping</h3>
+          <h3 class="tc-section-title">Сопоставление состояний</h3>
           <div class="tc-card-block">
             <div class="tc-form-group">
               <div class="tc-setting-block">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">State label map</div>
+                  <div class="tc-setting-title">Карта подписей состояний</div>
                   <div class="tc-setting-description">
-                    Override displayed labels per raw state.
+                    Переопределение отображаемых подписей для raw-состояний.
                   </div>
                 </div>
-                ${this._renderMapEditor('state_map', cfg.state_map, 'Label')}
+                ${this._renderMapEditor('state_map', cfg.state_map, 'Подпись')}
               </div>
 
               <div class="tc-setting-block">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Icon map</div>
+                  <div class="tc-setting-title">Карта иконок</div>
                   <div class="tc-setting-description">
-                    Select icons per state (uses MDI names).
+                    Иконки для каждого состояния (имена MDI).
                   </div>
                 </div>
                 ${this._renderIconMapEditor('icon_map', cfg.icon_map)}
@@ -261,9 +261,9 @@ class TimelineCardEntityEditor extends LitElement {
 
               <div class="tc-setting-block">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Icon color map</div>
+                  <div class="tc-setting-title">Карта цветов иконок</div>
                   <div class="tc-setting-description">
-                    Hex/RGB color per state.
+                    Цвет Hex/RGB для каждого состояния.
                   </div>
                 </div>
                 ${this._renderColorMapEditor(
@@ -363,21 +363,21 @@ class TimelineCardEntityEditor extends LitElement {
       <div class="tc-map-editor">
         ${entries.length === 0
           ? html`<div class="tc-muted" style="margin-bottom:6px;">
-              No entries yet.
+              Пока нет записей.
             </div>`
           : entries.map(
               ([state, value]) => html`
                 <div class="tc-map-row tc-map-row-icon">
                   <ha-textfield
                     class="tc-map-key"
-                    label="State"
+                    label="Состояние"
                     .value=${state}
                     @input=${(e) =>
                       this._onMapKeyChange(mapKey, state, e.target.value)}
                   ></ha-textfield>
                   <ha-textfield
                     class="tc-map-value"
-                    label="Value"
+                    label="Значение"
                     .value=${value}
                     placeholder=${placeholder}
                     @input=${(e) =>
@@ -385,7 +385,7 @@ class TimelineCardEntityEditor extends LitElement {
                   ></ha-textfield>
                   <button
                     class="tc-icon-button"
-                    title="Remove entry"
+                    title="Удалить запись"
                     @click=${() => this._removeMapEntry(mapKey, state)}
                   >
                     <ha-icon icon="mdi:delete"></ha-icon>
@@ -399,7 +399,7 @@ class TimelineCardEntityEditor extends LitElement {
           style="margin-top:6px;"
           @click=${() => this._addMapEntry(mapKey)}
         >
-          Add entry
+          Добавить запись
         </button>
       </div>
     `;
@@ -419,14 +419,14 @@ class TimelineCardEntityEditor extends LitElement {
       <div class="tc-map-editor">
         ${entries.length === 0
           ? html`<div class="tc-muted" style="margin-bottom:6px;">
-              No entries yet.
+              Пока нет записей.
             </div>`
           : entries.map(
               ([state, value]) => html`
                 <div class="tc-map-row">
                   <ha-textfield
                     class="tc-map-key"
-                    label="State"
+                    label="Состояние"
                     .value=${state}
                     @input=${(e) =>
                       this._onMapKeyChange(mapKey, state, e.target.value)}
@@ -439,7 +439,7 @@ class TimelineCardEntityEditor extends LitElement {
                   ></ha-icon-picker>
                   <button
                     class="tc-icon-button"
-                    title="Remove entry"
+                    title="Удалить запись"
                     @click=${() => this._removeMapEntry(mapKey, state)}
                   >
                     <ha-icon icon="mdi:delete"></ha-icon>
@@ -453,7 +453,7 @@ class TimelineCardEntityEditor extends LitElement {
           style="margin-top:6px;"
           @click=${() => this._addMapEntry(mapKey)}
         >
-          Add entry
+          Добавить запись
         </button>
       </div>
     `;
@@ -466,14 +466,14 @@ class TimelineCardEntityEditor extends LitElement {
       <div class="tc-map-editor">
         ${entries.length === 0
           ? html`<div class="tc-muted" style="margin-bottom:6px;">
-              No entries yet.
+              Пока нет записей.
             </div>`
           : entries.map(
               ([state, value]) => html`
                 <div class="tc-map-row tc-map-row-color">
                   <ha-textfield
                     class="tc-map-key"
-                    label="State"
+                    label="Состояние"
                     .value=${state}
                     @input=${(e) =>
                       this._onMapKeyChange(mapKey, state, e.target.value)}
@@ -481,7 +481,7 @@ class TimelineCardEntityEditor extends LitElement {
                   ${this._renderMapColorPicker(mapKey, state, value)}
                   <button
                     class="tc-icon-button"
-                    title="Remove entry"
+                    title="Удалить запись"
                     @click=${() => this._removeMapEntry(mapKey, state)}
                   >
                     <ha-icon icon="mdi:delete"></ha-icon>
@@ -495,7 +495,7 @@ class TimelineCardEntityEditor extends LitElement {
           style="margin-top:6px;"
           @click=${() => this._addMapEntry(mapKey)}
         >
-          Add entry
+          Добавить запись
         </button>
       </div>
     `;
@@ -564,7 +564,7 @@ class TimelineCardEntityEditor extends LitElement {
           />
           <button
             class="tc-icon-button"
-            title="Clear color"
+            title="Сбросить цвет"
             @click=${() => this._updateField(key, undefined)}
           >
             <ha-icon icon="mdi:close"></ha-icon>

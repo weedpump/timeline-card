@@ -11,6 +11,7 @@ class TimelineCardGeneralSettings extends LitElement {
   static get properties() {
     return {
       config: { type: Object },
+      hass: { type: Object },
     };
   }
 
@@ -28,16 +29,18 @@ class TimelineCardGeneralSettings extends LitElement {
       <div class="tc-editor-root">
         <!-- SECTION: General -->
         <div class="tc-section">
-          <h3 class="tc-section-title">General</h3>
-          <div class="tc-section-subtitle">Title, language and refresh.</div>
+          <h3 class="tc-section-title">Общие</h3>
+          <div class="tc-section-subtitle">Заголовок, язык и обновление.</div>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               <!-- TITLE -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Title</div>
-                  <div class="tc-setting-description">Optional card title.</div>
+                  <div class="tc-setting-title">Заголовок</div>
+                  <div class="tc-setting-description">
+                    Необязательный заголовок карточки.
+                  </div>
                 </div>
                 <ha-textfield
                   style="min-width: 200px; width: 280px; max-width: 280px;"
@@ -49,34 +52,43 @@ class TimelineCardGeneralSettings extends LitElement {
               <!-- LANGUAGE -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Language</div>
+                  <div class="tc-setting-title">Язык</div>
                   <div class="tc-setting-description">
-                    Optional override. Empty = auto from HA/browser.
+                    Необязательное переопределение. Пусто = автоматически из
+                    HA/браузера.
                   </div>
                 </div>
-                <ha-select
+                <ha-selector
                   style="min-width: 200px; width: 240px;"
+                  .hass=${this.hass}
                   .value=${cfg.language || ''}
-                  @selected=${(e) => this._onSelectChange('language', e)}
-                  @closed=${(e) => e.stopPropagation()}
-                >
-                  <mwc-list-item value="">Auto</mwc-list-item>
-                  <mwc-list-item value="de">Deutsch</mwc-list-item>
-                  <mwc-list-item value="en-GB">English (UK)</mwc-list-item>
-                  <mwc-list-item value="en-US">English (US)</mwc-list-item>
-                  <mwc-list-item value="fr">Francais</mwc-list-item>
-                  <mwc-list-item value="it">Italiano</mwc-list-item>
-                  <mwc-list-item value="pt-br">Portugues (BR)</mwc-list-item>
-                  <mwc-list-item value="sv">Svensk</mwc-list-item>
-                </ha-select>
+                  .selector=${{
+                    select: {
+                      mode: 'dropdown',
+                      options: [
+                        { value: '', label: 'Авто' },
+                        { value: 'de', label: 'Deutsch' },
+                        { value: 'en-GB', label: 'English (UK)' },
+                        { value: 'en-US', label: 'English (US)' },
+                        { value: 'fr', label: 'Francais' },
+                        { value: 'it', label: 'Italiano' },
+                        { value: 'pt-br', label: 'Portugues (BR)' },
+                        { value: 'ru', label: 'Русский' },
+                        { value: 'sv', label: 'Svensk' },
+                      ],
+                    },
+                  }}
+                  @value-changed=${(e) =>
+                    this._onSelectorChange('language', e, true)}
+                ></ha-selector>
               </div>
 
               <!-- REFRESH INTERVAL -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Refresh interval (s)</div>
+                  <div class="tc-setting-title">Интервал обновления (с)</div>
                   <div class="tc-setting-description">
-                    Optional auto-refresh interval in seconds.
+                    Необязательный интервал автообновления в секундах.
                   </div>
                 </div>
                 <ha-textfield
@@ -94,17 +106,17 @@ class TimelineCardGeneralSettings extends LitElement {
 
         <!-- SECTION: Range & data -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Range & data</h3>
-          <div class="tc-section-subtitle">How much history is loaded.</div>
+          <h3 class="tc-section-title">Период и данные</h3>
+          <div class="tc-section-subtitle">Сколько истории загружать.</div>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               <!-- HOURS -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Hours</div>
+                  <div class="tc-setting-title">Часы</div>
                   <div class="tc-setting-description">
-                    Number of hours of history to fetch.
+                    Количество часов истории для загрузки.
                   </div>
                 </div>
                 <ha-textfield
@@ -119,9 +131,9 @@ class TimelineCardGeneralSettings extends LitElement {
               <!-- LIMIT -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Limit</div>
+                  <div class="tc-setting-title">Лимит</div>
                   <div class="tc-setting-description">
-                    Max number of events to display.
+                    Максимальное количество отображаемых событий.
                   </div>
                 </div>
                 <ha-textfield
@@ -138,9 +150,9 @@ class TimelineCardGeneralSettings extends LitElement {
 
         <!-- SECTION: Event display -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Event display</h3>
+          <h3 class="tc-section-title">Отображение событий</h3>
           <div class="tc-section-subtitle">
-            Collapsing vs. scroll and how many events to show.
+            Сворачивание, прокрутка и количество видимых событий.
           </div>
 
           <div class="tc-card-block">
@@ -150,9 +162,9 @@ class TimelineCardGeneralSettings extends LitElement {
                 ? html`
                     <div class="tc-setting-row">
                       <div class="tc-setting-label">
-                        <div class="tc-setting-title">Visible events</div>
+                        <div class="tc-setting-title">Видимые события</div>
                         <div class="tc-setting-description">
-                          Show this many before "Show more".
+                          Показывать столько элементов до кнопки "Показать еще".
                         </div>
                       </div>
                       <ha-textfield
@@ -173,24 +185,33 @@ class TimelineCardGeneralSettings extends LitElement {
               <!-- OVERFLOW MODE -->
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Overflow mode</div>
+                  <div class="tc-setting-title">Режим переполнения</div>
                   <div class="tc-setting-description">
-                    Collapse extra events or render inside a scroll area.
+                    Свернуть лишние события или показывать их в области прокрутки.
                   </div>
                 </div>
-                <ha-select
+                <ha-selector
                   style="min-width: 180px; width: 200px;"
+                  .hass=${this.hass}
                   .value=${cfg.overflow || 'collapse'}
-                  @selected=${(e) => this._onSelectChange('overflow', e)}
-                  @closed=${(e) => e.stopPropagation()}
-                >
-                  <mwc-list-item value="collapse"
-                    >Collapse (show more/less)</mwc-list-item
-                  >
-                  <mwc-list-item value="scroll"
-                    >Scroll (respect max height)</mwc-list-item
-                  >
-                </ha-select>
+                  .selector=${{
+                    select: {
+                      mode: 'dropdown',
+                      options: [
+                        {
+                          value: 'collapse',
+                          label: 'Сворачивать (показать больше/меньше)',
+                        },
+                        {
+                          value: 'scroll',
+                          label: 'Прокрутка (с учетом max height)',
+                        },
+                      ],
+                    },
+                  }}
+                  @value-changed=${(e) =>
+                    this._onSelectorChange('overflow', e, false, 'collapse')}
+                ></ha-selector>
               </div>
 
               <!-- MAX HEIGHT (scroll only) -->
@@ -198,9 +219,9 @@ class TimelineCardGeneralSettings extends LitElement {
                 ? html`
                     <div class="tc-setting-row">
                       <div class="tc-setting-label">
-                        <div class="tc-setting-title">Max height</div>
+                        <div class="tc-setting-title">Максимальная высота</div>
                         <div class="tc-setting-description">
-                          Limit card height (e.g. 220px or 14rem).
+                          Ограничение высоты карточки (например, 220px или 14rem).
                         </div>
                       </div>
                       <ha-textfield
@@ -218,37 +239,38 @@ class TimelineCardGeneralSettings extends LitElement {
 
         <!-- SECTION: Layout -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Layout</h3>
+          <h3 class="tc-section-title">Расположение</h3>
           <div class="tc-section-subtitle">
-            Where the timeline line and cards appear.
+            Положение линии таймлайна и карточек событий.
           </div>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
-                  <div class="tc-setting-title">Card layout</div>
+                  <div class="tc-setting-title">Макет карточки</div>
                   <div class="tc-setting-description">
-                    Switch between centered (alternating) and single-sided
-                    layouts.
+                    Переключение между центральным (чередующимся) и
+                    односторонними макетами.
                   </div>
                 </div>
-                <ha-select
+                <ha-selector
                   style="min-width: 200px; width: 240px;"
+                  .hass=${this.hass}
                   .value=${cfg.card_layout || 'center'}
-                  @selected=${(e) => this._onSelectChange('card_layout', e)}
-                  @closed=${(e) => e.stopPropagation()}
-                >
-                  <mwc-list-item value="center"
-                    >Center (alternating)</mwc-list-item
-                  >
-                  <mwc-list-item value="left"
-                    >Left line, cards right</mwc-list-item
-                  >
-                  <mwc-list-item value="right"
-                    >Right line, cards left</mwc-list-item
-                  >
-                </ha-select>
+                  .selector=${{
+                    select: {
+                      mode: 'dropdown',
+                      options: [
+                        { value: 'center', label: 'Центр (чередование)' },
+                        { value: 'left', label: 'Линия слева, карточки справа' },
+                        { value: 'right', label: 'Линия справа, карточки слева' },
+                      ],
+                    },
+                  }}
+                  @value-changed=${(e) =>
+                    this._onSelectorChange('card_layout', e, false, 'center')}
+                ></ha-selector>
               </div>
 
               ${this._compactRow(cfg)}
@@ -258,38 +280,38 @@ class TimelineCardGeneralSettings extends LitElement {
 
         <!-- SECTION: Content -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Content</h3>
-          <div class="tc-section-subtitle">What is shown for each event.</div>
+          <h3 class="tc-section-title">Содержимое</h3>
+          <div class="tc-section-subtitle">Что отображать в каждом событии.</div>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               ${this._booleanRow(
-                'Show names',
-                'Show the entity name in the timeline.',
+                'Показывать имена',
+                'Показывать имя сущности в таймлайне.',
                 'show_names',
                 cfg.show_names ?? true
               )}
               ${this._booleanRow(
-                'Show states',
-                'Display the entity state next to the name.',
+                'Показывать состояния',
+                'Показывать состояние рядом с именем.',
                 'show_states',
                 cfg.show_states ?? true
               )}
               ${this._booleanRow(
-                'Show icons',
-                'Add the entity icon to each event.',
+                'Показывать иконки',
+                'Показывать иконку сущности у каждого события.',
                 'show_icons',
                 cfg.show_icons ?? true
               )}
               ${this._booleanRow(
-                'Use relative time',
-                'Show relative timestamps like 5 minutes ago.',
+                'Использовать относительное время',
+                'Показывать время в формате "5 минут назад".',
                 'relative_time',
                 cfg.relative_time ?? false
               )}
               ${this._booleanRow(
-                'Show date',
-                'Include the date for absolute timestamps; turn off to display time only.',
+                'Показывать дату',
+                'Добавлять дату для абсолютного времени; отключите, чтобы показывать только время.',
                 'show_date',
                 cfg.show_date ?? true
               )}
@@ -299,22 +321,22 @@ class TimelineCardGeneralSettings extends LitElement {
 
         <!-- SECTION: Text formatting -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Text formatting</h3>
+          <h3 class="tc-section-title">Формат текста</h3>
           <div class="tc-section-subtitle">
-            Control wrapping of names and states.
+            Перенос строк для имен и состояний.
           </div>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               ${this._booleanRow(
-                'Allow multiline',
-                'Allow names and states to wrap across multiple lines.',
+                'Разрешить многострочный текст',
+                'Разрешить перенос имен и состояний на несколько строк.',
                 'allow_multiline',
                 cfg.allow_multiline ?? false
               )}
               ${this._booleanRow(
-                'Force multiline',
-                'Always place the state on a new line under the name.',
+                'Принудительно многострочно',
+                'Всегда переносить состояние на новую строку под именем.',
                 'force_multiline',
                 cfg.force_multiline ?? false
               )}
@@ -324,16 +346,16 @@ class TimelineCardGeneralSettings extends LitElement {
 
         <!-- SECTION: Duplicates -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Duplicates & filters</h3>
+          <h3 class="tc-section-title">Дубликаты и фильтры</h3>
           <div class="tc-section-subtitle">
-            Collapse repeating states globally.
+            Глобально скрывать повторяющиеся подряд состояния.
           </div>
 
           <div class="tc-card-block">
             <div class="tc-form-group">
               ${this._booleanRow(
-                'Collapse duplicates',
-                'Hide consecutive events with the same state.',
+                'Скрывать дубликаты',
+                'Скрывать последовательные события с одинаковым состоянием.',
                 'collapse_duplicates',
                 cfg.collapse_duplicates ?? false
               )}
@@ -343,9 +365,9 @@ class TimelineCardGeneralSettings extends LitElement {
 
         <!-- SECTION: Colors -->
         <div class="tc-section">
-          <h3 class="tc-section-title">Colors</h3>
+          <h3 class="tc-section-title">Цвета</h3>
           <div class="tc-section-subtitle">
-            Optional static colors for name and state (applied globally).
+            Необязательные статические цвета для карточки и текста.
           </div>
           <div class="tc-card-block">
             <div class="tc-form-group">
@@ -353,14 +375,14 @@ class TimelineCardGeneralSettings extends LitElement {
                 ${this._renderColorPicker(
                   'card_background',
                   cfg.card_background,
-                  'Card background color'
+                  'Цвет фона карточки'
                 )}
               </div>
               <div class="tc-color-row">
                 ${this._renderColorPicker(
                   'timeline_color_start',
                   cfg.timeline_color_start,
-                  'Timeline gradient start',
+                  'Начало градиента линии',
                   '#2da8ff'
                 )}
               </div>
@@ -368,7 +390,7 @@ class TimelineCardGeneralSettings extends LitElement {
                 ${this._renderColorPicker(
                   'timeline_color_end',
                   cfg.timeline_color_end,
-                  'Timeline gradient end',
+                  'Конец градиента линии',
                   '#b24aff'
                 )}
               </div>
@@ -376,7 +398,7 @@ class TimelineCardGeneralSettings extends LitElement {
                 ${this._renderColorPicker(
                   'dot_color',
                   cfg.dot_color,
-                  'Dot color',
+                  'Цвет точки',
                   '#31a8ff'
                 )}
               </div>
@@ -384,14 +406,14 @@ class TimelineCardGeneralSettings extends LitElement {
                 ${this._renderColorPicker(
                   'name_color',
                   cfg.name_color,
-                  'Name color'
+                  'Цвет имени'
                 )}
               </div>
               <div class="tc-color-row">
                 ${this._renderColorPicker(
                   'state_color',
                   cfg.state_color,
-                  'State color'
+                  'Цвет состояния'
                 )}
               </div>
             </div>
@@ -459,7 +481,7 @@ class TimelineCardGeneralSettings extends LitElement {
           />
           <button
             class="tc-icon-button"
-            title="Clear color"
+            title="Сбросить цвет"
             @click=${() => this._onColorChange(key, undefined)}
           >
             <ha-icon icon="mdi:close"></ha-icon>
@@ -511,9 +533,13 @@ class TimelineCardGeneralSettings extends LitElement {
     this._emitPatch({ [key]: v || undefined });
   }
 
-  _onSelectChange(key, ev) {
-    const val = ev.target?.value ?? '';
-    const patch = { [key]: val || undefined };
+  _onSelectChange(key, rawValue, keepEmpty = false, fallbackValue) {
+    const val = `${rawValue ?? ''}`.trim();
+    const patch = { [key]: val || (keepEmpty ? '' : undefined) };
+
+    if (!val && fallbackValue) {
+      patch[key] = fallbackValue;
+    }
 
     // If layout switches away from center, turn off compact to avoid invalid combo
     if (key === 'card_layout' && val && val !== 'center') {
@@ -523,14 +549,34 @@ class TimelineCardGeneralSettings extends LitElement {
     this._emitPatch(patch);
   }
 
+  _onSelectorChange(key, ev, keepEmpty = false, fallbackValue) {
+    const eventValue =
+      ev?.detail?.value ??
+      ev?.target?.value ??
+      ev?.target?.__value ??
+      ev?.target?.configValue ??
+      '';
+    // Debug info for HA selector regressions across frontend versions.
+    console.debug('[Timeline Card] ha-selector event', {
+      key,
+      type: ev?.type,
+      eventValue,
+      targetValue: ev?.target?.value,
+      detailValue: ev?.detail?.value,
+      target: ev?.target?.tagName,
+      detail: ev?.detail,
+    });
+    this._onSelectChange(key, eventValue, keepEmpty, fallbackValue);
+  }
+
   _compactRow(cfg) {
     const layout = cfg.card_layout || 'center';
     const disabled = layout !== 'center';
     const desc = disabled
-      ? 'Center layout required.'
-      : 'Overlap rows to reduce the vertical height of the timeline.';
+      ? 'Доступно только для макета "Центр".'
+      : 'Перекрывать ряды, чтобы уменьшить вертикальную высоту таймлайна.';
     return this._booleanRow(
-      'Compact layout',
+      'Компактный макет',
       desc,
       'compact_layout',
       cfg.compact_layout ?? false,

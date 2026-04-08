@@ -1,0 +1,65 @@
+{
+  "time": {
+    "seconds": "несколько секунд назад",
+    "minutes": "{n} минут назад",
+    "hours": "{n} часов назад",
+    "days": "{n} дней назад"
+  },
+  "status": {
+    "locked": "заперто",
+    "unlocked": "отперто",
+    "open": "открыто",
+    "closed": "закрыто",
+    "on": "включено",
+    "off": "выключено",
+    "home": "дома",
+    "not_home": "не дома",
+    "idle": "ожидание",
+    "running": "работает",
+    "paused": "пауза",
+    "stopped": "остановлено",
+    "pending": "ожидание",
+    "unknown": "неизвестно",
+    "unavailable": "недоступно",
+    "detected": "обнаружено",
+    "clear": "чисто",
+    "online": "в сети",
+    "offline": "не в сети",
+    "playing": "воспроизведение",
+    "buffering": "буферизация",
+    "standby": "ожидание",
+    "cleaning": "уборка",
+    "returning": "возвращается",
+    "docked": "на базе",
+    "charging": "заряжается",
+    "error": "ошибка",
+    "spot_cleaning": "локальная уборка",
+    "edge_cleaning": "уборка по краям",
+    "mopping": "влажная уборка",
+    "locating": "поиск",
+    "moving": "движение",
+    "stuck": "застрял",
+    "disarmed": "снято с охраны",
+    "armed_home": "охрана (дома)",
+    "armed_away": "охрана (вне дома)",
+    "armed_night": "охрана (ночь)",
+    "armed_custom_bypass": "охрана (пользовательский режим)",
+    "arming": "постановка на охрану",
+    "disarming": "снятие с охраны",
+    "triggered": "сработало"
+  },
+  "ui": {
+    "show_more": "Показать еще {n}",
+    "show_less": "Показать меньше",
+    "no_events": "Нет событий за выбранный период."
+  },
+  "date_format": {
+    "datetime": {
+      "day": "2-digit",
+      "month": "2-digit",
+      "year": "numeric",
+      "hour": "2-digit",
+      "minute": "2-digit"
+    }
+  }
+}

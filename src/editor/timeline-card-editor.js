@@ -78,15 +78,15 @@ class TimelineCardEditor extends LitElement {
       </style>
       <div class="tc-editor-root">
         <div class="tc-header">
-          <div class="tc-header-title">Timeline Card</div>
+          <div class="tc-header-title">Карточка таймлайна</div>
         </div>
 
         <div class="tc-section">
           <button class="tc-row-button" @click=${this._openCardSettings}>
             <div class="tc-row-button-label">
-              <span class="tc-row-button-title">General settings</span>
+              <span class="tc-row-button-title">Общие настройки</span>
               <span class="tc-row-button-sub">
-                Configure global behaviour and layout of the timeline.
+                Настройка общего поведения и внешнего вида таймлайна.
               </span>
             </div>
             <span>›</span>
@@ -113,15 +113,16 @@ class TimelineCardEditor extends LitElement {
         <div class="tc-header">
           <button
             class="tc-icon-button"
-            title="Back"
+            title="Назад"
             @click=${() => this._goTo('main')}
           >
             <ha-icon icon="mdi:arrow-left"></ha-icon>
           </button>
-          <div class="tc-header-title">Card settings</div>
+          <div class="tc-header-title">Настройки карточки</div>
         </div>
 
         <timeline-card-general-settings
+          .hass=${this.hass}
           .config=${this._config}
           @settings-changed=${this._onSettingsChanged}
         ></timeline-card-general-settings>
@@ -143,12 +144,12 @@ class TimelineCardEditor extends LitElement {
         <div class="tc-header">
           <button
             class="tc-icon-button"
-            title="Back"
+            title="Назад"
             @click=${() => this._goTo('main')}
           >
             <ha-icon icon="mdi:arrow-left"></ha-icon>
           </button>
-          <div class="tc-header-title">Entity settings</div>
+          <div class="tc-header-title">Настройки сущности</div>
         </div>
 
         <timeline-card-entity-editor

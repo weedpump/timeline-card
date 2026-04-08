@@ -27,12 +27,12 @@ class TimelineCardEntityList extends LitElement {
       <div class="tc-section">
         <div class="tc-entities-list">
           <div class="tc-entities-header">
-            <div class="tc-entities-title">Entities</div>
+            <div class="tc-entities-title">Сущности</div>
           </div>
 
           ${entities.length === 0
             ? html`<div style="font-size: 13px; opacity: 0.7;">
-                No entities configured yet.
+                Сущности еще не настроены.
               </div>`
             : entities.map((e, idx) => this._renderEntityRow(e, idx))}
 
@@ -54,13 +54,14 @@ class TimelineCardEntityList extends LitElement {
               @click=${this._addEntity}
               ?disabled=${!this._newEntityId}
             >
-              Add
+              Добавить
             </button>
           </div>
 
           <div class="tc-muted">
-            Entities are added as plain <code>entity:</code> entries first. You
-            can customise them in the entity editor later.
+            Сущности сначала добавляются как обычные записи
+            <code>entity:</code>. Детальную настройку можно сделать позже в
+            редакторе сущности.
           </div>
         </div>
       </div>
@@ -84,7 +85,7 @@ class TimelineCardEntityList extends LitElement {
         <div class="tc-entity-actions">
           <button
             class="tc-icon-button"
-            title="Edit entity options"
+            title="Редактировать сущность"
             @click=${() => this._editEntity(index)}
           >
             <ha-icon icon="mdi:pencil"></ha-icon>
@@ -92,7 +93,7 @@ class TimelineCardEntityList extends LitElement {
 
           <button
             class="tc-icon-button"
-            title="Remove entity"
+            title="Удалить сущность"
             @click=${() => this._removeEntity(index)}
           >
             <ha-icon icon="mdi:delete"></ha-icon>
@@ -110,6 +111,7 @@ class TimelineCardEntityList extends LitElement {
 
     if (typeof sel === 'string') return sel;
     if (sel.entity_id) return sel.entity_id;
+    if (sel.entity) return sel.entity;
     if (sel.value) return sel.value;
 
     return '';
@@ -119,7 +121,14 @@ class TimelineCardEntityList extends LitElement {
   // ADD NEW ENTITY
   //
   _onEntityPicked(ev) {
-    this._newEntityId = this._extractEntityId(ev.detail?.value);
+    const pickedValue = ev.detail?.value;
+    this._newEntityId = this._extractEntityId(pickedValue);
+    console.debug('[Timeline Card] ha-selector add entity', {
+      type: ev?.type,
+      rawValue: pickedValue,
+      extractedEntityId: this._newEntityId,
+      detail: ev?.detail,
+    });
   }
 
   _addEntity() {
@@ -138,7 +147,15 @@ class TimelineCardEntityList extends LitElement {
   // REPLACE EXISTING ENTITY
   //
   _onEntityReplaced(index, ev) {
-    const id = this._extractEntityId(ev.detail?.value);
+    const selectorValue = ev.detail?.value;
+    const id = this._extractEntityId(selectorValue);
+    console.debug('[Timeline Card] ha-selector replace entity', {
+      index,
+      type: ev?.type,
+      rawValue: selectorValue,
+      extractedEntityId: id,
+      detail: ev?.detail,
+    });
     if (!id) return;
 
     const list = [...this.entities];

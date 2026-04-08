@@ -4,6 +4,7 @@ import enUS from './locales/en-US.json';
 import fr from './locales/fr.json';
 import it from './locales/it.json';
 import ptBR from './locales/pt-BR.json';
+import ru from './locales/ru.json';
 import sv from './locales/sv.json';
 import styles from './timeline-card.css';
 
@@ -28,6 +29,7 @@ const translations = {
   fr,
   it,
   'pt-br': ptBR,
+  ru,
   sv,
 };
 
@@ -151,7 +153,6 @@ class TimelineCard extends HTMLElement {
   }
 
   ensureCardExists() {
-    console.log('test');
     const root = this.shadowRoot;
     if (!root.querySelector('style')) {
       const styleEl = document.createElement('style');
