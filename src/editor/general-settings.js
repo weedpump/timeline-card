@@ -38,9 +38,7 @@ class TimelineCardGeneralSettings extends LitElement {
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Title</div>
-                  <div class="tc-setting-description">
-                    Optional card title.
-                  </div>
+                  <div class="tc-setting-description">Optional card title.</div>
                 </div>
                 <ha-textfield
                   style="min-width: 200px; width: 280px; max-width: 280px;"
@@ -549,7 +547,12 @@ class TimelineCardGeneralSettings extends LitElement {
   }
 
   _onSelectorChange(key, ev, keepEmpty = false, fallbackValue) {
-    this._onSelectChange(key, ev?.detail?.value ?? '', keepEmpty, fallbackValue);
+    this._onSelectChange(
+      key,
+      ev?.detail?.value ?? '',
+      keepEmpty,
+      fallbackValue
+    );
   }
 
   _compactRow(cfg) {
