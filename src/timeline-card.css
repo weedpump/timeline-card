@@ -168,7 +168,7 @@ ha-card {
 }
 
 .event-box:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(128, 128, 128, 0.2);
 }
 
 .wrapper.compact .event-box {
