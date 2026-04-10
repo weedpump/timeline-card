@@ -120,8 +120,7 @@ class TimelineCardEntityList extends LitElement {
   // ADD NEW ENTITY
   //
   _onEntityPicked(ev) {
-    const pickedValue = ev.detail?.value;
-    this._newEntityId = this._extractEntityId(pickedValue);
+    this._newEntityId = this._extractEntityId(ev.detail?.value);
   }
 
   _addEntity() {
@@ -140,8 +139,7 @@ class TimelineCardEntityList extends LitElement {
   // REPLACE EXISTING ENTITY
   //
   _onEntityReplaced(index, ev) {
-    const selectorValue = ev.detail?.value;
-    const id = this._extractEntityId(selectorValue);
+    const id = this._extractEntityId(ev.detail?.value);
     if (!id) return;
 
     const list = [...this.entities];

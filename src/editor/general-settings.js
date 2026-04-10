@@ -72,7 +72,7 @@ class TimelineCardGeneralSettings extends LitElement {
                         { value: 'fr', label: 'Francais' },
                         { value: 'it', label: 'Italiano' },
                         { value: 'pt-br', label: 'Portugues (BR)' },
-                        { value: 'ru', label: 'Russian' },
+                        { value: 'ru', label: 'Русский' },
                         { value: 'sv', label: 'Svensk' },
                       ],
                     },
@@ -549,13 +549,7 @@ class TimelineCardGeneralSettings extends LitElement {
   }
 
   _onSelectorChange(key, ev, keepEmpty = false, fallbackValue) {
-    const eventValue =
-      ev?.detail?.value ??
-      ev?.target?.value ??
-      ev?.target?.__value ??
-      ev?.target?.configValue ??
-      '';
-    this._onSelectChange(key, eventValue, keepEmpty, fallbackValue);
+    this._onSelectChange(key, ev?.detail?.value ?? '', keepEmpty, fallbackValue);
   }
 
   _compactRow(cfg) {
