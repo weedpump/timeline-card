@@ -458,7 +458,7 @@ class TimelineCard extends HTMLElement {
         const stateColor = entityCfg.state_color || this.stateColor || '';
 
         const renderEventBox = () => `
-          <div class="${eventBoxClassName}">
+          <div class="${eventBoxClassName}" data-entity-id="${item.id}">
             ${
               this.showIcons
                 ? showEntityPicture
@@ -567,6 +567,18 @@ class TimelineCard extends HTMLElement {
         this.render();
       });
     }
+
+    root.querySelectorAll('.event-box[data-entity-id]').forEach((el) => {
+      el.addEventListener('click', () => {
+        this.dispatchEvent(
+          new CustomEvent('hass-more-info', {
+            detail: { entityId: el.dataset.entityId },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      });
+    });
 
     // Ensure single-sided layouts share the same card width (widest card)
     this.applySingleSideWidth(root, layout);

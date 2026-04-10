@@ -162,6 +162,13 @@ ha-card {
   max-width: 100%;
   flex-shrink: 1;
   min-width: 0;
+
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.event-box:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .wrapper.compact .event-box {

@@ -8,6 +8,7 @@
 - Editor: fixed language selector not allowing "Auto" to be re-selected after a language was chosen
 - Added `min_value` and `max_value` per-entity options to filter events by numeric state (e.g. only show sensor readings ≥ 50 or ≤ 21); non-numeric states are excluded when a value filter is active
 - Added default icons for `input_text`, `input_boolean`, `input_number`, `input_select`, `automation`, and `script` domains
+- Clicking an event tile now opens the More Info dialog for that entity
 
 ## v1.7.0
 
