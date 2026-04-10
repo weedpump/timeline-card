@@ -4,7 +4,8 @@
   "description": "A custom Lovelace card for Home Assistant that renders a vertical,\r alternating timeline of recent events for one or more entities.\\\r Supports per-entity configuration, localized time and state labels, icon\r mapping, and flexible filtering.",
   "main": "index.js",
   "directories": {
-    "doc": "docs"
+    "doc": "docs",
+    "test": "tests"
   },
   "scripts": {
     "test": "vitest run",

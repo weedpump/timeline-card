@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.8.0
+
+- Added Russian translations by **@kai-zer-ru**, Thank you!
+- Editor: migrated language, overflow, and card layout dropdowns to `ha-selector` for compatibility with the new Home Assistant UI by **@kai-zer-ru**
+- Editor: fixed entity picker compatibility with updated Home Assistant selector event format by **@kai-zer-ru**
+
 ## v1.7.0
 
 - **Fixed & Improved `collapse_duplicates`:**
