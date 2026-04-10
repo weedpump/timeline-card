@@ -6,6 +6,8 @@
 - Editor: migrated language, overflow, and card layout dropdowns to `ha-selector` for compatibility with the new Home Assistant UI by **@kai-zer-ru**
 - Editor: fixed entity picker compatibility with updated Home Assistant selector event format by **@kai-zer-ru**
 - Editor: fixed language selector not allowing "Auto" to be re-selected after a language was chosen
+- Added `min_value` and `max_value` per-entity options to filter events by numeric state (e.g. only show sensor readings ≥ 50 or ≤ 21); non-numeric states are excluded when a value filter is active
+- Added default icons for `input_text`, `input_boolean`, `input_number`, `input_select`, `automation`, and `script` domains
 
 ## v1.7.0
 
