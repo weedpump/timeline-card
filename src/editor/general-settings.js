@@ -11,6 +11,7 @@ class TimelineCardGeneralSettings extends LitElement {
   static get properties() {
     return {
       config: { type: Object },
+      hass: { type: Object },
     };
   }
 
@@ -37,7 +38,9 @@ class TimelineCardGeneralSettings extends LitElement {
               <div class="tc-setting-row">
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Title</div>
-                  <div class="tc-setting-description">Optional card title.</div>
+                  <div class="tc-setting-description">
+                    Optional card title.
+                  </div>
                 </div>
                 <ha-textfield
                   style="min-width: 200px; width: 280px; max-width: 280px;"
@@ -54,21 +57,29 @@ class TimelineCardGeneralSettings extends LitElement {
                     Optional override. Empty = auto from HA/browser.
                   </div>
                 </div>
-                <ha-select
+                <ha-selector
                   style="min-width: 200px; width: 240px;"
+                  .hass=${this.hass}
                   .value=${cfg.language || ''}
-                  @selected=${(e) => this._onSelectChange('language', e)}
-                  @closed=${(e) => e.stopPropagation()}
-                >
-                  <mwc-list-item value="">Auto</mwc-list-item>
-                  <mwc-list-item value="de">Deutsch</mwc-list-item>
-                  <mwc-list-item value="en-GB">English (UK)</mwc-list-item>
-                  <mwc-list-item value="en-US">English (US)</mwc-list-item>
-                  <mwc-list-item value="fr">Francais</mwc-list-item>
-                  <mwc-list-item value="it">Italiano</mwc-list-item>
-                  <mwc-list-item value="pt-br">Portugues (BR)</mwc-list-item>
-                  <mwc-list-item value="sv">Svensk</mwc-list-item>
-                </ha-select>
+                  .selector=${{
+                    select: {
+                      mode: 'dropdown',
+                      options: [
+                        { value: '', label: 'Auto' },
+                        { value: 'de', label: 'Deutsch' },
+                        { value: 'en-GB', label: 'English (UK)' },
+                        { value: 'en-US', label: 'English (US)' },
+                        { value: 'fr', label: 'Francais' },
+                        { value: 'it', label: 'Italiano' },
+                        { value: 'pt-br', label: 'Portugues (BR)' },
+                        { value: 'ru', label: 'Русский' },
+                        { value: 'sv', label: 'Svensk' },
+                      ],
+                    },
+                  }}
+                  @value-changed=${(e) =>
+                    this._onSelectorChange('language', e, true)}
+                ></ha-selector>
               </div>
 
               <!-- REFRESH INTERVAL -->
@@ -178,19 +189,28 @@ class TimelineCardGeneralSettings extends LitElement {
                     Collapse extra events or render inside a scroll area.
                   </div>
                 </div>
-                <ha-select
+                <ha-selector
                   style="min-width: 180px; width: 200px;"
+                  .hass=${this.hass}
                   .value=${cfg.overflow || 'collapse'}
-                  @selected=${(e) => this._onSelectChange('overflow', e)}
-                  @closed=${(e) => e.stopPropagation()}
-                >
-                  <mwc-list-item value="collapse"
-                    >Collapse (show more/less)</mwc-list-item
-                  >
-                  <mwc-list-item value="scroll"
-                    >Scroll (respect max height)</mwc-list-item
-                  >
-                </ha-select>
+                  .selector=${{
+                    select: {
+                      mode: 'dropdown',
+                      options: [
+                        {
+                          value: 'collapse',
+                          label: 'Collapse (show more/less)',
+                        },
+                        {
+                          value: 'scroll',
+                          label: 'Scroll (respect max height)',
+                        },
+                      ],
+                    },
+                  }}
+                  @value-changed=${(e) =>
+                    this._onSelectorChange('overflow', e, false, 'collapse')}
+                ></ha-selector>
               </div>
 
               <!-- MAX HEIGHT (scroll only) -->
@@ -233,22 +253,23 @@ class TimelineCardGeneralSettings extends LitElement {
                     layouts.
                   </div>
                 </div>
-                <ha-select
+                <ha-selector
                   style="min-width: 200px; width: 240px;"
+                  .hass=${this.hass}
                   .value=${cfg.card_layout || 'center'}
-                  @selected=${(e) => this._onSelectChange('card_layout', e)}
-                  @closed=${(e) => e.stopPropagation()}
-                >
-                  <mwc-list-item value="center"
-                    >Center (alternating)</mwc-list-item
-                  >
-                  <mwc-list-item value="left"
-                    >Left line, cards right</mwc-list-item
-                  >
-                  <mwc-list-item value="right"
-                    >Right line, cards left</mwc-list-item
-                  >
-                </ha-select>
+                  .selector=${{
+                    select: {
+                      mode: 'dropdown',
+                      options: [
+                        { value: 'center', label: 'Center (alternating)' },
+                        { value: 'left', label: 'Left line, cards right' },
+                        { value: 'right', label: 'Right line, cards left' },
+                      ],
+                    },
+                  }}
+                  @value-changed=${(e) =>
+                    this._onSelectorChange('card_layout', e, false, 'center')}
+                ></ha-selector>
               </div>
 
               ${this._compactRow(cfg)}
@@ -511,9 +532,13 @@ class TimelineCardGeneralSettings extends LitElement {
     this._emitPatch({ [key]: v || undefined });
   }
 
-  _onSelectChange(key, ev) {
-    const val = ev.target?.value ?? '';
-    const patch = { [key]: val || undefined };
+  _onSelectChange(key, rawValue, keepEmpty = false, fallbackValue) {
+    const val = `${rawValue ?? ''}`.trim();
+    const patch = { [key]: val || (keepEmpty ? '' : undefined) };
+
+    if (!val && fallbackValue) {
+      patch[key] = fallbackValue;
+    }
 
     // If layout switches away from center, turn off compact to avoid invalid combo
     if (key === 'card_layout' && val && val !== 'center') {
@@ -521,6 +546,10 @@ class TimelineCardGeneralSettings extends LitElement {
     }
 
     this._emitPatch(patch);
+  }
+
+  _onSelectorChange(key, ev, keepEmpty = false, fallbackValue) {
+    this._onSelectChange(key, ev?.detail?.value ?? '', keepEmpty, fallbackValue);
   }
 
   _compactRow(cfg) {

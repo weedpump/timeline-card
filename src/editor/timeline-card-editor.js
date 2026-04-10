@@ -122,6 +122,7 @@ class TimelineCardEditor extends LitElement {
         </div>
 
         <timeline-card-general-settings
+          .hass=${this.hass}
           .config=${this._config}
           @settings-changed=${this._onSettingsChanged}
         ></timeline-card-general-settings>

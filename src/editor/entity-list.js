@@ -110,6 +110,7 @@ class TimelineCardEntityList extends LitElement {
 
     if (typeof sel === 'string') return sel;
     if (sel.entity_id) return sel.entity_id;
+    if (sel.entity) return sel.entity;
     if (sel.value) return sel.value;
 
     return '';
