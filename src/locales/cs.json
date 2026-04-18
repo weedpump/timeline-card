@@ -1,0 +1,66 @@
+{
+  "time": {
+    "seconds": "před chvílí",
+    "minutes": "před {n} min",
+    "hours": "před {n} h",
+    "days": "před {n} d"
+  },
+  "status": {
+    "locked": "zamčeno",
+    "unlocked": "odemčeno",
+    "open": "otevřeno",
+    "closed": "zavřeno",
+    "on": "zapnuto",
+    "off": "vypnuto",
+    "home": "doma",
+    "not_home": "pryč",
+    "idle": "nečinné",
+    "running": "běží",
+    "paused": "pozastaveno",
+    "stopped": "zastaveno",
+    "pending": "čeká",
+    "unknown": "neznámé",
+    "unavailable": "nedostupné",
+    "detected": "detekováno",
+    "clear": "bez detekce",
+    "online": "online",
+    "offline": "offline",
+    "playing": "přehrává se",
+    "buffering": "načítá se",
+    "standby": "pohotovost",
+    "cleaning": "uklízí",
+    "returning": "vrací se",
+    "docked": "v dokovací stanici",
+    "charging": "nabíjí se",
+    "error": "chyba",
+    "spot_cleaning": "bodový úklid",
+    "edge_cleaning": "úklid podél stěn",
+    "mopping": "vytírání",
+    "locating": "určování polohy",
+    "moving": "pohybuje se",
+    "stuck": "zaseknuto",
+    "disarmed": "deaktivováno",
+    "armed_home": "střežení doma",
+    "armed_away": "střežení mimo domov",
+    "armed_night": "noční střežení",
+    "armed_custom_bypass": "vlastní režim střežení",
+    "arming": "aktivace střežení",
+    "disarming": "deaktivace střežení",
+    "triggered": "spuštěno"
+  },
+  "ui": {
+    "show_more": "Zobrazit další {n}",
+    "show_less": "Zobrazit méně",
+    "no_events": "V tomto časovém období nejsou žádné události."
+  },
+  "date_format": {
+    "datetime": {
+      "day": "2-digit",
+      "month": "2-digit",
+      "year": "numeric",
+      "hour": "2-digit",
+      "minute": "2-digit",
+      "hour12": false
+    }
+  }
+}

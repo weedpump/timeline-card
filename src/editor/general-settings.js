@@ -64,6 +64,7 @@ class TimelineCardGeneralSettings extends LitElement {
                       mode: 'dropdown',
                       options: [
                         { value: 'auto', label: 'Auto' },
+                        { value: 'cs', label: 'Čeština' },
                         { value: 'de', label: 'Deutsch' },
                         { value: 'en-GB', label: 'English (UK)' },
                         { value: 'en-US', label: 'English (US)' },

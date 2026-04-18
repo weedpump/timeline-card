@@ -1,3 +1,4 @@
+import cs from './locales/cs.json';
 import de from './locales/de.json';
 import enGB from './locales/en-GB.json';
 import enUS from './locales/en-US.json';
@@ -23,6 +24,7 @@ import { getCachedHistory, setCachedHistory } from './history-cache.js';
 import { transformState } from './state-transform.js';
 
 const translations = {
+  cs,
   de,
   'en-gb': enGB,
   'en-us': enUS,
