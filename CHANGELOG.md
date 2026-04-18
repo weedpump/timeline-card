@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0
+
+- Added Czech translations by **@trigger737**, Thank you!
+
 ## v1.8.1
 
 - Fixed event tile hover highlight not visible in light mode
