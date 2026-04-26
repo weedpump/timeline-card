@@ -152,33 +152,33 @@ entities:
 
 ### Card Options
 
-| Option                 | Type    | Required | Default  | Description                                                                                                    |
-| ---------------------- | ------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------- |
-| `entities`             | list    | yes      | -        | List of entities or entity config objects                                                                      |
-| `hours`                | number  | yes      | -        | Number of hours of history to fetch                                                                            |
-| `limit`                | number  | yes      | -        | Max number of events displayed                                                                                 |
-| `visible_events`       | number  | no       | -        | Only show the first N events; hide the rest behind a toggle                                                    |
-| `overflow`             | string  | no       | collapse | `collapse` (Show more/less) or `scroll` (scrollable container)                                                 |
-| `max_height`           | string  | no       | -        | Constrain card height (e.g. `220px`, `16rem`); useful with `overflow: scroll`                                  |
-| `title`                | string  | no       | ""       | Card title                                                                                                     |
-| `relative_time`        | boolean | no       | false    | Use relative ("5 minutes ago") time                                                                            |
-| `show_date`            | boolean | no       | true     | Include the date in absolute timestamps; set `false` to show time only                                         |
-| `show_names`           | boolean | no       | true     | Show entity names                                                                                              |
-| `show_states`          | boolean | no       | true     | Show entity states                                                                                             |
-| `show_icons`           | boolean | no       | true     | Show entity icons                                                                                              |
-| `language`             | string  | no       | auto     | Language code (default `en-US`; supports `cs`, `en-US`, `en-GB`, `de`, `fr`, `it`, `pt-BR`, `ru`, `sv`, etc.)  |
-| `refresh_interval`     | number  | no       | -        | Auto-refresh interval in seconds (background refresh)                                                          |
-| `allow_multiline`      | boolean | no       | false    | Enables automatic multiline wrapping for long names/states                                                     |
-| `force_multiline`      | boolean | no       | false    | Always place the state on a new line below the name                                                            |
-| `card_layout`          | string  | no       | center   | Layout mode: `center` (alternating), `left` (timeline left, cards right), `right` (timeline right, cards left) |
-| `compact_layout`       | boolean | no       | false    | Overlaps alternating rows to reduce vertical height (only with `card_layout: center`)                          |
-| `card_background`      | string  | no       | -        | Card background color (supports hex/rgb/rgba)                                                                  |
-| `name_color`           | string  | no       | -        | Global name color (overridden by entity)                                                                       |
-| `state_color`          | string  | no       | -        | Global state color (overridden by entity)                                                                      |
-| `timeline_color_start` | string  | no       | -        | Timeline gradient start color (hex/rgb/rgba)                                                                   |
-| `timeline_color_end`   | string  | no       | -        | Timeline gradient end color (hex/rgb/rgba)                                                                     |
-| `dot_color`            | string  | no       | -        | Timeline dot color (hex/rgb/rgba)                                                                              |
-| `collapse_duplicates`  | boolean | no       | false    | Removes consecutive events with the same state across all entities.                                            |
+| Option                 | Type    | Required | Default  | Description                                                                                                          |
+| ---------------------- | ------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------|
+| `entities`             | list    | yes      | -        | List of entities or entity config objects                                                                            |
+| `hours`                | number  | yes      | -        | Number of hours of history to fetch                                                                                  |
+| `limit`                | number  | yes      | -        | Max number of events displayed                                                                                       |
+| `visible_events`       | number  | no       | -        | Only show the first N events; hide the rest behind a toggle                                                          |
+| `overflow`             | string  | no       | collapse | `collapse` (Show more/less) or `scroll` (scrollable container)                                                       |
+| `max_height`           | string  | no       | -        | Constrain card height (e.g. `220px`, `16rem`); useful with `overflow: scroll`                                        |
+| `title`                | string  | no       | ""       | Card title                                                                                                           |
+| `relative_time`        | boolean | no       | false    | Use relative ("5 minutes ago") time                                                                                  |
+| `show_date`            | boolean | no       | true     | Include the date in absolute timestamps; set `false` to show time only                                               |
+| `show_names`           | boolean | no       | true     | Show entity names                                                                                                    |
+| `show_states`          | boolean | no       | true     | Show entity states                                                                                                   |
+| `show_icons`           | boolean | no       | true     | Show entity icons                                                                                                    |
+| `language`             | string  | no       | auto     | Language code (default `en-US`; supports `cs`, `en-US`, `en-GB`, `de`, `fr`, `it`, `pl`, `pt-BR`, `ru`, `sv`, etc.)  |
+| `refresh_interval`     | number  | no       | -        | Auto-refresh interval in seconds (background refresh)                                                                |
+| `allow_multiline`      | boolean | no       | false    | Enables automatic multiline wrapping for long names/states                                                           |
+| `force_multiline`      | boolean | no       | false    | Always place the state on a new line below the name                                                                  |
+| `card_layout`          | string  | no       | center   | Layout mode: `center` (alternating), `left` (timeline left, cards right), `right` (timeline right, cards left)       |
+| `compact_layout`       | boolean | no       | false    | Overlaps alternating rows to reduce vertical height (only with `card_layout: center`)                                |
+| `card_background`      | string  | no       | -        | Card background color (supports hex/rgb/rgba)                                                                        |
+| `name_color`           | string  | no       | -        | Global name color (overridden by entity)                                                                             |
+| `state_color`          | string  | no       | -        | Global state color (overridden by entity)                                                                            |
+| `timeline_color_start` | string  | no       | -        | Timeline gradient start color (hex/rgb/rgba)                                                                         |
+| `timeline_color_end`   | string  | no       | -        | Timeline gradient end color (hex/rgb/rgba)                                                                           |
+| `dot_color`            | string  | no       | -        | Timeline dot color (hex/rgb/rgba)                                                                                    |
+| `collapse_duplicates`  | boolean | no       | false    | Removes consecutive events with the same state across all entities.                                                  |
 
 ```yaml
 type: custom:timeline-card
@@ -398,6 +398,7 @@ Available translations:
 - German
 - French
 - Italian
+- Polish
 - Brazilian Portuguese
 - Russian
 - Swedish
