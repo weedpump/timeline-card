@@ -1,0 +1,66 @@
+{
+  "time": {
+    "seconds": "kilka sekund temu",
+    "minutes": "{n} minut temu",
+    "hours": "{n} godzin temu",
+    "days": "{n} dni temu"
+  },
+  "status": {
+    "locked": "zablokowany",
+    "unlocked": "odblokowany",
+    "open": "otwarty",
+    "closed": "zamknięty",
+    "on": "włączony",
+    "off": "wyłączony",
+    "home": "w domu",
+    "not_home": "poza domem",
+    "idle": "bezczynny",
+    "running": "działa",
+    "paused": "wstrzymany",
+    "stopped": "zatrzymany",
+    "pending": "oczekujący",
+    "unknown": "nieznany",
+    "unavailable": "niedostępny",
+    "detected": "wykryto",
+    "clear": "czysty",
+    "online": "online",
+    "offline": "offline",
+    "playing": "odtwarzanie",
+    "buffering": "buforowanie",
+    "standby": "tryb czuwania",
+    "cleaning": "sprzątanie",
+    "returning": "powrót",
+    "docked": "zadokowany",
+    "charging": "ładowanie",
+    "error": "błąd",
+    "spot_cleaning": "sprzątanie punktowe",
+    "edge_cleaning": "sprzątanie krawędzi",
+    "mopping": "mopowanie",
+    "locating": "lokalizowanie",
+    "moving": "ruch",
+    "stuck": "zablokowany",
+    "disarmed": "rozbrojony",
+    "armed_home": "uzbrojony (dom)",
+    "armed_away": "uzbrojony (poza domem)",
+    "armed_night": "uzbrojony (noc)",
+    "armed_custom_bypass": "uzbrojony (niestandardowe obejście)",
+    "arming": "uzbrajanie",
+    "disarming": "rozbrajanie",
+    "triggered": "uruchomiony"
+  },
+  "ui": {
+    "show_more": "Pokaż jeszcze {n}",
+    "show_less": "Pokaż mniej",
+    "no_events": "Brak zdarzeń w tym okresie."
+  },
+  "date_format": {
+    "datetime": {
+      "day": "2-digit",
+      "month": "2-digit",
+      "year": "numeric",
+      "hour": "2-digit",
+      "minute": "2-digit",
+      "hour12": false
+    }
+  }
+}
