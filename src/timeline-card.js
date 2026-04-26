@@ -4,6 +4,7 @@ import enGB from './locales/en-GB.json';
 import enUS from './locales/en-US.json';
 import fr from './locales/fr.json';
 import it from './locales/it.json';
+import pl from './locales/pl.json';
 import ptBR from './locales/pt-BR.json';
 import ru from './locales/ru.json';
 import sv from './locales/sv.json';
