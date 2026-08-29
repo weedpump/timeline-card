@@ -74,7 +74,7 @@ jobs:
 
       # Create release only if extraction succeeded
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: dist/timeline-card.js
           body_path: RELEASE_NOTES.md
