@@ -30,14 +30,14 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "baseline-browser-mapping": "^2.9.19",
-    "copy-webpack-plugin": "^13.0.1",
+    "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.3.0",
     "prettier": "^3.8.1",
-    "vitest": "^4.0.18",
-    "webpack": "^5.103.0",
+    "vitest": "^4.1.0",
+    "webpack": "^5.110.1",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
