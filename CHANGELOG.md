@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.11.1
+
+### Maintenance
+
+- Updated runtime and development dependencies
+- Updated GitHub Actions and release tooling
+- Standardized development, CI, and release builds on Node.js 24
+- Added automated Dependabot updates
+- Improved compatibility with the latest Lit rendering behavior
+
+No configuration changes are required.
+
 ## v1.11.0
 
 - Added Dutch translations by **@VGrol**, Thank you!
