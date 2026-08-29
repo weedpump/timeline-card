@@ -30,11 +30,13 @@ class TimelineCardEntityList extends LitElement {
             <div class="tc-entities-title">Entities</div>
           </div>
 
-          ${entities.length === 0
-            ? html`<div style="font-size: 13px; opacity: 0.7;">
-                No entities configured yet.
-              </div>`
-            : entities.map((e, idx) => this._renderEntityRow(e, idx))}
+          ${
+            entities.length === 0
+              ? html`<div style="font-size: 13px; opacity: 0.7;">
+                  No entities configured yet.
+                </div>`
+              : entities.map((e, idx) => this._renderEntityRow(e, idx))
+          }
 
           <!-- ADD NEW ENTITY -->
           <div

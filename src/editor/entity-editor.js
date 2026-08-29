@@ -155,18 +155,20 @@ class TimelineCardEntityEditor extends LitElement {
                 'collapse_duplicates',
                 cfg.collapse_duplicates ?? null
               )}
-              ${cfg.collapse_duplicates === true
-                ? this._selectRow(
-                    'Keep event',
-                    'Which event to show when collapsing duplicates.',
-                    'collapse_duplicates_keep',
-                    cfg.collapse_duplicates_keep ?? 'earliest',
-                    [
-                      { value: 'earliest', label: 'Earliest (default)' },
-                      { value: 'latest', label: 'Latest' },
-                    ]
-                  )
-                : ''}
+              ${
+                cfg.collapse_duplicates === true
+                  ? this._selectRow(
+                      'Keep event',
+                      'Which event to show when collapsing duplicates.',
+                      'collapse_duplicates_keep',
+                      cfg.collapse_duplicates_keep ?? 'earliest',
+                      [
+                        { value: 'earliest', label: 'Earliest (default)' },
+                        { value: 'latest', label: 'Latest' },
+                      ]
+                    )
+                  : ''
+              }
 
               <!-- INCLUDE STATES (YAML ONLY) -->
               <div class="tc-setting-row" style="align-items: flex-start;">
@@ -177,8 +179,7 @@ class TimelineCardEntityEditor extends LitElement {
                     <pre>
 - open
 - closed
-- jammed</pre
-                    >
+- jammed</pre>
                   </div>
                 </div>
 
@@ -215,8 +216,7 @@ class TimelineCardEntityEditor extends LitElement {
                     <pre>
 - idle
 - unknown
-- unavailable</pre
-                    >
+- unavailable</pre>
                   </div>
                 </div>
 
@@ -386,9 +386,11 @@ class TimelineCardEntityEditor extends LitElement {
       <div class="tc-setting-row">
         <div class="tc-setting-label">
           <div class="tc-setting-title">${title}</div>
-          ${description
-            ? html`<div class="tc-setting-description">${description}</div>`
-            : ''}
+          ${
+            description
+              ? html`<div class="tc-setting-description">${description}</div>`
+              : ''
+          }
         </div>
         <select
           style="
@@ -469,39 +471,41 @@ class TimelineCardEntityEditor extends LitElement {
 
     return html`
       <div class="tc-map-editor">
-        ${entries.length === 0
-          ? html`<div class="tc-muted" style="margin-bottom:6px;">
-              No entries yet.
-            </div>`
-          : entries.map(
-              ([state, value]) => html`
-                <div class="tc-map-row tc-map-row-icon">
-                  <input
-                    class="tc-text-input tc-map-key"
-                    aria-label="State"
-                    placeholder="State"
-                    .value=${state}
-                    @input=${(e) =>
-                      this._onMapKeyChange(mapKey, state, e.target.value)}
-                  />
-                  <input
-                    class="tc-text-input tc-map-value"
-                    aria-label="Value"
-                    .value=${value}
-                    placeholder=${placeholder}
-                    @input=${(e) =>
-                      this._updateMap(mapKey, state, e.target.value)}
-                  />
-                  <button
-                    class="tc-icon-button"
-                    title="Remove entry"
-                    @click=${() => this._removeMapEntry(mapKey, state)}
-                  >
-                    <ha-icon icon="mdi:delete"></ha-icon>
-                  </button>
-                </div>
-              `
-            )}
+        ${
+          entries.length === 0
+            ? html`<div class="tc-muted" style="margin-bottom:6px;">
+                No entries yet.
+              </div>`
+            : entries.map(
+                ([state, value]) => html`
+                  <div class="tc-map-row tc-map-row-icon">
+                    <input
+                      class="tc-text-input tc-map-key"
+                      aria-label="State"
+                      placeholder="State"
+                      .value=${state}
+                      @input=${(e) =>
+                        this._onMapKeyChange(mapKey, state, e.target.value)}
+                    />
+                    <input
+                      class="tc-text-input tc-map-value"
+                      aria-label="Value"
+                      .value=${value}
+                      placeholder=${placeholder}
+                      @input=${(e) =>
+                        this._updateMap(mapKey, state, e.target.value)}
+                    />
+                    <button
+                      class="tc-icon-button"
+                      title="Remove entry"
+                      @click=${() => this._removeMapEntry(mapKey, state)}
+                    >
+                      <ha-icon icon="mdi:delete"></ha-icon>
+                    </button>
+                  </div>
+                `
+              )
+        }
 
         <button
           class="tc-btn-secondary"
@@ -526,37 +530,39 @@ class TimelineCardEntityEditor extends LitElement {
 
     return html`
       <div class="tc-map-editor">
-        ${entries.length === 0
-          ? html`<div class="tc-muted" style="margin-bottom:6px;">
-              No entries yet.
-            </div>`
-          : entries.map(
-              ([state, value]) => html`
-                <div class="tc-map-row">
-                  <input
-                    class="tc-text-input tc-map-key"
-                    aria-label="State"
-                    placeholder="State"
-                    .value=${state}
-                    @input=${(e) =>
-                      this._onMapKeyChange(mapKey, state, e.target.value)}
-                  />
-                  <ha-icon-picker
-                    class="tc-map-icon"
-                    .value=${value}
-                    @value-changed=${(e) =>
-                      this._updateMap(mapKey, state, e.detail.value)}
-                  ></ha-icon-picker>
-                  <button
-                    class="tc-icon-button"
-                    title="Remove entry"
-                    @click=${() => this._removeMapEntry(mapKey, state)}
-                  >
-                    <ha-icon icon="mdi:delete"></ha-icon>
-                  </button>
-                </div>
-              `
-            )}
+        ${
+          entries.length === 0
+            ? html`<div class="tc-muted" style="margin-bottom:6px;">
+                No entries yet.
+              </div>`
+            : entries.map(
+                ([state, value]) => html`
+                  <div class="tc-map-row">
+                    <input
+                      class="tc-text-input tc-map-key"
+                      aria-label="State"
+                      placeholder="State"
+                      .value=${state}
+                      @input=${(e) =>
+                        this._onMapKeyChange(mapKey, state, e.target.value)}
+                    />
+                    <ha-icon-picker
+                      class="tc-map-icon"
+                      .value=${value}
+                      @value-changed=${(e) =>
+                        this._updateMap(mapKey, state, e.detail.value)}
+                    ></ha-icon-picker>
+                    <button
+                      class="tc-icon-button"
+                      title="Remove entry"
+                      @click=${() => this._removeMapEntry(mapKey, state)}
+                    >
+                      <ha-icon icon="mdi:delete"></ha-icon>
+                    </button>
+                  </div>
+                `
+              )
+        }
 
         <button
           class="tc-btn-secondary"
@@ -574,32 +580,34 @@ class TimelineCardEntityEditor extends LitElement {
 
     return html`
       <div class="tc-map-editor">
-        ${entries.length === 0
-          ? html`<div class="tc-muted" style="margin-bottom:6px;">
-              No entries yet.
-            </div>`
-          : entries.map(
-              ([state, value]) => html`
-                <div class="tc-map-row tc-map-row-color">
-                  <input
-                    class="tc-text-input tc-map-key"
-                    aria-label="State"
-                    placeholder="State"
-                    .value=${state}
-                    @input=${(e) =>
-                      this._onMapKeyChange(mapKey, state, e.target.value)}
-                  />
-                  ${this._renderMapColorPicker(mapKey, state, value)}
-                  <button
-                    class="tc-icon-button"
-                    title="Remove entry"
-                    @click=${() => this._removeMapEntry(mapKey, state)}
-                  >
-                    <ha-icon icon="mdi:delete"></ha-icon>
-                  </button>
-                </div>
-              `
-            )}
+        ${
+          entries.length === 0
+            ? html`<div class="tc-muted" style="margin-bottom:6px;">
+                No entries yet.
+              </div>`
+            : entries.map(
+                ([state, value]) => html`
+                  <div class="tc-map-row tc-map-row-color">
+                    <input
+                      class="tc-text-input tc-map-key"
+                      aria-label="State"
+                      placeholder="State"
+                      .value=${state}
+                      @input=${(e) =>
+                        this._onMapKeyChange(mapKey, state, e.target.value)}
+                    />
+                    ${this._renderMapColorPicker(mapKey, state, value)}
+                    <button
+                      class="tc-icon-button"
+                      title="Remove entry"
+                      @click=${() => this._removeMapEntry(mapKey, state)}
+                    >
+                      <ha-icon icon="mdi:delete"></ha-icon>
+                    </button>
+                  </div>
+                `
+              )
+        }
 
         <button
           class="tc-btn-secondary"

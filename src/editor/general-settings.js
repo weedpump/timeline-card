@@ -161,30 +161,32 @@ class TimelineCardGeneralSettings extends LitElement {
           <div class="tc-card-block">
             <div class="tc-form-group">
               <!-- VISIBLE EVENTS (collapse only) -->
-              ${isCollapseMode
-                ? html`
-                    <div class="tc-setting-row">
-                      <div class="tc-setting-label">
-                        <div class="tc-setting-title">Visible events</div>
-                        <div class="tc-setting-description">
-                          Show this many before "Show more".
+              ${
+                isCollapseMode
+                  ? html`
+                      <div class="tc-setting-row">
+                        <div class="tc-setting-label">
+                          <div class="tc-setting-title">Visible events</div>
+                          <div class="tc-setting-description">
+                            Show this many before "Show more".
+                          </div>
                         </div>
+                        <input
+                          class="tc-text-input"
+                          type="number"
+                          min="1"
+                          style="width: 140px;"
+                          .value=${cfg.visible_events ?? ''}
+                          @input=${(e) =>
+                            this._onNumberChange(
+                              'visible_events',
+                              e.target.value
+                            )}
+                        />
                       </div>
-                      <input
-                        class="tc-text-input"
-                        type="number"
-                        min="1"
-                        style="width: 140px;"
-                        .value=${cfg.visible_events ?? ''}
-                        @input=${(e) =>
-                          this._onNumberChange(
-                            'visible_events',
-                            e.target.value
-                          )}
-                      />
-                    </div>
-                  `
-                : ''}
+                    `
+                  : ''
+              }
 
               <!-- OVERFLOW MODE -->
               <div class="tc-setting-row">
@@ -219,25 +221,27 @@ class TimelineCardGeneralSettings extends LitElement {
               </div>
 
               <!-- MAX HEIGHT (scroll only) -->
-              ${isScrollMode
-                ? html`
-                    <div class="tc-setting-row">
-                      <div class="tc-setting-label">
-                        <div class="tc-setting-title">Max height</div>
-                        <div class="tc-setting-description">
-                          Limit card height (e.g. 220px or 14rem).
+              ${
+                isScrollMode
+                  ? html`
+                      <div class="tc-setting-row">
+                        <div class="tc-setting-label">
+                          <div class="tc-setting-title">Max height</div>
+                          <div class="tc-setting-description">
+                            Limit card height (e.g. 220px or 14rem).
+                          </div>
                         </div>
+                        <input
+                          class="tc-text-input"
+                          style="width: 180px;"
+                          .value=${cfg.max_height ?? ''}
+                          @input=${(e) =>
+                            this._onTextChange('max_height', e.target.value)}
+                        />
                       </div>
-                      <input
-                        class="tc-text-input"
-                        style="width: 180px;"
-                        .value=${cfg.max_height ?? ''}
-                        @input=${(e) =>
-                          this._onTextChange('max_height', e.target.value)}
-                      />
-                    </div>
-                  `
-                : ''}
+                    `
+                  : ''
+              }
             </div>
           </div>
         </div>
@@ -364,18 +368,20 @@ class TimelineCardGeneralSettings extends LitElement {
                 'collapse_duplicates',
                 cfg.collapse_duplicates ?? false
               )}
-              ${(cfg.collapse_duplicates ?? false)
-                ? this._selectRow(
-                    'Keep event',
-                    'Which event to show when collapsing duplicates.',
-                    'collapse_duplicates_keep',
-                    cfg.collapse_duplicates_keep ?? 'earliest',
-                    [
-                      { value: 'earliest', label: 'Earliest (default)' },
-                      { value: 'latest', label: 'Latest' },
-                    ]
-                  )
-                : ''}
+              ${
+                (cfg.collapse_duplicates ?? false)
+                  ? this._selectRow(
+                      'Keep event',
+                      'Which event to show when collapsing duplicates.',
+                      'collapse_duplicates_keep',
+                      cfg.collapse_duplicates_keep ?? 'earliest',
+                      [
+                        { value: 'earliest', label: 'Earliest (default)' },
+                        { value: 'latest', label: 'Latest' },
+                      ]
+                    )
+                  : ''
+              }
             </div>
           </div>
         </div>
@@ -445,9 +451,11 @@ class TimelineCardGeneralSettings extends LitElement {
       <div class="tc-setting-row">
         <div class="tc-setting-label">
           <div class="tc-setting-title">${title}</div>
-          ${description
-            ? html`<div class="tc-setting-description">${description}</div>`
-            : ''}
+          ${
+            description
+              ? html`<div class="tc-setting-description">${description}</div>`
+              : ''
+          }
         </div>
         <ha-switch
           .checked=${value}
@@ -463,9 +471,11 @@ class TimelineCardGeneralSettings extends LitElement {
       <div class="tc-setting-row">
         <div class="tc-setting-label">
           <div class="tc-setting-title">${title}</div>
-          ${description
-            ? html`<div class="tc-setting-description">${description}</div>`
-            : ''}
+          ${
+            description
+              ? html`<div class="tc-setting-description">${description}</div>`
+              : ''
+          }
         </div>
         <select
           style="
