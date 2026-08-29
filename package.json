@@ -23,6 +23,9 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "bugs": {
     "url": "https://github.com/weedpump/timeline-card/issues"
   },
