@@ -3,7 +3,7 @@ import {
   createEntitySuggestion,
   createPreviewConfig,
   getEffectiveTimelineLayout,
-  isGeneralCardPickerPreview,
+  isCardPickerPreview,
   isTimelineEntitySupported,
   selectPreviewEntities,
 } from '../src/card-picker.js';
@@ -140,18 +140,38 @@ describe('Timeline Card picker preview', () => {
     expect(createPreviewConfig(hass, [], []).entities).toEqual([]);
   });
 
-  it('detects only the general card picker shadow-root context', () => {
+  it('detects direct and nested card picker shadow-root contexts', () => {
     expect(
-      isGeneralCardPickerPreview({
+      isCardPickerPreview({
         getRootNode: () => ({ host: { localName: 'hui-card-picker' } }),
       })
     ).toBe(true);
+
+    const suggestionPicker = { localName: 'hui-suggestion-picker' };
+    const suggestionCard = {
+      localName: 'hui-suggestion-card',
+      getRootNode: () => ({ host: suggestionPicker }),
+    };
     expect(
-      isGeneralCardPickerPreview({
-        getRootNode: () => ({ host: { localName: 'hui-card' } }),
+      isCardPickerPreview({
+        getRootNode: () => ({ host: suggestionCard }),
+      })
+    ).toBe(true);
+  });
+
+  it('does not treat the card editor preview as a picker preview', () => {
+    expect(
+      isCardPickerPreview({
+        preview: true,
+        getRootNode: () => ({
+          host: {
+            localName: 'hui-dialog-edit-card',
+            getRootNode: () => ({ host: null }),
+          },
+        }),
       })
     ).toBe(false);
-    expect(isGeneralCardPickerPreview({})).toBe(false);
+    expect(isCardPickerPreview({ preview: true })).toBe(false);
   });
 
   it('uses a left layout only while rendering a picker preview', () => {

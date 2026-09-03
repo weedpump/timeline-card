@@ -30,7 +30,7 @@ import {
   createEntitySuggestion,
   createPreviewConfig,
   getEffectiveTimelineLayout,
-  isGeneralCardPickerPreview,
+  isCardPickerPreview,
 } from './card-picker.js';
 import { createLiveSubscription } from './live-subscription.js';
 import { createCurrentStatePreview } from './preview-items.js';
@@ -175,7 +175,7 @@ class TimelineCard extends HTMLElement {
     }
 
     const wasPreview = this.isPreviewMode();
-    this.pickerPreview = isGeneralCardPickerPreview(this);
+    this.pickerPreview = isCardPickerPreview(this);
     const modeChanged = this.handlePreviewModeChange(wasPreview);
 
     if (!modeChanged && this.loaded && this.i18nReady) {
@@ -195,7 +195,7 @@ class TimelineCard extends HTMLElement {
   }
 
   isPreviewMode() {
-    return this._preview === true || this.pickerPreview === true;
+    return this.pickerPreview === true;
   }
 
   handlePreviewModeChange(wasPreview) {
