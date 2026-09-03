@@ -138,6 +138,8 @@ class TimelineCard extends HTMLElement {
 
     this.refreshInterval = config.refresh_interval || null;
     this.refreshTimer = null;
+    this.singleSideResizeObserver?.disconnect();
+    this.singleSideResizeObserver = null;
     this.singleSideWidth = null;
     this.singleSideLayout = null;
     this.singleSideSignature = null;
@@ -157,6 +159,10 @@ class TimelineCard extends HTMLElement {
       this.attachShadow({ mode: 'open' });
     }
     this.ensureCardExists();
+
+    if (this.loaded && this.items?.length && this.cardLayout !== 'center') {
+      this.applySingleSideWidth(this.shadowRoot, this.cardLayout);
+    }
   }
 
   ensureCardExists() {
@@ -368,6 +374,8 @@ class TimelineCard extends HTMLElement {
       this.liveUnsub();
     }
     this.liveUnsub = null;
+    this.singleSideResizeObserver?.disconnect();
+    this.singleSideResizeObserver = null;
   }
 
   // ------------------------------------
@@ -401,6 +409,8 @@ class TimelineCard extends HTMLElement {
     }
 
     if (!this.items.length) {
+      this.singleSideResizeObserver?.disconnect();
+      this.singleSideResizeObserver = null;
       card.innerHTML = `
           <div style="padding:12px">${this.i18n.t('ui.no_events')}</div>
       `;
@@ -601,6 +611,9 @@ class TimelineCard extends HTMLElement {
   }
 
   applySingleSideWidth(root, layout) {
+    this.singleSideResizeObserver?.disconnect();
+    this.singleSideResizeObserver = null;
+
     if (layout === 'center') {
       this.singleSideWidth = null;
       this.singleSideLayout = null;
@@ -608,47 +621,33 @@ class TimelineCard extends HTMLElement {
       return;
     }
 
+    const container = root.querySelector('.timeline-container');
     const wrapper = root.querySelector('.wrapper');
-    if (!wrapper) return;
+    if (!container || !wrapper) return;
 
-    const measure = () => {
-      const signature = `${layout}-${this.allowMultiline}-${this.forceMultiline}`;
-      if (this.singleSideSignature !== signature) {
-        wrapper.style.removeProperty('--tc-event-col-width');
-        this.singleSideWidth = null;
-        this.singleSideLayout = layout;
-        this.singleSideSignature = signature;
-      }
+    const boxes = Array.from(wrapper.querySelectorAll('.event-box'));
+    if (!boxes.length) return;
 
-      const boxes = Array.from(wrapper.querySelectorAll('.event-box'));
-      if (!boxes.length) return;
+    const signature = `${layout}-${this.allowMultiline}-${this.forceMultiline}`;
+    if (this.singleSideSignature !== signature) {
+      this.singleSideWidth = null;
+      this.singleSideLayout = layout;
+      this.singleSideSignature = signature;
+    }
 
-      const wrapperRect = wrapper.getBoundingClientRect();
-      const lineColRaw =
-        getComputedStyle(wrapper).getPropertyValue('--tc-line-column');
-      const lineCol = parseFloat(lineColRaw) || 0;
-      const gap = 16; // column-gap defined in CSS
-      const maxAvailable = Math.max(wrapperRect.width - lineCol - gap, 0);
+    const lineColRaw =
+      getComputedStyle(wrapper).getPropertyValue('--tc-line-column');
+    const lineCol = parseFloat(lineColRaw) || 0;
+    const gap = 16; // column-gap defined in CSS
+    let naturalWidth = 0;
 
-      const max = boxes.reduce((acc, box) => {
-        const isForce = box.classList.contains('force-multiline');
+    const applyAvailableWidth = () => {
+      if (!container.isConnected) return;
 
-        const prevWidthBox = box.style.width;
-        const prevMaxWidth = box.style.maxWidth;
-        box.style.width = isForce ? 'min-content' : 'max-content';
-        box.style.maxWidth = 'none';
+      const maxAvailable = Math.max(container.clientWidth - lineCol - gap, 0);
 
-        const natural = Math.ceil(box.scrollWidth + 8); // small buffer for font/layout shifts
-
-        box.style.width = prevWidthBox;
-        box.style.maxWidth = prevMaxWidth;
-
-        return Math.max(acc, natural);
-      }, 0);
-
-      if (max > 0) {
-        const clamped = Math.min(max, maxAvailable);
-        const target = Math.min(maxAvailable, clamped);
+      if (naturalWidth > 0 && maxAvailable > 0) {
+        const target = Math.min(naturalWidth, maxAvailable);
 
         this.singleSideWidth = target;
         this.singleSideLayout = layout;
@@ -659,14 +658,65 @@ class TimelineCard extends HTMLElement {
       }
     };
 
-    const schedule = () => {
-      requestAnimationFrame(measure);
-      setTimeout(() => requestAnimationFrame(measure), 120);
+    const measureNaturalWidth = () => {
+      if (!container.isConnected) return;
+
+      wrapper.style.removeProperty('--tc-event-col-width');
+      if (container.clientWidth === 0) {
+        naturalWidth = 0;
+        return;
+      }
+
+      if (!this.forceMultiline) {
+        const previousMaxWidth = wrapper.style.maxWidth;
+        wrapper.style.maxWidth = 'none';
+        naturalWidth = Math.max(
+          Math.ceil(wrapper.getBoundingClientRect().width - lineCol - gap + 8),
+          0
+        );
+        wrapper.style.maxWidth = previousMaxWidth;
+      } else {
+        // Batch writes and reads to avoid one forced layout per event box.
+        const previousStyles = boxes.map((box) => ({
+          width: box.style.width,
+          maxWidth: box.style.maxWidth,
+        }));
+
+        boxes.forEach((box) => {
+          box.style.width = 'min-content';
+          box.style.maxWidth = 'none';
+        });
+
+        naturalWidth = boxes.reduce(
+          (max, box) => Math.max(max, Math.ceil(box.scrollWidth + 8)),
+          0
+        );
+
+        boxes.forEach((box, index) => {
+          box.style.width = previousStyles[index].width;
+          box.style.maxWidth = previousStyles[index].maxWidth;
+        });
+      }
+
+      applyAvailableWidth();
     };
 
-    schedule();
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(schedule);
+    measureNaturalWidth();
+    if (document.fonts?.status === 'loading') {
+      document.fonts.ready.then(() =>
+        requestAnimationFrame(measureNaturalWidth)
+      );
+    }
+
+    if (typeof ResizeObserver === 'function') {
+      this.singleSideResizeObserver = new ResizeObserver(() => {
+        if (naturalWidth > 0) {
+          applyAvailableWidth();
+        } else {
+          measureNaturalWidth();
+        }
+      });
+      this.singleSideResizeObserver.observe(container);
     }
   }
 }

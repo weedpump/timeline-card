@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.11.2
+
+### Fixed
+
+- Fixed `left` and `right` layouts retaining a truncated initial width when opened in dynamically sized containers such as `browser_mod.popup`
+- Kept single-sided event tiles responsive across container resizes, initially hidden cards, scrollbars, and view reconnects
+
+No configuration changes are required.
+
 ## v1.11.1
 
 ### Maintenance
