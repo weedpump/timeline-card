@@ -10,6 +10,7 @@ import ptBR from './locales/pt-BR.json';
 import ru from './locales/ru.json';
 import sv from './locales/sv.json';
 import styles from './timeline-card.css';
+import packageMetadata from '../package.json';
 
 import './editor/timeline-card-editor.js';
 
@@ -39,6 +40,12 @@ const translations = {
   ru,
   sv,
 };
+
+console.info(
+  `%c TIMELINE-CARD %c v${packageMetadata.version} `,
+  'background:#2da8ff;color:#fff;padding:4px 7px;font-weight:700;border-radius:4px 0 0 4px',
+  'background:#b24aff;color:#fff;padding:4px 7px;font-weight:700;border-radius:0 4px 4px 0'
+);
 
 class TimelineCard extends HTMLElement {
   static getConfigElement() {
