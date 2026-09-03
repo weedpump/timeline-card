@@ -34,6 +34,7 @@ import {
 } from './card-picker.js';
 import { createLiveSubscription } from './live-subscription.js';
 import { createCurrentStatePreview } from './preview-items.js';
+import { measureUntransformedWidth } from './single-side-width.js';
 
 const translations = {
   cs,
@@ -822,7 +823,7 @@ class TimelineCard extends HTMLElement {
         const previousMaxWidth = wrapper.style.maxWidth;
         wrapper.style.maxWidth = 'none';
         naturalWidth = Math.max(
-          Math.ceil(wrapper.getBoundingClientRect().width - lineCol - gap + 8),
+          Math.ceil(measureUntransformedWidth(wrapper) - lineCol - gap + 8),
           0
         );
         wrapper.style.maxWidth = previousMaxWidth;

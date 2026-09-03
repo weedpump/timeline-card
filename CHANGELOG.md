@@ -4,16 +4,9 @@
 
 ### Added
 
+- Added a styled browser console banner showing the bundled Timeline Card version
 - Added Timeline Card suggestions with the selected entity to Home Assistant's entity-first card picker
 - Added a compact one-sided live Timeline Card preview to the general card picker using suitable entities from the Home Assistant instance, while keeping recorder-backed history active in card-editor previews
-
-No configuration changes are required.
-
-## v1.11.2
-
-### Added
-
-- Added a styled browser console banner showing the bundled Timeline Card version
 
 ### Fixed
 
@@ -27,7 +20,7 @@ No configuration changes are required.
 
 ### Maintenance
 
-- Synchronized package metadata with `v1.11.2` and added release checks for matching tag, package, lockfile, and changelog versions
+- Synchronized package metadata with `v1.12.0` and added release checks for matching tag, package, lockfile, and changelog versions
 
 No configuration changes are required.
 
