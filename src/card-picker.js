@@ -72,8 +72,22 @@ export function createPreviewConfig(hass, entities, entitiesFallback) {
   );
 }
 
-export function isGeneralCardPickerPreview(element) {
-  return element?.getRootNode?.()?.host?.localName === 'hui-card-picker';
+const CARD_PICKER_HOSTS = new Set(['hui-card-picker', 'hui-suggestion-picker']);
+
+export function isCardPickerPreview(element) {
+  const visited = new Set();
+  let current = element;
+
+  while (current && !visited.has(current)) {
+    visited.add(current);
+    if (CARD_PICKER_HOSTS.has(current.localName)) return true;
+
+    const shadowHost = current.getRootNode?.()?.host;
+    current =
+      shadowHost && shadowHost !== current ? shadowHost : current.parentElement;
+  }
+
+  return false;
 }
 
 export function getEffectiveTimelineLayout(configuredLayout, previewMode) {
