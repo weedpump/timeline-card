@@ -7,6 +7,11 @@
 - Fixed `left` and `right` layouts retaining a truncated initial width when opened in dynamically sized containers such as `browser_mod.popup`
 - Kept single-sided event tiles responsive across container resizes, initially hidden cards, scrollbars, and view reconnects
 
+### Security
+
+- Updated the transitive development dependency `@humanfs/node` to `0.16.8` to prevent recursive copies from following symlinks outside the source tree
+- Updated the transitive development dependency `ajv` to `8.20.0` to address a regular expression denial-of-service vulnerability when using `$data`
+
 No configuration changes are required.
 
 ## v1.11.1
