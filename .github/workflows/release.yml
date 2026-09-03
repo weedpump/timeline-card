@@ -26,8 +26,8 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
-      - name: Validate release metadata
-        run: node scripts/validate-release-version.mjs
+      - name: Validate release metadata and extract release notes
+        run: node scripts/validate-release-version.mjs --write-release-notes RELEASE_NOTES.md
 
       - name: Install dependencies
         run: npm ci
@@ -35,48 +35,7 @@ jobs:
       - name: Build timeline-card
         run: npm run build
 
-      # Extract release notes for the current tag
-      - name: Extract release notes for tag
-        id: changelog
-        run: |
-          TAG="${GITHUB_REF_NAME}"
-          echo "TAG: $TAG"
-
-          # Ensure the changelog exists
-          if [ ! -f CHANGELOG.md ]; then
-            echo "CHANGELOG.md not found"
-            exit 1
-          fi
-
-          # Find matching version section header ("## vX.Y.Z")
-          START_LINE=$(grep -nE "^##[[:space:]]+${TAG}[[:space:]]*$" CHANGELOG.md | cut -d: -f1 | head -n1 || true)
-
-          # If there's no section for this tag → fail the job
-          if [ -z "$START_LINE" ]; then
-            echo "No changelog section found for ${TAG}"
-            exit 1
-          fi
-
-          # Find next section header to determine the end of the block
-          END_LINE=$(tail -n +"$((START_LINE+1))" CHANGELOG.md | grep -n "^## " | head -n1 | cut -d: -f1 || true)
-
-          if [ -z "$END_LINE" ]; then
-            # No further header → end of file
-            END_LINE=$(wc -l < CHANGELOG.md)
-          else
-            END_LINE=$((START_LINE + END_LINE - 1))
-          fi
-
-          # Extract changelog content (excluding the header)
-          sed -n "$((START_LINE+1))","$END_LINE"p CHANGELOG.md > RELEASE_NOTES.md
-
-          # Check if extracted notes are empty
-          if [ ! -s RELEASE_NOTES.md ]; then
-            echo "Release notes section for ${TAG} is empty"
-            exit 1
-          fi
-
-      # Create release only if extraction succeeded
+      # Create release only if validation and extraction succeeded
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
