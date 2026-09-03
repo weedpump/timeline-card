@@ -46,6 +46,22 @@ ha-card {
   margin: 0 auto;
 }
 
+.wrapper.picker-preview.layout-left {
+  --tc-line-column: 28px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  direction: ltr;
+}
+
+.wrapper.picker-preview.layout-left .event-box {
+  direction: ltr;
+}
+
+:host(:dir(rtl)) .wrapper.picker-preview.layout-left .event-box {
+  direction: rtl;
+}
+
 .wrapper.compact {
   padding-top: 7px;
   padding-bottom: 5px;
@@ -107,6 +123,13 @@ ha-card {
     var(--tc-line-column);
 }
 
+.wrapper.picker-preview.layout-left .timeline-row {
+  grid-template-columns: var(--tc-line-column) minmax(0, 1fr);
+  width: 100%;
+  margin: 6px 0;
+  column-gap: 8px;
+}
+
 .side {
   width: 47%;
   display: flex;
@@ -147,6 +170,22 @@ ha-card {
 .wrapper.layout-right .event-box {
   width: 100%;
   box-sizing: border-box;
+}
+
+.wrapper.picker-preview .event-box {
+  padding: 7px 9px;
+  gap: 8px;
+}
+
+.wrapper.picker-preview .text {
+  flex: 1;
+  overflow: hidden;
+}
+
+.wrapper.picker-preview .time {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .event-box {

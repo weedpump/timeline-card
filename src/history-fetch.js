@@ -7,6 +7,8 @@ export async function fetchHistory(hass, entities, hours) {
 
   const entityParam = entities.map((e) => e.entity).join(',');
 
+  if (!entityParam) return { data: [], start };
+
   const data = await hass.callApi(
     'GET',
     `history/period/${startTime}?filter_entity_id=${entityParam}&end_time=${endTime}`

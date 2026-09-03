@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.12.0
+
+### Added
+
+- Added Timeline Card suggestions with the selected entity to Home Assistant's entity-first card picker
+- Added a compact one-sided live Timeline Card preview to the general card picker using suitable entities from the Home Assistant instance, while keeping recorder-backed history active in card-editor previews
+
+No configuration changes are required.
+
 ## v1.11.2
 
 ### Added

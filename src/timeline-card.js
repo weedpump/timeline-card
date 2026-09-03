@@ -26,6 +26,14 @@ import { getCachedHistory, setCachedHistory } from './history-cache.js';
 // Unified state transformer for both history + live
 import { transformState } from './state-transform.js';
 import { resolveStateMappedColor } from './color-engine.js';
+import {
+  createEntitySuggestion,
+  createPreviewConfig,
+  getEffectiveTimelineLayout,
+  isCardPickerPreview,
+} from './card-picker.js';
+import { createLiveSubscription } from './live-subscription.js';
+import { createCurrentStatePreview } from './preview-items.js';
 
 const translations = {
   cs,
@@ -52,18 +60,8 @@ class TimelineCard extends HTMLElement {
     return document.createElement('weedpump-timeline-card-editor');
   }
 
-  static getStubConfig() {
-    return {
-      type: 'custom:timeline-card',
-      title: 'Timeline',
-      hours: 6,
-      limit: 10,
-      relative_time: true,
-      show_names: true,
-      show_states: true,
-      show_icons: true,
-      entities: [],
-    };
+  static getStubConfig(hass, entities, entitiesFallback) {
+    return createPreviewConfig(hass, entities, entitiesFallback);
   }
 
   setConfig(config) {
@@ -144,6 +142,7 @@ class TimelineCard extends HTMLElement {
     this.expanded = false;
 
     this.refreshInterval = config.refresh_interval || null;
+    if (this.refreshTimer) clearInterval(this.refreshTimer);
     this.refreshTimer = null;
     this.singleSideResizeObserver?.disconnect();
     this.singleSideResizeObserver = null;
@@ -151,7 +150,11 @@ class TimelineCard extends HTMLElement {
     this.singleSideLayout = null;
     this.singleSideSignature = null;
 
-    this.liveUnsub = null;
+    this.liveSubscription?.stop();
+    this.liveSubscription = null;
+    this.configGeneration = (this.configGeneration || 0) + 1;
+    this.dataGeneration = (this.dataGeneration || 0) + 1;
+    this.i18nReady = false;
 
     this.items = [];
     this.loaded = false;
@@ -170,6 +173,55 @@ class TimelineCard extends HTMLElement {
     if (this.loaded && this.items?.length && this.cardLayout !== 'center') {
       this.applySingleSideWidth(this.shadowRoot, this.cardLayout);
     }
+
+    const wasPreview = this.isPreviewMode();
+    this.pickerPreview = isCardPickerPreview(this);
+    const modeChanged = this.handlePreviewModeChange(wasPreview);
+
+    if (!modeChanged && this.loaded && this.i18nReady) {
+      this.applyCurrentMode();
+    }
+    queueMicrotask(() => this.startLiveEventsIfNeeded());
+  }
+
+  set preview(value) {
+    const wasPreview = this.isPreviewMode();
+    this._preview = value === true;
+    this.handlePreviewModeChange(wasPreview);
+  }
+
+  get preview() {
+    return this._preview === true;
+  }
+
+  isPreviewMode() {
+    return this.pickerPreview === true;
+  }
+
+  handlePreviewModeChange(wasPreview) {
+    const isPreview = this.isPreviewMode();
+    if (wasPreview === isPreview) return false;
+
+    this.dataGeneration = (this.dataGeneration || 0) + 1;
+    this.liveSubscription?.stop();
+    this.liveSubscription = null;
+
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer);
+      this.refreshTimer = null;
+    }
+
+    if (!this.loaded || !this.i18nReady) return true;
+
+    if (isPreview) {
+      this.loadPreview();
+    } else {
+      this.items = [];
+      this.render();
+      this.startNormalMode();
+    }
+
+    return true;
   }
 
   ensureCardExists() {
@@ -208,28 +260,78 @@ class TimelineCard extends HTMLElement {
       const yamlLang = this.config.language;
       const haLang = hass?.locale?.language;
       const browserLang = navigator.language;
+      const configGeneration = this.configGeneration;
 
       this.language = yamlLang || haLang || browserLang || 'en-US';
-
       this.i18n = new TranslationEngine(translations);
 
       this.i18n.load(this.language).then(() => {
+        if (configGeneration !== this.configGeneration) return;
+
         // Keep the full normalized language code so region-specific formats work.
         this.languageCode = this.i18n.langCode || this.language.toLowerCase();
-        this.loadHistory();
-
-        if (this.refreshInterval && !this.refreshTimer) {
-          this.startAutoRefresh();
+        this.i18nReady = true;
+        if (this.isConnected) this.applyCurrentMode();
+      });
+    } else if (this.isPreviewMode() && this.i18nReady) {
+      queueMicrotask(() => {
+        if (
+          this.isConnected &&
+          this.isPreviewMode() &&
+          this.hassInst === hass
+        ) {
+          this.loadPreview();
         }
       });
     }
 
-    if (this.hassInst?.connection && !this.liveUnsub) {
-      this.startLiveEvents();
+    queueMicrotask(() => {
+      if (this.hassInst === hass) this.startLiveEventsIfNeeded();
+    });
+  }
+
+  applyCurrentMode() {
+    if (this.isPreviewMode()) {
+      this.loadPreview();
+    } else {
+      this.startNormalMode();
     }
   }
 
-  async loadHistory() {
+  startNormalMode() {
+    if (
+      this.isPreviewMode() ||
+      !this.isConnected ||
+      !this.i18nReady ||
+      !this.hassInst
+    ) {
+      return;
+    }
+
+    const generation = this.dataGeneration;
+    this.loadHistory(generation).catch(() => undefined);
+
+    if (this.refreshInterval && !this.refreshTimer) {
+      this.startAutoRefresh();
+    }
+
+    queueMicrotask(() => this.startLiveEventsIfNeeded());
+  }
+
+  loadPreview() {
+    this.items = createCurrentStatePreview(
+      this.hassInst,
+      this.entities,
+      this.i18n,
+      this.limit,
+      this.config
+    );
+    this.render();
+  }
+
+  async loadHistory(generation = this.dataGeneration) {
+    if (this.isPreviewMode() || generation !== this.dataGeneration) return;
+
     const cached = getCachedHistory(
       this.entities,
       this.hours,
@@ -237,17 +339,19 @@ class TimelineCard extends HTMLElement {
     );
 
     if (cached) {
+      if (this.isPreviewMode() || generation !== this.dataGeneration) return;
       this.items = cached;
       this.render();
-      this.refreshInBackground();
+      this.refreshInBackground(generation).catch(() => undefined);
       return;
     }
 
-    await this.refreshInForeground();
+    await this.refreshInForeground(generation);
   }
 
-  async refreshInForeground() {
+  async refreshInForeground(generation = this.dataGeneration) {
     const raw = await fetchHistory(this.hassInst, this.entities, this.hours);
+    if (this.isPreviewMode() || generation !== this.dataGeneration) return;
 
     const flat = transformHistory(
       raw,
@@ -263,14 +367,16 @@ class TimelineCard extends HTMLElement {
       this.config // includes collapse_duplicates
     );
 
+    if (this.isPreviewMode() || generation !== this.dataGeneration) return;
     setCachedHistory(this.entities, this.hours, this.languageCode, items);
 
     this.items = items;
     this.render();
   }
 
-  async refreshInBackground() {
+  async refreshInBackground(generation = this.dataGeneration) {
     const raw = await fetchHistory(this.hassInst, this.entities, this.hours);
+    if (this.isPreviewMode() || generation !== this.dataGeneration) return;
 
     const flat = transformHistory(
       raw,
@@ -286,6 +392,7 @@ class TimelineCard extends HTMLElement {
       this.config // includes collapse_duplicates
     );
 
+    if (this.isPreviewMode() || generation !== this.dataGeneration) return;
     if (JSON.stringify(items) === JSON.stringify(this.items)) return;
 
     setCachedHistory(this.entities, this.hours, this.languageCode, items);
@@ -295,23 +402,52 @@ class TimelineCard extends HTMLElement {
   }
 
   startAutoRefresh() {
+    if (this.isPreviewMode()) return;
     if (this.refreshTimer) clearInterval(this.refreshTimer);
 
     this.refreshTimer = setInterval(() => {
-      this.refreshInBackground();
+      const generation = this.dataGeneration;
+      this.refreshInBackground(generation).catch(() => undefined);
     }, this.refreshInterval * 1000);
   }
 
-  startLiveEvents() {
+  startLiveEventsIfNeeded() {
+    if (
+      this.isPreviewMode() ||
+      !this.isConnected ||
+      !this.hassInst?.connection ||
+      this.liveSubscription
+    ) {
+      return;
+    }
+
     const entityIds = this.entities.map((e) => e.entity);
+    const generation = this.dataGeneration;
+    const subscription = createLiveSubscription(
+      this.hassInst.connection,
+      (msg) => {
+        if (
+          this.isPreviewMode() ||
+          generation !== this.dataGeneration ||
+          this.liveSubscription !== subscription
+        ) {
+          return;
+        }
 
-    this.liveUnsub = this.hassInst.connection.subscribeEvents((msg) => {
-      const data = msg?.data;
-      if (!data?.entity_id) return;
-      if (!entityIds.includes(data.entity_id)) return;
+        const data = msg?.data;
+        if (!data?.entity_id) return;
+        if (!entityIds.includes(data.entity_id)) return;
 
-      this.processLiveEvent(data);
-    }, 'state_changed');
+        this.processLiveEvent(data);
+      }
+    );
+
+    this.liveSubscription = subscription;
+    subscription.ready.catch(() => {
+      if (this.liveSubscription === subscription) {
+        this.liveSubscription = null;
+      }
+    });
   }
 
   processLiveEvent(data) {
@@ -373,14 +509,13 @@ class TimelineCard extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.dataGeneration = (this.dataGeneration || 0) + 1;
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer);
       this.refreshTimer = null;
     }
-    if (typeof this.liveUnsub === 'function') {
-      this.liveUnsub();
-    }
-    this.liveUnsub = null;
+    this.liveSubscription?.stop();
+    this.liveSubscription = null;
     this.singleSideResizeObserver?.disconnect();
     this.singleSideResizeObserver = null;
   }
@@ -454,10 +589,9 @@ class TimelineCard extends HTMLElement {
       ? this.items.slice(0, visibleLimit)
       : this.items;
 
-    const layout =
-      ['center', 'left', 'right'].includes(this.cardLayout) && this.cardLayout
-        ? this.cardLayout
-        : 'center';
+    const previewMode = this.isPreviewMode();
+    const layout = getEffectiveTimelineLayout(this.cardLayout, previewMode);
+    const previewClass = previewMode ? 'picker-preview' : '';
     const compactClass =
       this.compactLayout && layout === 'center' ? 'compact' : '';
 
@@ -581,7 +715,7 @@ class TimelineCard extends HTMLElement {
         <div class="timeline-container ${
           overflowMode === 'scroll' ? 'scrollable' : ''
         }" style="${containerStyle}">
-          <div class="wrapper ${compactClass} layout-${layout}">
+          <div class="wrapper ${compactClass} ${previewClass} layout-${layout}">
             <div class="timeline-line"></div>
             ${rows}
           </div>
@@ -620,6 +754,16 @@ class TimelineCard extends HTMLElement {
   applySingleSideWidth(root, layout) {
     this.singleSideResizeObserver?.disconnect();
     this.singleSideResizeObserver = null;
+
+    if (this.isPreviewMode()) {
+      this.singleSideWidth = null;
+      this.singleSideLayout = null;
+      this.singleSideSignature = null;
+      root
+        .querySelector('.wrapper')
+        ?.style.removeProperty('--tc-event-col-width');
+      return;
+    }
 
     if (layout === 'center') {
       this.singleSideWidth = null;
@@ -735,6 +879,8 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type: 'timeline-card',
   name: 'Timeline Card',
+  preview: true,
   description:
     'A timeline-based event history card with icons, states and WS updates.',
+  getEntitySuggestion: createEntitySuggestion,
 });
