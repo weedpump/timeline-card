@@ -75,3 +75,10 @@ export function createPreviewConfig(hass, entities, entitiesFallback) {
 export function isGeneralCardPickerPreview(element) {
   return element?.getRootNode?.()?.host?.localName === 'hui-card-picker';
 }
+
+export function getEffectiveTimelineLayout(configuredLayout, previewMode) {
+  if (previewMode) return 'left';
+  return ['center', 'left', 'right'].includes(configuredLayout)
+    ? configuredLayout
+    : 'center';
+}

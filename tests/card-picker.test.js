@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createEntitySuggestion,
   createPreviewConfig,
+  getEffectiveTimelineLayout,
   isGeneralCardPickerPreview,
   isTimelineEntitySupported,
   selectPreviewEntities,
@@ -151,5 +152,12 @@ describe('Timeline Card picker preview', () => {
       })
     ).toBe(false);
     expect(isGeneralCardPickerPreview({})).toBe(false);
+  });
+
+  it('uses a left layout only while rendering a picker preview', () => {
+    expect(getEffectiveTimelineLayout('center', true)).toBe('left');
+    expect(getEffectiveTimelineLayout('right', true)).toBe('left');
+    expect(getEffectiveTimelineLayout('center', false)).toBe('center');
+    expect(getEffectiveTimelineLayout('right', false)).toBe('right');
   });
 });

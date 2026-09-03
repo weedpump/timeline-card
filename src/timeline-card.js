@@ -29,6 +29,7 @@ import { resolveStateMappedColor } from './color-engine.js';
 import {
   createEntitySuggestion,
   createPreviewConfig,
+  getEffectiveTimelineLayout,
   isGeneralCardPickerPreview,
 } from './card-picker.js';
 import { createLiveSubscription } from './live-subscription.js';
@@ -588,10 +589,9 @@ class TimelineCard extends HTMLElement {
       ? this.items.slice(0, visibleLimit)
       : this.items;
 
-    const layout =
-      ['center', 'left', 'right'].includes(this.cardLayout) && this.cardLayout
-        ? this.cardLayout
-        : 'center';
+    const previewMode = this.isPreviewMode();
+    const layout = getEffectiveTimelineLayout(this.cardLayout, previewMode);
+    const previewClass = previewMode ? 'picker-preview' : '';
     const compactClass =
       this.compactLayout && layout === 'center' ? 'compact' : '';
 
@@ -715,7 +715,7 @@ class TimelineCard extends HTMLElement {
         <div class="timeline-container ${
           overflowMode === 'scroll' ? 'scrollable' : ''
         }" style="${containerStyle}">
-          <div class="wrapper ${compactClass} layout-${layout}">
+          <div class="wrapper ${compactClass} ${previewClass} layout-${layout}">
             <div class="timeline-line"></div>
             ${rows}
           </div>
@@ -754,6 +754,16 @@ class TimelineCard extends HTMLElement {
   applySingleSideWidth(root, layout) {
     this.singleSideResizeObserver?.disconnect();
     this.singleSideResizeObserver = null;
+
+    if (this.isPreviewMode()) {
+      this.singleSideWidth = null;
+      this.singleSideLayout = null;
+      this.singleSideSignature = null;
+      root
+        .querySelector('.wrapper')
+        ?.style.removeProperty('--tc-event-col-width');
+      return;
+    }
 
     if (layout === 'center') {
       this.singleSideWidth = null;
