@@ -44,3 +44,34 @@ export function createEntitySuggestion(hass, entityId) {
     config: createTimelineConfig([entityId], { includeType: true }),
   };
 }
+
+export function selectPreviewEntities(
+  hass,
+  entities = [],
+  entitiesFallback = [],
+  maxEntities = 3
+) {
+  const candidates = [
+    ...(Array.isArray(entities) ? entities : []),
+    ...(Array.isArray(entitiesFallback) ? entitiesFallback : []),
+    ...Object.keys(hass?.states || {}),
+  ];
+
+  return [...new Set(candidates)]
+    .filter(
+      (entityId) =>
+        isTimelineEntitySupported(hass, entityId) &&
+        hass.entities?.[entityId]?.hidden !== true
+    )
+    .slice(0, maxEntities);
+}
+
+export function createPreviewConfig(hass, entities, entitiesFallback) {
+  return createTimelineConfig(
+    selectPreviewEntities(hass, entities, entitiesFallback)
+  );
+}
+
+export function isGeneralCardPickerPreview(element) {
+  return element?.getRootNode?.()?.host?.localName === 'hui-card-picker';
+}

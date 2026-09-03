@@ -5,6 +5,7 @@
 ### Added
 
 - Added Timeline Card suggestions with the selected entity to Home Assistant's entity-first card picker
+- Added a live Timeline Card preview to the general card picker using suitable entities from the Home Assistant instance
 
 No configuration changes are required.
 
