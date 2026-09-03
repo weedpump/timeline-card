@@ -146,6 +146,7 @@ ha-card {
 .wrapper.layout-left .event-box,
 .wrapper.layout-right .event-box {
   width: 100%;
+  box-sizing: border-box;
 }
 
 .event-box {
