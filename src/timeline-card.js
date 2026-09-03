@@ -26,6 +26,7 @@ import { getCachedHistory, setCachedHistory } from './history-cache.js';
 // Unified state transformer for both history + live
 import { transformState } from './state-transform.js';
 import { resolveStateMappedColor } from './color-engine.js';
+import { createEntitySuggestion } from './card-picker.js';
 
 const translations = {
   cs,
@@ -737,4 +738,5 @@ window.customCards.push({
   name: 'Timeline Card',
   description:
     'A timeline-based event history card with icons, states and WS updates.',
+  getEntitySuggestion: createEntitySuggestion,
 });
