@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   createEntitySuggestion,
+  createPreviewConfig,
+  isGeneralCardPickerPreview,
   isTimelineEntitySupported,
+  selectPreviewEntities,
 } from '../src/card-picker.js';
 
 const createHass = (...entityIds) => ({
@@ -59,5 +62,94 @@ describe('Timeline Card entity suggestions', () => {
     const hass = createHass(entityId);
 
     expect(isTimelineEntitySupported(hass, entityId)).toBe(true);
+  });
+});
+
+describe('Timeline Card picker preview', () => {
+  it('selects up to three unique supported entities in HA priority order', () => {
+    const hass = createHass(
+      'button.restart',
+      'binary_sensor.front_door',
+      'sensor.temperature',
+      'person.tobi',
+      'light.kitchen'
+    );
+
+    expect(
+      selectPreviewEntities(
+        hass,
+        [
+          'button.restart',
+          'binary_sensor.front_door',
+          'sensor.temperature',
+          'binary_sensor.front_door',
+        ],
+        ['person.tobi', 'light.kitchen']
+      )
+    ).toEqual([
+      'binary_sensor.front_door',
+      'sensor.temperature',
+      'person.tobi',
+    ]);
+  });
+
+  it('falls back to visible Home Assistant states', () => {
+    const hass = createHass(
+      'button.restart',
+      'sensor.temperature',
+      'binary_sensor.front_door'
+    );
+    hass.entities = {
+      'sensor.temperature': { hidden: true },
+      'binary_sensor.front_door': { hidden: false },
+    };
+
+    expect(selectPreviewEntities(hass, [], [])).toEqual([
+      'binary_sensor.front_door',
+    ]);
+  });
+
+  it('creates a valid stub config without a custom card type', () => {
+    const hass = createHass('sensor.temperature', 'binary_sensor.front_door');
+
+    expect(
+      createPreviewConfig(
+        hass,
+        ['sensor.temperature'],
+        ['binary_sensor.front_door']
+      )
+    ).toEqual({
+      title: 'Timeline',
+      hours: 6,
+      limit: 10,
+      relative_time: true,
+      show_names: true,
+      show_states: true,
+      show_icons: true,
+      entities: [
+        { entity: 'sensor.temperature' },
+        { entity: 'binary_sensor.front_door' },
+      ],
+    });
+  });
+
+  it('returns a valid empty fallback when no suitable entity exists', () => {
+    const hass = createHass('button.restart');
+
+    expect(createPreviewConfig(hass, [], []).entities).toEqual([]);
+  });
+
+  it('detects only the general card picker shadow-root context', () => {
+    expect(
+      isGeneralCardPickerPreview({
+        getRootNode: () => ({ host: { localName: 'hui-card-picker' } }),
+      })
+    ).toBe(true);
+    expect(
+      isGeneralCardPickerPreview({
+        getRootNode: () => ({ host: { localName: 'hui-card' } }),
+      })
+    ).toBe(false);
+    expect(isGeneralCardPickerPreview({})).toBe(false);
   });
 });
