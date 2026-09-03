@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.12.0
+
+### Added
+
+- Added Timeline Card suggestions with the selected entity to Home Assistant's entity-first card picker
+
+No configuration changes are required.
+
 ## v1.11.2
 
 ### Added
