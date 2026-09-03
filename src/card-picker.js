@@ -1,8 +1,32 @@
-const ACTION_ONLY_DOMAINS = new Set([
-  'button',
-  'input_button',
-  'scene',
-  'script',
+const TIMELINE_SUGGESTION_DOMAINS = new Set([
+  'alarm_control_panel',
+  'automation',
+  'binary_sensor',
+  'calendar',
+  'climate',
+  'cover',
+  'device_tracker',
+  'event',
+  'fan',
+  'humidifier',
+  'input_boolean',
+  'lawn_mower',
+  'light',
+  'lock',
+  'media_player',
+  'person',
+  'remote',
+  'schedule',
+  'sensor',
+  'siren',
+  'sun',
+  'switch',
+  'timer',
+  'update',
+  'vacuum',
+  'valve',
+  'water_heater',
+  'weather',
 ]);
 
 export function createTimelineConfig(entityIds, { includeType = false } = {}) {
@@ -33,7 +57,8 @@ export function isTimelineEntitySupported(hass, entityId) {
 
   const domain = entityId.slice(0, separatorIndex);
   return (
-    Object.hasOwn(hass.states, entityId) && !ACTION_ONLY_DOMAINS.has(domain)
+    Object.hasOwn(hass.states, entityId) &&
+    TIMELINE_SUGGESTION_DOMAINS.has(domain)
   );
 }
 

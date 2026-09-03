@@ -35,15 +35,25 @@ describe('Timeline Card entity suggestions', () => {
 
   it.each([
     'button.restart',
+    'conversation.assistant',
     'input_button.doorbell',
+    'input_select.mode',
+    'notify.mobile_app',
     'scene.evening',
     'script.good_night',
-  ])('does not suggest a timeline for action-only entity %s', (entityId) => {
-    const hass = createHass(entityId);
+    'stt.cloud',
+    'tts.cloud',
+    'unknown_custom.entity',
+    'wake_word.openwakeword',
+  ])(
+    'does not suggest a timeline for non-allowlisted entity %s',
+    (entityId) => {
+      const hass = createHass(entityId);
 
-    expect(isTimelineEntitySupported(hass, entityId)).toBe(false);
-    expect(createEntitySuggestion(hass, entityId)).toBeNull();
-  });
+      expect(isTimelineEntitySupported(hass, entityId)).toBe(false);
+      expect(createEntitySuggestion(hass, entityId)).toBeNull();
+    }
+  );
 
   it('does not suggest a timeline for a missing or malformed entity', () => {
     const hass = createHass('sensor.temperature');
@@ -54,12 +64,35 @@ describe('Timeline Card entity suggestions', () => {
   });
 
   it.each([
-    'sensor.temperature',
-    'binary_sensor.front_door',
-    'person.tobi',
-    'light.kitchen',
+    'alarm_control_panel.home',
     'automation.arrival',
-  ])('supports stateful entity %s', (entityId) => {
+    'binary_sensor.front_door',
+    'calendar.family',
+    'climate.living_room',
+    'cover.garage',
+    'device_tracker.phone',
+    'event.doorbell',
+    'fan.bedroom',
+    'humidifier.bedroom',
+    'input_boolean.mailbox',
+    'lawn_mower.garden',
+    'light.kitchen',
+    'lock.front_door',
+    'media_player.living_room',
+    'person.tobi',
+    'remote.harmony',
+    'schedule.heating',
+    'sensor.temperature',
+    'siren.alarm',
+    'sun.sun',
+    'switch.coffee_machine',
+    'timer.laundry',
+    'update.home_assistant',
+    'vacuum.roborock',
+    'valve.garden',
+    'water_heater.boiler',
+    'weather.home',
+  ])('supports allowlisted entity %s', (entityId) => {
     const hass = createHass(entityId);
 
     expect(isTimelineEntitySupported(hass, entityId)).toBe(true);
