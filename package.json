@@ -32,7 +32,7 @@
   "homepage": "https://github.com/weedpump/timeline-card#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "baseline-browser-mapping": "^2.9.19",
+    "baseline-browser-mapping": "^2.11.21",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.5",
     "eslint": "^10.9.1",
