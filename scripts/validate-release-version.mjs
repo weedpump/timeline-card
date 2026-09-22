@@ -127,8 +127,20 @@ function validateCurrentRelease() {
       process.exitCode = 1;
       return;
     }
+    const projectRootPath = fileURLToPath(PROJECT_ROOT);
+    const resolvedOutputPath = resolve(projectRootPath, outputPath);
+    if (
+      resolvedOutputPath !== projectRootPath.replace(/[/\\]+$/, '') &&
+      !resolvedOutputPath.startsWith(projectRootPath)
+    ) {
+      console.error(
+        '::error::--write-release-notes path must resolve within the project directory'
+      );
+      process.exitCode = 1;
+      return;
+    }
     writeFileSync(
-      resolve(outputPath),
+      resolvedOutputPath,
       extractReleaseNotes(changelog, tagName),
       'utf8'
     );
