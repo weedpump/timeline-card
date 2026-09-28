@@ -3,7 +3,8 @@
     "seconds": "před chvílí",
     "minutes": "před {n} min",
     "hours": "před {n} h",
-    "days": "před {n} d"
+    "days": "před {n} d",
+    "since": "po dobu {duration}"
   },
   "status": {
     "locked": "zamčeno",

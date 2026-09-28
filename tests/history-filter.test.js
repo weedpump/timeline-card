@@ -153,4 +153,24 @@ describe('filterHistory', () => {
     expect(times).not.toContain(100);
     expect(times).not.toContain(400);
   });
+
+  it('calculates spans between filtered events of the same entity', () => {
+    const entities = [
+      { entity: 'person.alex', exclude_states: ['not_home'] },
+      { entity: 'binary_sensor.door' },
+    ];
+    const items = [
+      { id: 'person.alex', raw_state: 'home', time: 100 },
+      { id: 'binary_sensor.door', raw_state: 'on', time: 150 },
+      { id: 'person.alex', raw_state: 'not_home', time: 200 },
+      { id: 'person.alex', raw_state: 'work', time: 300 },
+    ];
+
+    const result = filterHistory(items, entities, 100, {});
+    const home = result.find((item) => item.raw_state === 'home');
+    const work = result.find((item) => item.raw_state === 'work');
+
+    expect(home.endTime).toBe(300);
+    expect(work.endTime).toBeNull();
+  });
 });

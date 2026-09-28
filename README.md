@@ -68,6 +68,7 @@
 - Fully configurable via the Home Assistant UI editor
 - Compact layout option to reduce vertical space
 - Localized relative time (e.g. "5 minutes ago") or absolute datetime
+- Optional localized durations for completed states and "since" times for current states
 - Locale-based state translation with per-entity overrides
 - Optional auto-refresh interval (in seconds)
 - Live updates via WebSocket - timeline updates instantly without page refresh
@@ -162,6 +163,7 @@ entities:
 | `max_height`               | string  | no       | -          | Constrain card height (e.g. `220px`, `16rem`); useful with `overflow: scroll`                                       |
 | `title`                    | string  | no       | ""         | Card title                                                                                                          |
 | `relative_time`            | boolean | no       | false      | Use relative ("5 minutes ago") time                                                                                 |
+| `show_duration`            | boolean | no       | false      | Show the duration between filtered states of the same entity and how long the current state has been active         |
 | `show_date`                | boolean | no       | true       | Include the date in absolute timestamps; set `false` to show time only                                              |
 | `show_names`               | boolean | no       | true       | Show entity names                                                                                                   |
 | `show_states`              | boolean | no       | true       | Show entity states                                                                                                  |
@@ -185,9 +187,12 @@ entities:
 type: custom:timeline-card
 relative_time: false
 show_date: false
+show_duration: true
 entities:
   - entity: light.living_room
 ```
+
+Durations are calculated after state filters and duplicate collapsing. A filtered-out state therefore neither appears in the timeline nor ends the duration of the previous visible state. With relative timestamps enabled, the current state is shown as a localized "for/since" duration instead of repeating the same relative age twice.
 
 <a id="overflow-handling"></a>
 

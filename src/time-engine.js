@@ -5,8 +5,8 @@
 //  - "a few seconds ago"
 //  - "5 minutes ago"
 // Uses the "time.*" keys from the locale JSON.
-export function relativeTime(date, i18n) {
-  const diff = (Date.now() - date.getTime()) / 1000;
+export function relativeTime(date, i18n, now = new Date()) {
+  const diff = (now.getTime() - date.getTime()) / 1000;
 
   if (diff < 60) return i18n.t('time.seconds');
   if (diff < 3600) return i18n.t('time.minutes', { n: Math.floor(diff / 60) });
@@ -52,4 +52,62 @@ export function formatAbsoluteTime(
       : '';
 
   return suffixText ? `${base} ${suffixText}` : base;
+}
+
+export function formatDuration(durationMs, langCode) {
+  const totalSeconds = Math.max(0, Math.floor(durationMs / 1000));
+  let unit = 'second';
+  let value = totalSeconds;
+
+  if (totalSeconds >= 86400) {
+    unit = 'day';
+    value = Math.floor(totalSeconds / 86400);
+  } else if (totalSeconds >= 3600) {
+    unit = 'hour';
+    value = Math.floor(totalSeconds / 3600);
+  } else if (totalSeconds >= 60) {
+    unit = 'minute';
+    value = Math.floor(totalSeconds / 60);
+  }
+
+  const options = {
+    style: 'unit',
+    unit,
+    unitDisplay: 'long',
+  };
+
+  try {
+    return new Intl.NumberFormat(langCode, options).format(value);
+  } catch {
+    return new Intl.NumberFormat('en-US', options).format(value);
+  }
+}
+
+export function formatEventTime(
+  item,
+  {
+    langCode,
+    i18n,
+    relative = false,
+    includeDate = true,
+    showDuration = false,
+    now = new Date(),
+  }
+) {
+  const baseTime = relative
+    ? relativeTime(item.time, i18n, now)
+    : formatAbsoluteTime(item.time, langCode, i18n, { includeDate });
+
+  if (!showDuration) return baseTime;
+
+  const endTime = item.endTime == null ? now : item.endTime;
+  const durationMs = endTime.getTime() - item.time.getTime();
+  const duration = formatDuration(durationMs, langCode);
+
+  if (item.endTime == null) {
+    const since = i18n.t('time.since', { duration });
+    return relative ? since : `${baseTime} (${since})`;
+  }
+
+  return `${baseTime} (${duration})`;
 }

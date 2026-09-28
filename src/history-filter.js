@@ -1,3 +1,5 @@
+import { annotateEventDurations } from './event-duration.js';
+
 // ------------------------------------
 // NEW: Collapse consecutive duplicates
 // ------------------------------------
@@ -92,6 +94,9 @@ export function filterHistory(items, entities, limit, globalConfig = {}) {
 
   // NEW: collapse duplicates
   filtered = collapseDuplicates(filtered, entities, globalConfig);
+
+  // Calculate spans only between events that remain after filters and collapse.
+  filtered = annotateEventDurations(filtered);
 
   // Sort back to NEWEST first for display
   filtered = filtered.reverse();

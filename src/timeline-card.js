@@ -15,7 +15,7 @@ import packageMetadata from '../package.json';
 import './editor/timeline-card-editor.js';
 
 import { TranslationEngine } from './translation-engine.js';
-import { relativeTime, formatAbsoluteTime } from './time-engine.js';
+import { formatEventTime } from './time-engine.js';
 
 import { fetchHistory } from './history-fetch.js';
 import { transformHistory } from './history-transform.js';
@@ -35,6 +35,7 @@ import {
 import { createLiveSubscription } from './live-subscription.js';
 import { createCurrentStatePreview } from './preview-items.js';
 import { measureUntransformedWidth } from './single-side-width.js';
+import { insertLiveEvent } from './event-duration.js';
 
 const translations = {
   cs,
@@ -101,6 +102,7 @@ class TimelineCard extends HTMLElement {
     this.title = typeof config.title === 'string' ? config.title : '';
 
     this.relativeTimeEnabled = config.relative_time ?? false;
+    this.showDuration = config.show_duration ?? false;
     this.showDate = config.show_date ?? true;
     this.showStates = config.show_states ?? true;
     this.showNames = config.show_names ?? true;
@@ -486,20 +488,18 @@ class TimelineCard extends HTMLElement {
 
     if (!item) return;
 
-    // --- NEW: collapse duplicates for LIVE events ---
     const collapse =
       cfg?.collapse_duplicates ?? this.config.collapse_duplicates ?? false;
+    const keepMode =
+      cfg?.collapse_duplicates_keep ??
+      this.config.collapse_duplicates_keep ??
+      'earliest';
 
-    if (collapse) {
-      const last = this.items.find((i) => i.id === item.id);
-      if (last && last.raw_state === item.raw_state) {
-        return; // ignore duplicate
-      }
-    }
-    // -------------------------------------------------
-
-    // Insert new event at the top
-    this.items.unshift(item);
+    const inserted = insertLiveEvent(this.items, item, {
+      collapseDuplicates: collapse,
+      keepMode,
+    });
+    if (!inserted) return;
 
     // Limit size
     if (this.limit && this.items.length > this.limit) {
@@ -652,16 +652,13 @@ class TimelineCard extends HTMLElement {
                 }
               </div>
               <div class="time">
-                ${
-                  this.relativeTimeEnabled
-                    ? relativeTime(item.time, this.i18n)
-                    : formatAbsoluteTime(
-                        item.time,
-                        this.languageCode,
-                        this.i18n,
-                        { includeDate: this.showDate }
-                      )
-                }
+                ${formatEventTime(item, {
+                  langCode: this.languageCode,
+                  i18n: this.i18n,
+                  relative: this.relativeTimeEnabled,
+                  includeDate: this.showDate,
+                  showDuration: this.showDuration,
+                })}
               </div>
             </div>
           </div>

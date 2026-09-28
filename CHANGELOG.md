@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added the optional global `show_duration` setting to display how long completed filtered states lasted and how long the current filtered state has been active
+
 ## v1.12.0
 
 ### Added

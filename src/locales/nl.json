@@ -3,7 +3,8 @@
     "seconds": "voor enkele seconden",
     "minutes": "{n} minuten geleden",
     "hours": "{n} uur geleden",
-    "days": "{n} dagen geleden"
+    "days": "{n} dagen geleden",
+    "since": "al {duration}"
   },
   "status": {
     "locked": "vergrendeld",

@@ -319,6 +319,12 @@ class TimelineCardGeneralSettings extends LitElement {
                 cfg.relative_time ?? false
               )}
               ${this._booleanRow(
+                'Show duration',
+                'Show how long completed states lasted and how long current states have been active.',
+                'show_duration',
+                cfg.show_duration ?? false
+              )}
+              ${this._booleanRow(
                 'Show date',
                 'Include the date for absolute timestamps; turn off to display time only.',
                 'show_date',

@@ -3,7 +3,8 @@
     "seconds": "vor wenigen Sekunden",
     "minutes": "vor {n} Minuten",
     "hours": "vor {n} Stunden",
-    "days": "vor {n} Tagen"
+    "days": "vor {n} Tagen",
+    "since": "seit {duration}"
   },
   "status": {
     "locked": "abgeschlossen",
