@@ -3,8 +3,11 @@
     "seconds": "för några sekunder sedan",
     "minutes": "{n} minuter sedan",
     "hours": "{n} timmar sedan",
-    "days": "{n} dagar sedan",
-    "since": "i {duration}"
+    "days": "{n} dagar sedan"
+  },
+  "duration": {
+    "completed": "i {duration}",
+    "current": "i {duration}"
   },
   "status": {
     "locked": "låst",

@@ -3,8 +3,11 @@
     "seconds": "a few seconds ago",
     "minutes": "{n} minutes ago",
     "hours": "{n} hours ago",
-    "days": "{n} days ago",
-    "since": "for {duration}"
+    "days": "{n} days ago"
+  },
+  "duration": {
+    "completed": "for {duration}",
+    "current": "for {duration}"
   },
   "status": {
     "locked": "locked",

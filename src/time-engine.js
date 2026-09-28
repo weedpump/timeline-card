@@ -103,11 +103,13 @@ export function formatEventTime(
   const endTime = item.endTime == null ? now : item.endTime;
   const durationMs = endTime.getTime() - item.time.getTime();
   const duration = formatDuration(durationMs, langCode);
+  const durationKey =
+    item.endTime == null ? 'duration.current' : 'duration.completed';
+  const durationText = i18n.t(durationKey, { duration });
 
   if (item.endTime == null) {
-    const since = i18n.t('time.since', { duration });
-    return relative ? since : `${baseTime} (${since})`;
+    return relative ? durationText : `${baseTime} (${durationText})`;
   }
 
-  return `${baseTime} (${duration})`;
+  return `${baseTime} (${durationText})`;
 }

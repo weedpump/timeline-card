@@ -3,8 +3,11 @@
     "seconds": "há alguns segundos",
     "minutes": "há {n} minutos",
     "hours": "há {n} horas",
-    "days": "há {n} dias",
-    "since": "há {duration}"
+    "days": "há {n} dias"
+  },
+  "duration": {
+    "completed": "por {duration}",
+    "current": "há {duration}"
   },
   "status": {
     "locked": "trancado",

@@ -3,8 +3,11 @@
     "seconds": "kilka sekund temu",
     "minutes": "{n} minut temu",
     "hours": "{n} godzin temu",
-    "days": "{n} dni temu",
-    "since": "od {duration}"
+    "days": "{n} dni temu"
+  },
+  "duration": {
+    "completed": "przez {duration}",
+    "current": "już {duration}"
   },
   "status": {
     "locked": "zablokowany",
