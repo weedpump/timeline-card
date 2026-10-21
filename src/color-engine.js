@@ -1,3 +1,5 @@
+import { resolveStateMap } from './state-pattern.js';
+
 export function resolveStateMappedColor(
   state,
   entityMap,
@@ -6,7 +8,8 @@ export function resolveStateMappedColor(
 ) {
   const rawState = `${state ?? ''}`;
 
-  if (entityMap?.[rawState]) return entityMap[rawState];
+  const mappedColor = resolveStateMap(entityMap, rawState);
+  if (mappedColor) return mappedColor;
   if (entityColor) return entityColor;
   if (globalColor) return globalColor;
 

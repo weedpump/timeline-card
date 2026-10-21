@@ -1,3 +1,5 @@
+import { resolveStateMap } from './state-pattern.js';
+
 // Icon Engine — extended, stateless, pure functions
 // Covers full HA device_class + smart fallbacks
 
@@ -124,7 +126,8 @@ const GENERIC_STATES = {
 };
 
 export function getIconColor(cfg, state) {
-  if (cfg?.icon_color_map?.[state]) return cfg.icon_color_map[state];
+  const mappedColor = resolveStateMap(cfg?.icon_color_map, state);
+  if (mappedColor) return mappedColor;
   if (cfg?.icon_color) return cfg.icon_color;
 }
 
@@ -135,7 +138,8 @@ export function getIconForEntity(stateObj, cfg, forcedState) {
   const state = forcedState ?? stateObj.state;
 
   // YAML: icon per state
-  if (cfg?.icon_map?.[state]) return cfg.icon_map[state];
+  const mappedIcon = resolveStateMap(cfg?.icon_map, state);
+  if (mappedIcon) return mappedIcon;
 
   // YAML: static icon
   if (cfg?.icon) return cfg.icon;

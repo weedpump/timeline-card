@@ -36,6 +36,7 @@ import { createLiveSubscription } from './live-subscription.js';
 import { createCurrentStatePreview } from './preview-items.js';
 import { measureUntransformedWidth } from './single-side-width.js';
 import { insertLiveEvent } from './event-duration.js';
+import { passesStateFilter } from './state-pattern.js';
 
 const translations = {
   cs,
@@ -460,18 +461,8 @@ class TimelineCard extends HTMLElement {
     const cfg = this.entities.find((e) => e.entity === entityId);
 
     // --- include/exclude filter for LIVE EVENTS ---
-    const include = Array.isArray(cfg?.include_states)
-      ? cfg.include_states
-      : null;
-    const exclude = Array.isArray(cfg?.exclude_states)
-      ? cfg.exclude_states
-      : null;
-
-    if (include && !include.includes(newState.state)) {
-      return; // ignore this live event (not in include list)
-    }
-    if (exclude && exclude.includes(newState.state)) {
-      return; // ignore this live event (blocked by exclude list)
+    if (!passesStateFilter(newState.state, cfg)) {
+      return; // ignore this live event (blocked by state filters)
     }
     if (!passesValueFilter(newState.state, cfg)) {
       return; // ignore this live event (outside min_value/max_value range)

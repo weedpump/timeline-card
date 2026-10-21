@@ -1,3 +1,5 @@
+import { resolveStateMap } from './state-pattern.js';
+
 export class TranslationEngine {
   constructor(translations) {
     this.translations = translations; // { en-us: {...}, de: {...} }
@@ -38,9 +40,8 @@ export class TranslationEngine {
   // Applies YAML state_map → then locale → then fallback
   getLocalizedState(entity_id, state, cfg) {
     // YAML override
-    if (cfg?.state_map?.[state]) {
-      return cfg.state_map[state];
-    }
+    const mappedState = resolveStateMap(cfg?.state_map, state);
+    if (mappedState) return mappedState;
 
     // JSON translation
     const translated = this.t(`status.${state}`);

@@ -1,4 +1,5 @@
 import { annotateEventDurations } from './event-duration.js';
+import { passesStateFilter } from './state-pattern.js';
 
 // ------------------------------------
 // NEW: Collapse consecutive duplicates
@@ -71,16 +72,7 @@ export function passesValueFilter(raw_state, cfg) {
 export function filterHistory(items, entities, limit, globalConfig = {}) {
   let filtered = items.filter((ev) => {
     const cfg = entities.find((e) => e.entity === ev.id);
-    const include = Array.isArray(cfg?.include_states)
-      ? cfg.include_states
-      : null;
-    const exclude = Array.isArray(cfg?.exclude_states)
-      ? cfg.exclude_states
-      : null;
-
-    if (include) return include.includes(ev.raw_state);
-    if (exclude) return !exclude.includes(ev.raw_state);
-    return true;
+    return passesStateFilter(ev.raw_state, cfg);
   });
 
   // Value-based filter (min_value / max_value)
