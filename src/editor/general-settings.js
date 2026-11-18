@@ -69,6 +69,7 @@ class TimelineCardGeneralSettings extends LitElement {
                         { value: 'de', label: 'Deutsch' },
                         { value: 'en-GB', label: 'English (UK)' },
                         { value: 'en-US', label: 'English (US)' },
+                        { value: 'es', label: 'Español' },
                         { value: 'fr', label: 'Francais' },
                         { value: 'it', label: 'Italiano' },
                         { value: 'nl', label: 'Nederlands' },

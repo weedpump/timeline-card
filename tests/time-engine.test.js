@@ -4,6 +4,7 @@ import cs from '../src/locales/cs.json';
 import de from '../src/locales/de.json';
 import enGB from '../src/locales/en-GB.json';
 import enUS from '../src/locales/en-US.json';
+import es from '../src/locales/es.json';
 import fr from '../src/locales/fr.json';
 import itLocale from '../src/locales/it.json';
 import nl from '../src/locales/nl.json';
@@ -110,7 +111,20 @@ describe('duration formatting', () => {
   });
 
   it('provides completed and current duration templates in every locale', () => {
-    const locales = [cs, de, enGB, enUS, fr, itLocale, nl, pl, ptBR, ru, sv];
+    const locales = [
+      cs,
+      de,
+      enGB,
+      enUS,
+      es,
+      fr,
+      itLocale,
+      nl,
+      pl,
+      ptBR,
+      ru,
+      sv,
+    ];
 
     for (const locale of locales) {
       expect(locale.duration.completed).toContain('{duration}');
