@@ -1,0 +1,70 @@
+{
+  "time": {
+    "seconds": "hace unos segundos",
+    "minutes": "hace {n} minutos",
+    "hours": "hace {n} horas",
+    "days": "hace {n} días"
+  },
+  "duration": {
+    "completed": "durante {duration}",
+    "current": "desde hace {duration}"
+  },
+  "status": {
+    "locked": "bloqueado",
+    "unlocked": "desbloqueado",
+    "open": "abierto",
+    "closed": "cerrado",
+    "on": "encendido",
+    "off": "apagado",
+    "home": "en casa",
+    "not_home": "fuera",
+    "idle": "inactivo",
+    "running": "en marcha",
+    "paused": "en pausa",
+    "stopped": "detenido",
+    "pending": "pendiente",
+    "unknown": "desconocido",
+    "unavailable": "no disponible",
+    "detected": "detectado",
+    "clear": "no detectado",
+    "online": "en línea",
+    "offline": "sin conexión",
+    "playing": "reproduciendo",
+    "buffering": "almacenando en búfer",
+    "standby": "en espera",
+    "cleaning": "limpiando",
+    "returning": "volviendo a la base",
+    "docked": "en la base",
+    "charging": "cargando",
+    "error": "error",
+    "spot_cleaning": "limpieza localizada",
+    "edge_cleaning": "limpieza de bordes",
+    "mopping": "fregando",
+    "locating": "localizando",
+    "moving": "en movimiento",
+    "stuck": "atascado",
+    "disarmed": "desarmada",
+    "armed_home": "armada (en casa)",
+    "armed_away": "armada (ausente)",
+    "armed_night": "armada (noche)",
+    "armed_custom_bypass": "armada (personalizada)",
+    "arming": "armando",
+    "disarming": "desarmando",
+    "triggered": "disparada"
+  },
+  "ui": {
+    "show_more": "Mostrar {n} más",
+    "show_less": "Mostrar menos",
+    "no_events": "No hay eventos en este periodo."
+  },
+  "date_format": {
+    "datetime": {
+      "day": "2-digit",
+      "month": "2-digit",
+      "year": "numeric",
+      "hour": "2-digit",
+      "minute": "2-digit",
+      "hour12": false
+    }
+  }
+}
