@@ -154,6 +154,34 @@ describe('filterHistory', () => {
     expect(times).not.toContain(400);
   });
 
+  it('includes history states matching configured wildcards', () => {
+    const entities = [
+      { entity: 'sensor.shutter', include_states: ['Closed', 'Open @ *'] },
+    ];
+    const items = [
+      { id: 'sensor.shutter', raw_state: 'Open @ 20 %', time: 100 },
+      { id: 'sensor.shutter', raw_state: 'Unknown', time: 200 },
+    ];
+
+    const result = filterHistory(items, entities, 100, {});
+
+    expect(result.map((item) => item.raw_state)).toEqual(['Open @ 20 %']);
+  });
+
+  it('excludes history states matching configured wildcards', () => {
+    const entities = [
+      { entity: 'sensor.shutter', exclude_states: ['Unknown*'] },
+    ];
+    const items = [
+      { id: 'sensor.shutter', raw_state: 'Open @ 20 %', time: 100 },
+      { id: 'sensor.shutter', raw_state: 'Unknown device', time: 200 },
+    ];
+
+    const result = filterHistory(items, entities, 100, {});
+
+    expect(result.map((item) => item.raw_state)).toEqual(['Open @ 20 %']);
+  });
+
   it('calculates spans between filtered events of the same entity', () => {
     const entities = [
       { entity: 'person.alex', exclude_states: ['not_home'] },

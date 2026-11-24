@@ -290,18 +290,43 @@ entities:
 | -------------------------- | ------- | ----------------------------------------------------------------------------------------------- |
 | `name`                     | string  | Display name override                                                                           |
 | `icon`                     | string  | Static icon                                                                                     |
-| `icon_map`                 | object  | State -> icon mapping                                                                           |
+| `icon_map`                 | object  | State pattern -> icon mapping                                                                   |
 | `icon_color`               | string  | Static icon color                                                                               |
-| `icon_color_map`           | object  | State -> color mapping                                                                          |
-| `state_map`                | object  | State -> label override                                                                         |
-| `include_states`           | list    | Only include events with these raw states                                                       |
-| `exclude_states`           | list    | Hide events with these raw states (alternative to `include_states`)                             |
+| `icon_color_map`           | object  | State pattern -> color mapping                                                                  |
+| `state_map`                | object  | State pattern -> label override                                                                 |
+| `include_states`           | list    | Only include events matching these raw-state patterns                                           |
+| `exclude_states`           | list    | Hide events matching these raw-state patterns (alternative to `include_states`)                 |
 | `show_entity_picture`      | boolean | Show the entity picture instead of the icon when available                                      |
 | `name_color`               | string  | Name color override (fallback: card -> theme)                                                   |
-| `name_color_map`           | object  | Raw state -> name color mapping (fallback: entity name color -> card -> theme)                  |
+| `name_color_map`           | object  | Raw-state pattern -> name color mapping (fallback: entity name color -> card -> theme)          |
 | `state_color`              | string  | State color override (fallback: card -> theme)                                                  |
 | `collapse_duplicates`      | boolean | Removes consecutive events with the same state for this entity only (overrides global setting). |
 | `collapse_duplicates_keep` | string  | Which event to keep when collapsing: `earliest` or `latest` (overrides global setting).         |
+
+State maps and filters support `*` as a wildcard for any number of characters.
+Matching is case-sensitive, and every other character is treated literally.
+Maps first check for a non-empty exact raw-state match, then check non-empty
+wildcard entries in configuration order. Their existing static values and
+fallbacks continue to apply when no entry matches. History and live events use
+the same wildcard matching for `include_states` and `exclude_states`.
+
+```yaml
+entities:
+  - entity: sensor.shutter_state
+    icon_map:
+      'Closed': mdi:window-shutter
+      'Open @ *': mdi:window-shutter-open
+      default: mdi:help-circle
+    icon_color_map:
+      'Open @ *': green
+    name_color_map:
+      'Open @ *': orange
+    state_map:
+      'Open @ *': Open
+    include_states:
+      - 'Closed'
+      - 'Open @ *'
+```
 
 ---
 

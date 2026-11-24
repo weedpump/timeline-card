@@ -8,6 +8,17 @@ describe('resolveStateMappedColor', () => {
     ).toBe('green');
   });
 
+  it('prefers wildcard state colors over entity static and global colors', () => {
+    expect(
+      resolveStateMappedColor(
+        'Open @ 20 %',
+        { 'Open @ *': 'green' },
+        'orange',
+        'red'
+      )
+    ).toBe('green');
+  });
+
   it('uses entity static color before global static color', () => {
     expect(resolveStateMappedColor('on', {}, 'orange', 'red')).toBe('orange');
   });

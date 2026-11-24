@@ -6,8 +6,12 @@ import {
   parseColorValue,
   percentToAlpha,
 } from './color-utils.js';
+import { renameMapKey } from './map-utils.js';
+import { parseStateList, stringifyStateList } from './state-list.js';
 
 class TimelineCardEntityEditor extends LitElement {
+  _stateListDrafts = new WeakMap();
+
   static get properties() {
     return {
       entity: { type: Object },
@@ -175,10 +179,11 @@ class TimelineCardEntityEditor extends LitElement {
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Include states</div>
                   <div class="tc-setting-description">
-                    Only show events matching this YAML list:
+                    Only show events matching this YAML list (* matches any
+                    text; matching is case-sensitive):
                     <pre>
 - open
-- closed
+- Open @ *
 - jammed</pre>
                   </div>
                 </div>
@@ -198,12 +203,9 @@ class TimelineCardEntityEditor extends LitElement {
                     font-size: 13px;
                   "
                   ?disabled=${includeDisabled}
-                  .value=${this._stringifyStateList(cfg.include_states)}
+                  .value=${this._getStateListText(cfg.include_states)}
                   @input=${(e) =>
-                    this._updateField(
-                      'include_states',
-                      this._parseStateList(e.target.value)
-                    )}
+                    this._updateStateList('include_states', e.target.value)}
                 ></textarea>
               </div>
 
@@ -212,11 +214,12 @@ class TimelineCardEntityEditor extends LitElement {
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Exclude states</div>
                   <div class="tc-setting-description">
-                    Hide events matching this YAML list:
+                    Hide events matching this YAML list (* matches any text;
+                    matching is case-sensitive):
                     <pre>
 - idle
-- unknown
-- unavailable</pre>
+- unknown*
+- unavailable*</pre>
                   </div>
                 </div>
 
@@ -235,12 +238,9 @@ class TimelineCardEntityEditor extends LitElement {
                     font-size: 13px;
                   "
                   ?disabled=${excludeDisabled}
-                  .value=${this._stringifyStateList(cfg.exclude_states)}
+                  .value=${this._getStateListText(cfg.exclude_states)}
                   @input=${(e) =>
-                    this._updateField(
-                      'exclude_states',
-                      this._parseStateList(e.target.value)
-                    )}
+                    this._updateStateList('exclude_states', e.target.value)}
                 ></textarea>
               </div>
 
@@ -292,7 +292,8 @@ class TimelineCardEntityEditor extends LitElement {
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">State label map</div>
                   <div class="tc-setting-description">
-                    Override displayed labels per raw state.
+                    Override labels per raw state; * matches any text
+                    case-sensitively.
                   </div>
                 </div>
                 ${this._renderMapEditor('state_map', cfg.state_map, 'Label')}
@@ -302,7 +303,8 @@ class TimelineCardEntityEditor extends LitElement {
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Icon map</div>
                   <div class="tc-setting-description">
-                    Select icons per state (uses MDI names).
+                    Select icons per state; * matches any text case-sensitively
+                    (uses MDI names).
                   </div>
                 </div>
                 ${this._renderIconMapEditor('icon_map', cfg.icon_map)}
@@ -312,7 +314,8 @@ class TimelineCardEntityEditor extends LitElement {
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Icon color map</div>
                   <div class="tc-setting-description">
-                    Hex/RGB color per state.
+                    Hex/RGB color per state; * matches any text
+                    case-sensitively.
                   </div>
                 </div>
                 ${this._renderColorMapEditor(
@@ -325,7 +328,8 @@ class TimelineCardEntityEditor extends LitElement {
                 <div class="tc-setting-label">
                   <div class="tc-setting-title">Name color map</div>
                   <div class="tc-setting-description">
-                    Name color per raw state.
+                    Name color per raw state; * matches any text
+                    case-sensitively.
                   </div>
                 </div>
                 ${this._renderColorMapEditor(
@@ -344,22 +348,14 @@ class TimelineCardEntityEditor extends LitElement {
      STATE LISTS (YAML)
   -------------------------*/
 
-  _stringifyStateList(arr) {
-    if (!Array.isArray(arr) || arr.length === 0) return '';
-    return arr.map((s) => `- ${s}`).join('\n');
+  _getStateListText(patterns) {
+    return this._stateListDrafts.get(patterns) ?? stringifyStateList(patterns);
   }
 
-  _parseStateList(text) {
-    if (!text.trim()) return undefined;
-
-    const list = text
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.startsWith('- '))
-      .map((line) => line.substring(2))
-      .filter((v) => v.length > 0);
-
-    return list.length ? list : undefined;
+  _updateStateList(key, text) {
+    const patterns = parseStateList(text);
+    if (patterns) this._stateListDrafts.set(patterns, text);
+    this._updateField(key, patterns);
   }
 
   /* ------------------------
@@ -632,10 +628,7 @@ class TimelineCardEntityEditor extends LitElement {
     if (!nextKey) return;
     if (nextKey === oldKey) return;
 
-    const current = { ...(this.entity[mapKey] || {}) };
-    const value = current[oldKey];
-    delete current[oldKey];
-    current[nextKey] = value;
+    const current = renameMapKey(this.entity[mapKey], oldKey, nextKey);
 
     this._updateField(mapKey, current);
   }
