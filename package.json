@@ -41,7 +41,7 @@
     "prettier": "^3.10.1",
     "vitest": "^5.0.5",
     "webpack": "^5.113.0",
-    "webpack-cli": "^7.2.3"
+    "webpack-cli": "^7.3.1"
   },
   "dependencies": {
     "lit": "^3.3.3"
