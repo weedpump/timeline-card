@@ -7,8 +7,11 @@ import {
   percentToAlpha,
 } from './color-utils.js';
 import { renameMapKey } from './map-utils.js';
+import { parseStateList, stringifyStateList } from './state-list.js';
 
 class TimelineCardEntityEditor extends LitElement {
+  _stateListDrafts = new WeakMap();
+
   static get properties() {
     return {
       entity: { type: Object },
@@ -200,12 +203,9 @@ class TimelineCardEntityEditor extends LitElement {
                     font-size: 13px;
                   "
                   ?disabled=${includeDisabled}
-                  .value=${this._stringifyStateList(cfg.include_states)}
+                  .value=${this._getStateListText(cfg.include_states)}
                   @input=${(e) =>
-                    this._updateField(
-                      'include_states',
-                      this._parseStateList(e.target.value)
-                    )}
+                    this._updateStateList('include_states', e.target.value)}
                 ></textarea>
               </div>
 
@@ -238,12 +238,9 @@ class TimelineCardEntityEditor extends LitElement {
                     font-size: 13px;
                   "
                   ?disabled=${excludeDisabled}
-                  .value=${this._stringifyStateList(cfg.exclude_states)}
+                  .value=${this._getStateListText(cfg.exclude_states)}
                   @input=${(e) =>
-                    this._updateField(
-                      'exclude_states',
-                      this._parseStateList(e.target.value)
-                    )}
+                    this._updateStateList('exclude_states', e.target.value)}
                 ></textarea>
               </div>
 
@@ -351,22 +348,14 @@ class TimelineCardEntityEditor extends LitElement {
      STATE LISTS (YAML)
   -------------------------*/
 
-  _stringifyStateList(arr) {
-    if (!Array.isArray(arr) || arr.length === 0) return '';
-    return arr.map((s) => `- ${s}`).join('\n');
+  _getStateListText(patterns) {
+    return this._stateListDrafts.get(patterns) ?? stringifyStateList(patterns);
   }
 
-  _parseStateList(text) {
-    if (!text.trim()) return undefined;
-
-    const list = text
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.startsWith('- '))
-      .map((line) => line.substring(2))
-      .filter((v) => v.length > 0);
-
-    return list.length ? list : undefined;
+  _updateStateList(key, text) {
+    const patterns = parseStateList(text);
+    if (patterns) this._stateListDrafts.set(patterns, text);
+    this._updateField(key, patterns);
   }
 
   /* ------------------------
