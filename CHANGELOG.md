@@ -5,6 +5,7 @@
 ### Added
 
 - Added `*` wildcards to state maps and filters. For example, `Open @*` in `icon_map` matches sensor states such as `Open @ 20 %` while keeping the full state visible ([#102](https://github.com/weedpump/timeline-card/issues/102))
+- Added Spanish translations by **@PedroFlores199**, Thank you!
 
 ## v1.13.0
 
